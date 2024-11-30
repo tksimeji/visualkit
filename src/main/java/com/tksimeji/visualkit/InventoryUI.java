@@ -2,7 +2,7 @@ package com.tksimeji.visualkit;
 
 import com.tksimeji.visualkit.api.*;
 import com.tksimeji.visualkit.element.VisualkitElement;
-import com.tksimeji.visualkit.util.CloseableHashMap;
+import com.tksimeji.visualkit.util.KillableHashMap;
 import com.tksimeji.visualkit.util.AsmUtility;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 public abstract class InventoryUI<I extends Inventory> implements IInventoryUI<I> {
     protected final Player player;
 
-    protected final Map<Integer, VisualkitElement> elements = new CloseableHashMap<>();
+    protected final Map<Integer, VisualkitElement> elements = new KillableHashMap<>();
     protected final Set<Method> handlers = Arrays.stream(getClass().getDeclaredMethods())
             .filter(method -> method.isAnnotationPresent(Handler.class) && method.getParameters().length == 0)
             .collect(Collectors.toSet());
@@ -65,7 +65,7 @@ public abstract class InventoryUI<I extends Inventory> implements IInventoryUI<I
 
     @Override
     public final void onClick(int slot, @NotNull Click click, @NotNull Mouse mouse) {
-        this.handlers.stream().filter(handler -> {
+        handlers.stream().filter(handler -> {
             Handler annotation = handler.getAnnotation(Handler.class);
             return AsmUtility.of(annotation).stream().anyMatch(s -> s == slot) &&
                     Arrays.stream(annotation.click()).toList().contains(click) &&

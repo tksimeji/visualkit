@@ -1,5 +1,6 @@
 package com.tksimeji.visualkit.element;
 
+import com.tksimeji.visualkit.Killable;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -9,9 +10,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.Closeable;
-
-public final class VisualkitElement implements Closeable {
+public final class VisualkitElement implements Killable {
     public static @NotNull VisualkitElement of(@NotNull Material type) {
         return new VisualkitElement(type);
     }
@@ -34,7 +33,7 @@ public final class VisualkitElement implements Closeable {
     private @NotNull Xmpl title = Xmpl.empty();
 
     public @NotNull VisualkitElement title(@Nullable Component title) {
-        this.title.close();
+        this.title.kill();
         this.title = title != null ? new Xmpl(title) : Xmpl.empty();
         return this;
     }
@@ -42,7 +41,7 @@ public final class VisualkitElement implements Closeable {
     private @NotNull Lore lore = Lore.empty();
 
     public @NotNull VisualkitElement lore(@NotNull Component... components) {
-        this.lore.close();
+        this.lore.kill();
         this.lore = new Lore(components);
         return this;
     }
@@ -69,9 +68,9 @@ public final class VisualkitElement implements Closeable {
     }
 
     @Override
-    public void close() {
-        title.close();
-        lore.close();
+    public void kill() {
+        title.kill();
+        lore.kill();
     }
 
     public @NotNull ItemStack asItemStack(@NotNull Object object) {

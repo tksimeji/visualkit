@@ -1,15 +1,15 @@
 package com.tksimeji.visualkit.element;
 
-import com.tksimeji.visualkit.util.CloseableArrayList;
+import com.tksimeji.visualkit.Killable;
+import com.tksimeji.visualkit.util.KillableArrayList;
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.Closeable;
 import java.util.Arrays;
 import java.util.List;
 
-public final class Lore extends CloseableArrayList<Xmpl> implements Closeable {
+public final class Lore extends KillableArrayList<Xmpl> implements Killable {
     static @NotNull Lore empty() {
         return new Lore();
     }
@@ -34,7 +34,7 @@ public final class Lore extends CloseableArrayList<Xmpl> implements Closeable {
     }
 
     @Override
-    public void close() {
+    public void kill() {
         clear();
     }
 }

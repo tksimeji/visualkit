@@ -1,7 +1,7 @@
 package com.tksimeji.visualkit;
 
 import com.tksimeji.visualkit.element.Xmpl;
-import com.tksimeji.visualkit.util.CloseableArrayList;
+import com.tksimeji.visualkit.util.KillableArrayList;
 import com.tksimeji.visualkit.util.ComponentUtility;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
@@ -22,7 +22,7 @@ public abstract class PanelUI implements IPanelUI {
     private final @NotNull Objective objective = scoreboard.registerNewObjective(UUID.randomUUID().toString(), Criteria.DUMMY, title());
     private int blanks = 0;
 
-    private final List<Xmpl> lines = new CloseableArrayList<>();
+    private final List<Xmpl> lines = new KillableArrayList<>();
     private final Set<Player> players = new HashSet<>();
 
     public PanelUI() {
@@ -77,7 +77,7 @@ public abstract class PanelUI implements IPanelUI {
         Xmpl old = lines.get(index);
 
         if (old != null) {
-            old.close();
+            old.kill();
         }
 
         lines.set(index, new Xmpl(line, this));
@@ -148,7 +148,7 @@ public abstract class PanelUI implements IPanelUI {
         onTick();
 
         if (! ComponentUtility.equals(title.getSource(), title())) {
-            title.close();
+            title.kill();
             title = new Xmpl(title(), this);
         }
 

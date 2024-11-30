@@ -13,6 +13,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -20,6 +22,7 @@ import java.util.List;
 import java.util.Set;
 
 public final class Visualkit extends JavaPlugin {
+    private static final Logger log = LoggerFactory.getLogger(Visualkit.class);
     private static Visualkit instance;
 
     static final Set<VisualkitUI> sessions = new HashSet<>();
@@ -34,15 +37,6 @@ public final class Visualkit extends JavaPlugin {
 
     public static @NotNull ComponentLogger logger() {
         return instance.getComponentLogger();
-    }
-
-    public static @NotNull List<Component> art() {
-        return List.of(Component.text("       __    ").color(TextColor.color(255, 86, 217)),
-                Component.text("___  _|  | __").color(TextColor.color(255, 124, 255)).append(Component.text("    Visualkit").color(NamedTextColor.WHITE)),
-                Component.text("\\  \\/ /  |/ /").color(TextColor.color(248, 142, 255)),
-                Component.text(" \\   /|    < ").color(TextColor.color(225, 142, 255)).append(Component.text("    Help poor children in Uganda!").color(NamedTextColor.GRAY)),
-                Component.text("  \\_/ |__|_ \\").color(TextColor.color(194, 124, 255)).append(Component.text("    ").append(Component.text("https://iccf-holland.org/").color(NamedTextColor.BLUE).decorate(TextDecoration.UNDERLINED).clickEvent(ClickEvent.openUrl("https://iccf-holland.org/")))),
-                Component.text("           \\/").color(TextColor.color(164, 86, 255)));
     }
 
     public static @NotNull List<VisualkitUI> sessions() {
@@ -71,6 +65,11 @@ public final class Visualkit extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new InventoryListener(), this);
         Bukkit.getPluginManager().registerEvents(new ServerListener(), this);
 
-        art().forEach(line -> logger().info(line));
+        logger().info(Component.text("       __    ").color(TextColor.color(255, 86, 217)));
+        logger().info(Component.text("___  _|  | __").color(TextColor.color(255, 124, 255)).append(Component.text("    Visualkit - " + version()).color(NamedTextColor.WHITE)));
+        logger().info(Component.text("\\  \\/ /  |/ /").color(TextColor.color(248, 142, 255)));
+        logger().info(Component.text(" \\   /|    < ").color(TextColor.color(225, 142, 255)).append(Component.text("    Help poor children in Uganda!").color(NamedTextColor.GRAY)));
+        logger().info(Component.text("  \\_/ |__|_ \\").color(TextColor.color(194, 124, 255)).append(Component.text("    ").append(Component.text("https://iccf-holland.org/").color(NamedTextColor.BLUE).decorate(TextDecoration.UNDERLINED).clickEvent(ClickEvent.openUrl("https://iccf-holland.org/")))));
+        logger().info(Component.text("           \\/").color(TextColor.color(164, 86, 255)));
     }
 }

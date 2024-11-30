@@ -1,5 +1,6 @@
 package com.tksimeji.visualkit.element;
 
+import com.tksimeji.visualkit.Killable;
 import com.tksimeji.visualkit.Tickable;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
@@ -9,13 +10,12 @@ import net.kyori.adventure.text.format.TextDecoration;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.Closeable;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-public final class Xmpl implements Closeable, Tickable {
+public final class Xmpl implements Killable, Tickable {
     private static final Set<Xmpl> instances = new HashSet<>();
 
     public static @NotNull Set<Xmpl> getInstances() {
@@ -91,7 +91,7 @@ public final class Xmpl implements Closeable, Tickable {
     }
 
     @Override
-    public void close() {
+    public void kill() {
         Xmpl.instances.remove(this);
     }
 }
