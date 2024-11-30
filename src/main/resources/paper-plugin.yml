@@ -1,0 +1,4 @@
+name: Visualkit
+version: '0.0.0'
+main: com.tksimeji.visualkit.Visualkit
+api-version: '1.21'
