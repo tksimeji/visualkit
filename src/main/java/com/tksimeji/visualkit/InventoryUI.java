@@ -20,28 +20,33 @@ import java.util.stream.Collectors;
 public abstract class InventoryUI<I extends Inventory> implements IInventoryUI<I> {
     protected final Player player;
 
-    protected final Map<Integer, VisualkitElement> elements = new KillableHashMap<>();
-    protected final Set<Method> handlers = Arrays.stream(getClass().getDeclaredMethods())
+    protected final @NotNull Map<@NotNull Integer, @NotNull VisualkitElement> elements = new KillableHashMap<>();
+    protected final @NotNull Set<@NotNull Method> handlers = Arrays.stream(getClass().getDeclaredMethods())
             .filter(method -> method.isAnnotationPresent(Handler.class) && method.getParameters().length == 0)
             .collect(Collectors.toSet());
 
+    /**
+     * Creating a GUI.
+     *
+     * @param player Player showing GUI
+     */
     public InventoryUI(@NotNull Player player) {
         this.player = player;
         Visualkit.sessions.add(this);
     }
 
     @Override
-    public @NotNull Player getPlayer() {
+    public final @NotNull Player getPlayer() {
         return player;
     }
 
     @Override
-    public @Nullable VisualkitElement getElement(int slot) {
+    public final @Nullable VisualkitElement getElement(int slot) {
         return elements.get(slot);
     }
 
     @Override
-    public void setElement(int slot, @Nullable VisualkitElement element) {
+    public final void setElement(int slot, @Nullable VisualkitElement element) {
         if (slot < 0 || asInventory().getSize() <= slot) {
             return;
         }
@@ -99,14 +104,14 @@ public abstract class InventoryUI<I extends Inventory> implements IInventoryUI<I
         onTick();
 
         Arrays.stream(getClass().getDeclaredFields())
-                .filter(field -> field.isAnnotationPresent(InitialElement.class) && field.getType() == VisualkitElement.class)
+                .filter(field -> field.isAnnotationPresent(Element.class) && field.getType() == VisualkitElement.class)
                 .forEach(field -> {
                     field.setAccessible(true);
 
                     try {
                         VisualkitElement element = (VisualkitElement) field.get(InventoryUI.this);
 
-                        AsmUtility.of(field.getAnnotation(InitialElement.class)).forEach(slot -> {
+                        AsmUtility.of(field.getAnnotation(Element.class)).forEach(slot -> {
                             setElement(slot, element);
                         });
                     } catch (IllegalAccessException e) {

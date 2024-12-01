@@ -11,6 +11,12 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public final class VisualkitElement implements Killable {
+    /**
+     * Create a new element.
+     *
+     * @param type Item type
+     * @return New element
+     */
     public static @NotNull VisualkitElement of(@NotNull Material type) {
         return new VisualkitElement(type);
     }
@@ -25,6 +31,12 @@ public final class VisualkitElement implements Killable {
 
     private @NotNull Material type;
 
+    /**
+     * Set the item type.
+     *
+     * @param type Item type
+     * @return Updated element
+     */
     public @NotNull VisualkitElement type(@NotNull Material type) {
         this.type = type;
         return this;
@@ -32,6 +44,12 @@ public final class VisualkitElement implements Killable {
 
     private @NotNull Xmpl title = Xmpl.empty();
 
+    /**
+     * Set the title.
+     *
+     * @param title Title
+     * @return Updated element
+     */
     public @NotNull VisualkitElement title(@Nullable Component title) {
         this.title.kill();
         this.title = title != null ? new Xmpl(title) : Xmpl.empty();
@@ -40,6 +58,12 @@ public final class VisualkitElement implements Killable {
 
     private @NotNull Lore lore = Lore.empty();
 
+    /**
+     * Set the lore.
+     *
+     * @param components Lore
+     * @return Updated element
+     */
     public @NotNull VisualkitElement lore(@NotNull Component... components) {
         this.lore.kill();
         this.lore = new Lore(components);
@@ -48,6 +72,12 @@ public final class VisualkitElement implements Killable {
 
     private int stack = 1;
 
+    /**
+     * Set the stack count.
+     *
+     * @param stack Stack count
+     * @return Updated element
+     */
     public @NotNull VisualkitElement stack(int stack) {
         this.stack = Math.max(Math.min(stack, 1), this.type.getMaxStackSize());
         return this;
@@ -55,6 +85,12 @@ public final class VisualkitElement implements Killable {
 
     private int model = -1;
 
+    /**
+     * Set the custom model data.
+     *
+     * @param model Custom model data
+     * @return Updated element
+     */
     public @NotNull VisualkitElement model(int model) {
         this.model = model;
         return this;
@@ -62,6 +98,12 @@ public final class VisualkitElement implements Killable {
 
     private boolean aura = false;
 
+    /**
+     * Set whether to have an enchantment aura.
+     *
+     * @param aura True if has aura
+     * @return Updated element
+     */
     public @NotNull VisualkitElement aura(boolean aura) {
         this.aura = aura;
         return this;
@@ -73,6 +115,12 @@ public final class VisualkitElement implements Killable {
         lore.kill();
     }
 
+    /**
+     * Build an ItemStack
+     *
+     * @param object XMPL Target
+     * @return ItemStack
+     */
     public @NotNull ItemStack asItemStack(@NotNull Object object) {
         title.setTarget(object);
         lore.setTarget(object);

@@ -8,7 +8,7 @@ import java.util.Optional;
 public class KillableHashMap<K, V extends Killable> extends HashMap<K, V> {
     @Override
     public V remove(Object key) {
-        Optional.of(get(key)).ifPresent(Killable::kill);
+        Optional.ofNullable(get(key)).ifPresent(Killable::kill);
         return super.remove(key);
     }
 
@@ -23,7 +23,7 @@ public class KillableHashMap<K, V extends Killable> extends HashMap<K, V> {
 
     @Override
     public void clear() {
-        values().forEach(killable -> Optional.of(killable).ifPresent(Killable::kill));
+        values().forEach(killable -> Optional.ofNullable(killable).ifPresent(Killable::kill));
         super.clear();
     }
 }

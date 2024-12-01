@@ -1,11 +1,13 @@
+import cl.franciscosolis.sonatypecentralupload.SonatypeCentralUploadTask
+
 plugins {
-    id("java")
-    id("maven-publish")
-    id("signing")
+    java
+    `maven-publish`
+    id("cl.franciscosolis.sonatype-central-upload") version "1.0.2"
 }
 
 group = "com.tksimeji"
-version = "0.0.1"
+version = "0.1.0"
 
 repositories {
     mavenCentral()
@@ -21,6 +23,35 @@ dependencies {
     compileOnly("io.papermc.paper:paper-api:1.21.1-R0.1-SNAPSHOT")
 }
 
+publishing {
+    publications {
+        register<MavenPublication>("maven") {
+            pom {
+                name.set("tksimeji")
+                description.set("The Minecraft GUI framework")
+                url.set("https://github.com/tksimeji/visualkit")
+                licenses {
+                    license {
+                        name.set("MIT License")
+                        url.set("https://github.com/tksimeji/visualkit/blob/master/LICENSE")
+                        distribution.set("repo")
+                    }
+                }
+                developers {
+                    developer {
+                        id.set("tksimeji")
+                        name.set("tksimeji")
+                        email.set("tksimeji@outlook.com")
+                    }
+                }
+                scm {
+                    url.set("https://github.com/tksimeji/visualkit")
+                }
+            }
+        }
+    }
+}
+
 val targetJavaVersion = 21
 java {
     val javaVersion = JavaVersion.toVersion(targetJavaVersion)
@@ -29,6 +60,31 @@ java {
     if (JavaVersion.current() < javaVersion) {
         toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
     }
+
+    withSourcesJar()
+    withJavadocJar()
+}
+
+tasks.named<SonatypeCentralUploadTask>("sonatypeCentralUpload") {
+    println(System.getenv("PGP_SIGNING_KEY"))
+
+    dependsOn("jar", "sourcesJar", "javadocJar", "generatePomFileForMavenPublication")
+
+    username = System.getenv("SONATYPE_CENTRAL_USERNAME")
+    password = System.getenv("SONATYPE_CENTRAL_PASSWORD")
+
+    archives = files(
+        tasks.named("jar"),
+        tasks.named("sourcesJar"),
+        tasks.named("javadocJar"),
+    )
+
+    pom = file(
+        tasks.named("generatePomFileForMavenPublication").get().outputs.files.single()
+    )
+
+    signingKey.set(File("key.asc").readText())
+    signingKeyPassphrase = System.getenv("PGP_SIGNING_KEY_PASSPHRASE")
 }
 
 tasks.withType<JavaCompile>().configureEach {

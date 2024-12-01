@@ -1,6 +1,6 @@
 package com.tksimeji.visualkit.util;
 
-import com.tksimeji.visualkit.api.InitialElement;
+import com.tksimeji.visualkit.api.Element;
 import com.tksimeji.visualkit.api.Handler;
 import com.tksimeji.visualkit.api.Asm;
 import org.jetbrains.annotations.NotNull;
@@ -13,7 +13,7 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public final class AsmUtility {
-    public static @NotNull Set<@NotNull Integer> of(@NotNull InitialElement annotation) {
+    public static @NotNull Set<@NotNull Integer> of(@NotNull Element annotation) {
         return concat(of(annotation.value()), of(annotation.asm()));
     }
 

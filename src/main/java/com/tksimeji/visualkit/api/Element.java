@@ -7,7 +7,7 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface InitialElement {
+public @interface Element {
     int[] value() default {};
     Asm[] asm() default {};
 }

@@ -1,173 +1,56 @@
 package com.tksimeji.visualkit;
 
-import com.tksimeji.visualkit.element.Xmpl;
-import com.tksimeji.visualkit.util.KillableArrayList;
-import com.tksimeji.visualkit.util.ComponentUtility;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.scoreboard.*;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
-
-public abstract class PanelUI implements IPanelUI {
-    private static final @NotNull ScoreboardManager sm = Bukkit.getScoreboardManager();
-
-    private @NotNull Xmpl title = new Xmpl(title(), this);
-
-    private final @NotNull Scoreboard scoreboard = sm.getNewScoreboard();
-    private final @NotNull Objective objective = scoreboard.registerNewObjective(UUID.randomUUID().toString(), Criteria.DUMMY, title());
-    private int blanks = 0;
-
-    private final List<Xmpl> lines = new KillableArrayList<>();
-    private final Set<Player> players = new HashSet<>();
-
-    public PanelUI() {
-        objective.setDisplaySlot(DisplaySlot.SIDEBAR);
-        Visualkit.sessions.add(this);
+public abstract class PanelUI extends SimplePanelUI {
+    static void show(@NotNull Player player, @NotNull PanelUI ui) {
+        player.setScoreboard(ui.scoreboard);
     }
 
-    @Override
-    public @NotNull List<Player> getPlayers() {
-        return new ArrayList<>(players);
+    static void show(@NotNull Player player, @NotNull SharedPanelUI ui) {
+        player.setScoreboard(ui.scoreboard);
     }
 
-    @Override
-    public void addPlayer(@NotNull Player player) {
-        IPanelUI old = Visualkit.getPanelUI(player);
-
-        if (old != null) {
-            old.removePlayer(player);
-        }
-
-        player.setScoreboard(scoreboard);
-        players.add(player);
-    }
-
-    @Override
-    public void removePlayer(@NotNull Player player) {
-        if (! players.contains(player)) {
-            return;
-        }
+    static void hide(@NotNull Player player) {
+        IPanelUI ui = Visualkit.getPanelUI(player);
 
         player.setScoreboard(sm.getMainScoreboard());
-        players.remove(player);
-    }
 
-    @Override
-    public @Nullable Component getLine(int index) {
-        return lines.get(index).asComponent();
-    }
-
-    @Override
-    public void setLine(int index, @NotNull Component line) {
-        if (lines.size() <= index) {
-            for (int i = lines.size(); i <= index; i ++) {
-                lines.add(new Xmpl(ComponentUtility.space(blanks ++), this));
+        if (ui != null) {
+            if (ui instanceof PanelUI p) {
+                p.kill();
+            } else if (ui instanceof ISharedPanelUI s) {
+                s.removeAudience(player);
+            } else {
+                throw new UnsupportedOperationException();
             }
         }
+    }
 
-        if (ComponentUtility.equals(line, lines.get(index).getSource())) {
-            return;
-        }
+    protected final Player player;
 
-        Xmpl old = lines.get(index);
+    /**
+     * Start a GUI for any player.
+     *
+     * @param player Player showing GUI
+     */
+    public PanelUI(@NotNull Player player) {
+        show(this.player = player, this);
+    }
 
-        if (old != null) {
-            old.kill();
-        }
-
-        lines.set(index, new Xmpl(line, this));
-        push();
+    /**
+     * Get the player displaying the panel.
+     *
+     * @return Player
+     */
+    public final @NotNull Player getPlayer() {
+        return player;
     }
 
     @Override
-    public void addLine(@NotNull Component line) {
-        setLine(lines.size(), line);
-    }
-
-    @Override
-    public void addLine(int amount) {
-        if (amount < 0) {
-            throw new IllegalArgumentException();
-        }
-
-        for (int i = 0; i < amount; i ++) {
-            addLine();
-        }
-    }
-
-    @Override
-    public void addLine() {
-        addLine(ComponentUtility.space(blanks ++));
-    }
-
-    @Override
-    public void removeLine(int index) {
-        lines.remove(index);
-        push();
-    }
-
-    private @Nullable Score getScore(int index) {
-        int score = size() - index - 1;
-
-        return scoreboard.getEntries().stream().filter(entry -> {
-            Score s = objective.getScore(entry);
-            return s.getScore() == score;
-        }).findFirst().map(objective::getScore).orElse(null);
-    }
-
-    private void push() {
-        scoreboard.getEntries().forEach(scoreboard::resetScores);
-
-        int i = 0;
-
-        for (int j = size() - 1; 0 <= j; j --) {
-            Score score = objective.getScore(LegacyComponentSerializer.legacySection().serialize(lines.get(i ++).asComponent()));
-            score.setScore(j);
-        }
-    }
-
-    @Override
-    public int size() {
-        return lines.size();
-    }
-
-    @Override
-    public void clear() {
-        lines.clear();
-        blanks = 0;
-        push();
-    }
-
-    @Override
-    public final void tick() {
-        onTick();
-
-        if (! ComponentUtility.equals(title.getSource(), title())) {
-            title.kill();
-            title = new Xmpl(title(), this);
-        }
-
-        if (! ComponentUtility.equals(objective.displayName(), title.asComponent())) {
-            objective.displayName(title.asComponent());
-        }
-
-        for (int i = 0; i < size(); i ++) {
-            Score score = getScore(i);
-
-            if (score == null) {
-                continue;
-            }
-
-            Xmpl line = lines.get(i);
-
-            if (! ComponentUtility.equals(score.customName(), line.asComponent())) {
-                score.customName(line.asComponent());
-            }
-        }
+    public final void kill() {
+        super.kill();
+        hide(player);
     }
 }

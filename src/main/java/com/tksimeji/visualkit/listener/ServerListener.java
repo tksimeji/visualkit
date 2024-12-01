@@ -9,7 +9,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.jetbrains.annotations.NotNull;
 
-public class ServerListener implements Listener {
+public final class ServerListener implements Listener {
     @EventHandler
     public void onServerTickStart(@NotNull ServerTickStartEvent event) {
         Xmpl.getInstances().forEach(Xmpl::tick);

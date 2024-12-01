@@ -6,15 +6,21 @@ import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
 
 public abstract class ChestUI extends InventoryUI<Inventory> implements IChestUI {
-    protected final Inventory inventory;
+    protected final @NotNull Inventory inventory;
 
+    /**
+     * Start a GUI for any player.
+     *
+     * @param player Player showing GUI
+     */
     public ChestUI(@NotNull Player player) {
         super(player);
-        player.openInventory(inventory = Bukkit.createInventory(null, size().asInt(), title()));
+        inventory = Bukkit.createInventory(null, size().asInt(), title());
+        Bukkit.getScheduler().runTask(Visualkit.plugin(), () -> player.openInventory(inventory));
     }
 
     @Override
-    public @NotNull Inventory asInventory() {
+    public final @NotNull Inventory asInventory() {
         return inventory;
     }
 }

@@ -9,19 +9,52 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public interface IInventoryUI<I extends Inventory> extends VisualkitUI {
+    /**
+     * Gets the player that has the GUI open.
+     *
+     * @return player
+     */
     @NotNull Player getPlayer();
 
+    /**
+     * Gets the element of a given slot.
+     *
+     * @param slot Slot index number
+     * @return GUI element
+     */
     @Nullable VisualkitElement getElement(int slot);
 
+    /**
+     * Place an element in any slot.
+     *
+     * @param slot Slot index number
+     * @param element The element to place, if null it will become an empty slot
+     */
     void setElement(int slot, @Nullable VisualkitElement element);
 
+    /**
+     * Get GUI inventory.
+     *
+     * @return Inventory
+     */
     @NotNull I asInventory();
 
+    /**
+     * Called when the GUI is clicked.
+     *
+     * @param slot Clicked slot
+     * @param click Click Type
+     * @param mouse The mouse button used
+     */
     default void onClick(int slot, @NotNull Click click, @NotNull Mouse mouse) {}
 
+    /**
+     * Called when the GUI is closed.
+     */
     default void onClose() {}
 
-    default void onTick() {}
-
+    /**
+     * Close the GUI.
+     */
     void close();
 }

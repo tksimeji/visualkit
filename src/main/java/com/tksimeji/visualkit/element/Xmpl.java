@@ -7,18 +7,21 @@ import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.TextReplacementConfig;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
+import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 public final class Xmpl implements Killable, Tickable {
-    private static final Set<Xmpl> instances = new HashSet<>();
+    private static final @NotNull Set<@NotNull Xmpl> instances = new HashSet<>();
 
-    public static @NotNull Set<Xmpl> getInstances() {
+    public static @NotNull Set<@NotNull Xmpl> getInstances() {
         return new HashSet<>(instances);
     }
 
@@ -78,7 +81,8 @@ public final class Xmpl implements Killable, Tickable {
                 Object value = field.get(target);
 
                 String placeholder = "${" + field.getName() + "}";
-                String replacement = value != null ? value.toString() : "null";
+                Component replacement = value instanceof Component c ? c :
+                        LegacyComponentSerializer.legacySection().deserialize(Optional.ofNullable(value).orElse("null").toString().replace('&', '§'));
 
                 component = component.replaceText(TextReplacementConfig.builder()
                         .matchLiteral(placeholder)

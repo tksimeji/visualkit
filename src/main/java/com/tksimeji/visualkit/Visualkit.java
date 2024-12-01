@@ -1,6 +1,7 @@
 package com.tksimeji.visualkit;
 
 import com.tksimeji.visualkit.listener.InventoryListener;
+import com.tksimeji.visualkit.listener.PlayerListener;
 import com.tksimeji.visualkit.listener.ServerListener;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
@@ -13,8 +14,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -22,10 +21,9 @@ import java.util.List;
 import java.util.Set;
 
 public final class Visualkit extends JavaPlugin {
-    private static final Logger log = LoggerFactory.getLogger(Visualkit.class);
     private static Visualkit instance;
 
-    static final Set<VisualkitUI> sessions = new HashSet<>();
+    static final @NotNull Set<@NotNull VisualkitUI> sessions = new HashSet<>();
 
     public static @NotNull Visualkit plugin() {
         return instance;
@@ -39,7 +37,7 @@ public final class Visualkit extends JavaPlugin {
         return instance.getComponentLogger();
     }
 
-    public static @NotNull List<VisualkitUI> sessions() {
+    public static @NotNull List<@NotNull VisualkitUI> sessions() {
         return new ArrayList<>(sessions);
     }
 
@@ -55,7 +53,14 @@ public final class Visualkit extends JavaPlugin {
     }
 
     public static @Nullable IPanelUI getPanelUI(@Nullable Player player) {
-        return sessions(IPanelUI.class).stream().filter(s -> s.getPlayers().contains(player)).findFirst().orElse(null);
+        if (player == null) {
+            return null;
+        }
+
+        return sessions(IPanelUI.class).stream()
+                .filter(s -> s instanceof PanelUI t ? t.getPlayer() == player : s instanceof SharedPanelUI u && u.isAudience(player))
+                .findFirst()
+                .orElse(null);
     }
 
     @Override
@@ -64,6 +69,7 @@ public final class Visualkit extends JavaPlugin {
 
         Bukkit.getPluginManager().registerEvents(new InventoryListener(), this);
         Bukkit.getPluginManager().registerEvents(new ServerListener(), this);
+        Bukkit.getPluginManager().registerEvents(new PlayerListener(), this);
 
         logger().info(Component.text("       __    ").color(TextColor.color(255, 86, 217)));
         logger().info(Component.text("___  _|  | __").color(TextColor.color(255, 124, 255)).append(Component.text("    Visualkit - " + version()).color(NamedTextColor.WHITE)));

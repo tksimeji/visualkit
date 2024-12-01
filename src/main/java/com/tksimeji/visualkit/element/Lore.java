@@ -9,7 +9,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Arrays;
 import java.util.List;
 
-public final class Lore extends KillableArrayList<Xmpl> implements Killable {
+public final class Lore extends KillableArrayList<@NotNull Xmpl> implements Killable {
     static @NotNull Lore empty() {
         return new Lore();
     }
