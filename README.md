@@ -95,7 +95,7 @@ In addition to slots, you can add click and mouse conditions to the Handler anno
 
 ```java
 @Handler(slot = 13, click = Click.SINGLE, mouse = {Mouse.LEFT, Mouse.RIGHT})
-public void onSheepButtonClick() {
+public void onCookieClick() {
     count ++;
 }
 ```
