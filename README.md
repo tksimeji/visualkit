@@ -19,7 +19,7 @@ Donate to the future of Uganda's children!
 
 Add Visualkit to your plugin's dependencies.
 
-Visualkit is available on Maven Central. To add dependency using Gradle, write the following in your `build.gradle` (Groovy DSL DSL)
+Visualkit is available on Maven Central. To add dependency using Gradle, write the following in your `build.gradle` (Groovy DSL)
 
 ```groovy
 dependencies {
@@ -59,7 +59,7 @@ However, the case of `paper-plugin.yml` seems to be [slightly different](https:/
 For a plugin that uses Visualkit to work, Visualkit must be installed as a plugin on the server along with the plugin.
 
 Installing it on the server is no different from a normal plugin.
-Just download the jar file from "Release" and place it in the plugins directory on you server.
+Just download the jar file from "Releases" and place it in the plugins directory on you server.
 
 ![Release](./assets/f3baa37f-72de-4b1a-a48e-2b680a9afba6.png)
 
