@@ -2,7 +2,7 @@
 
 ![Banner](./assets/042a7581-620a-4df7-bb12-e873befa8529.png)
 
-![Version](https://img.shields.io/badge/version-0.1.0-blue?style=flat-square)
+![Version](https://img.shields.io/badge/version-0.1.1-blue?style=flat-square)
 ![Licence](https://img.shields.io/badge/licence-MIT-red?style=flat-square)
 
 Visualkit is a free, open-source GUI framework for [Paper](https://papermc.io/software/paper) server.
@@ -71,7 +71,7 @@ In GUIs created with Visualkit, you can use placeholders for text.
 
 ```java
 VisualkitElement
-        .of(Material.NAME_TAG)
+        .create(Material.NAME_TAG)
         .title(Component.text("Hello, ${name}."));
 ```
 
@@ -125,7 +125,7 @@ private int count;
 
 @Element(13)
 private final VisualkitElement sheepButton = VisualkitElement
-        .of(Material.COOKIE)
+        .create(Material.COOKIE)
         .title(Component.text("Click me!").color(NamedTextColor.GREEN).decorate(TextDecoration.BOLD))
         .lore(Component.text("Clicks: ${count}"));
 ```
@@ -147,7 +147,7 @@ You can also use asm (Advanced Slot Mapping) for more advanced specifications.
 If you want to dynamically add or remove elements, use `com.tksimeji.visualkit.ChestUI#setElement(...)`
 
 ```java
-setElement(0, VisualkitElement.of(Material.COOKIE).title(Component.text("Click me!")));
+setElement(0, VisualkitElement.create(Material.COOKIE).title(Component.text("Click me!")));
 
 setElement(0, null);
 ```

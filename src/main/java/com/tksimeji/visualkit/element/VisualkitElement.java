@@ -17,8 +17,19 @@ public final class VisualkitElement implements Killable {
      * @param type Item type
      * @return New element
      */
-    public static @NotNull VisualkitElement of(@NotNull Material type) {
+    public static @NotNull VisualkitElement create(@NotNull Material type) {
         return new VisualkitElement(type);
+    }
+
+    /**
+     * This factory method will be replaced by {@link VisualkitElement#create(Material)} in the feature.
+     *
+     * @param type Item type
+     * @return New element
+     */
+    @Deprecated(since = "0.1.1", forRemoval = true)
+    public static @NotNull VisualkitElement of(@NotNull Material type) {
+        return create(type);
     }
 
     private @NotNull ItemStack item;
