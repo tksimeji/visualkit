@@ -5,6 +5,7 @@ import com.tksimeji.visualkit.api.Mouse;
 import com.tksimeji.visualkit.element.VisualkitElement;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -27,10 +28,18 @@ public interface IInventoryUI<I extends Inventory> extends VisualkitUI {
     /**
      * Place an element in any slot.
      *
-     * @param slot Slot index number
+     * @param slot    Slot index number
      * @param element The element to place, if null it will become an empty slot
      */
     void setElement(int slot, @Nullable VisualkitElement element);
+
+    /**
+     * Place on element in any slot.
+     *
+     * @param slot    Slot index number
+     * @param element The element to place, if null it will become an empty slot
+     */
+    void setElement(int slot, @Nullable ItemStack element);
 
     /**
      * Get GUI inventory.
@@ -42,16 +51,18 @@ public interface IInventoryUI<I extends Inventory> extends VisualkitUI {
     /**
      * Called when the GUI is clicked.
      *
-     * @param slot Clicked slot
+     * @param slot  Clicked slot
      * @param click Click Type
      * @param mouse The mouse button used
      */
-    default void onClick(int slot, @NotNull Click click, @NotNull Mouse mouse) {}
+    default void onClick(int slot, @NotNull Click click, @NotNull Mouse mouse) {
+    }
 
     /**
      * Called when the GUI is closed.
      */
-    default void onClose() {}
+    default void onClose() {
+    }
 
     /**
      * Close the GUI.

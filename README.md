@@ -2,14 +2,15 @@
 
 ![Banner](./assets/042a7581-620a-4df7-bb12-e873befa8529.png)
 
-![Version](https://img.shields.io/badge/version-0.1.2-blue?style=flat-square)
+![Version](https://img.shields.io/badge/version-0.1.3-blue?style=flat-square)
 ![Licence](https://img.shields.io/badge/licence-MIT-red?style=flat-square)
 
 Visualkit is a free, open-source GUI framework for [Paper](https://papermc.io/software/paper) server.
 
 Maximum respect to [Bram Moolenaar](https://github.com/brammool), the developer of [Vim](https://www.vim.org/).
 
-I also sympathized with his philanthropic side, so I decided to add the same text as the Vim startup screen to the Visualkit banner.
+I also sympathized with his philanthropic side, so I decided to add the same text as the Vim startup screen to the
+Visualkit banner.
 
 #### "Help poor children in Uganda!"
 
@@ -19,7 +20,8 @@ Donate to the future of Uganda's children!
 
 Add Visualkit to your plugin's dependencies.
 
-Visualkit is available on Maven Central. To add dependency using Gradle, write the following in your `build.gradle` (Groovy DSL)
+Visualkit is available on Maven Central. To add dependency using Gradle, write the following in your `build.gradle` (
+Groovy DSL)
 
 ```groovy
 dependencies {
@@ -54,7 +56,8 @@ depend:
   - Visualkit
 ```
 
-However, the case of `paper-plugin.yml` seems to be [slightly different](https://docs.papermc.io/paper/dev/getting-started/paper-plugins).
+However, the case of `paper-plugin.yml` seems to
+be [slightly different](https://docs.papermc.io/paper/dev/getting-started/paper-plugins).
 
 For a plugin that uses Visualkit to work, Visualkit must be installed as a plugin on the server along with the plugin.
 
@@ -124,10 +127,17 @@ Add `com.tksimeji.visualkit.api.Element` to a field of type `com.tksimeji.visual
 private int count;
 
 @Element(13)
-private final VisualkitElement sheepButton = VisualkitElement
+private final VisualkitElement cookieButton = VisualkitElement
         .create(Material.COOKIE)
         .title(Component.text("Click me!").color(NamedTextColor.GREEN).decorate(TextDecoration.BOLD))
         .lore(Component.text("Clicks: ${count}"));
+```
+
+Alternatively, you can specify an `org.bukkit.inventory.ItemStack`.
+
+```java
+@Element(13)
+private final ItemStack cookieButton = new ItemStack(Material.COOKIE, 1);
 ```
 
 The annotation parameter specifies the index in the GUI.
@@ -147,8 +157,13 @@ You can also use asm (Advanced Slot Mapping) for more advanced specifications.
 If you want to dynamically add or remove elements, use `com.tksimeji.visualkit.ChestUI#setElement(...)`
 
 ```java
+// You can specify an VisualkitElement
 setElement(0, VisualkitElement.create(Material.COOKIE).title(Component.text("Click me!")));
 
+// You can specify an ItemStack
+setElement(0, new ItemStack(Material.COOKIE, 1));
+
+// Empty a slot
 setElement(0, null);
 ```
 

@@ -11,7 +11,10 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Handler {
     int[] slot() default {};
+
     Asm[] asm() default {};
+
     @NotNull Click[] click() default {Click.SINGLE, Click.DOUBLE, Click.SHIFT};
+
     @NotNull Mouse[] mouse() default {Mouse.LEFT, Mouse.RIGHT};
 }

@@ -29,7 +29,7 @@ public final class InventoryListener implements Listener {
         }
 
         Click click = event.getClick() == ClickType.DOUBLE_CLICK ? Click.DOUBLE : event.isShiftClick() ? Click.SHIFT : Click.SINGLE;
-        Mouse mouse = event.getClick().isLeftClick() ? Mouse.LEFT: Mouse.RIGHT;
+        Mouse mouse = event.getClick().isLeftClick() ? Mouse.LEFT : Mouse.RIGHT;
 
         ui.onClick(event.getSlot(), click, mouse);
     }

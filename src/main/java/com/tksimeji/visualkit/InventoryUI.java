@@ -74,6 +74,11 @@ public abstract class InventoryUI<I extends Inventory> implements IInventoryUI<I
     }
 
     @Override
+    public void setElement(int slot, @Nullable ItemStack element) {
+        setElement(slot, VisualkitElement.of(element));
+    }
+
+    @Override
     public final void onClick(int slot, @NotNull Click click, @NotNull Mouse mouse) {
         handlers.stream().filter(handler -> {
             Handler annotation = handler.getAnnotation(Handler.class);
@@ -84,7 +89,7 @@ public abstract class InventoryUI<I extends Inventory> implements IInventoryUI<I
             Parameter[] parameters = handler.getParameters();
             Object[] args = new Object[parameters.length];
 
-            for (int i = 0; i < args.length; i ++) {
+            for (int i = 0; i < args.length; i++) {
                 Parameter parameter = parameters[i];
                 Class<?> type = parameter.getType();
 
@@ -99,12 +104,12 @@ public abstract class InventoryUI<I extends Inventory> implements IInventoryUI<I
                 }
             }
 
-           try {
-               handler.setAccessible(true);
-               handler.invoke(this, args);
-           } catch (InvocationTargetException | IllegalAccessException e) {
-               throw new RuntimeException(e);
-           }
+            try {
+                handler.setAccessible(true);
+                handler.invoke(this, args);
+            } catch (InvocationTargetException | IllegalAccessException e) {
+                throw new RuntimeException(e);
+            }
         });
     }
 
@@ -129,15 +134,22 @@ public abstract class InventoryUI<I extends Inventory> implements IInventoryUI<I
         Arrays.stream(getClass().getDeclaredFields())
                 .filter(field -> ! placed.contains(field) &&
                         field.isAnnotationPresent(Element.class) &&
-                        field.getType() == VisualkitElement.class)
+                        (VisualkitElement.class.isAssignableFrom(field.getType()) || ItemStack.class.isAssignableFrom(field.getType())))
                 .forEach(field -> {
                     field.setAccessible(true);
 
                     try {
-                        VisualkitElement element = (VisualkitElement) field.get(InventoryUI.this);
+                        Object element = field.get(InventoryUI.this);
 
                         AsmUtility.of(field.getAnnotation(Element.class)).forEach(slot -> {
-                            setElement(slot, element);
+                            if (element instanceof VisualkitElement e) {
+                                setElement(slot, e);
+                            } if (element instanceof ItemStack e) {
+                                setElement(slot, e);
+                            } else {
+                                throw new UnsupportedOperationException();
+                            }
+
                             placed.add(field);
                         });
                     } catch (IllegalAccessException e) {

@@ -22,6 +22,34 @@ public final class VisualkitElement implements Killable {
     }
 
     /**
+     * Create a new element from the {@link ItemStack}.
+     *
+     * @param item The source {@link ItemStack}
+     * @return New element
+     */
+    public static @NotNull VisualkitElement of(@NotNull ItemStack item) {
+        ItemMeta meta = item.getItemMeta();
+        VisualkitElement element = create(item.getType());
+
+        element.title(meta.displayName());
+        element.stack(item.getAmount());
+
+        if (meta.hasLore()) {
+            element.lore(meta.lore().toArray(new Component[0]));
+        }
+
+        if (meta.hasCustomModelData()) {
+            element.model(meta.getCustomModelData());
+        }
+
+        if (meta.hasEnchants()) {
+            element.aura(true);
+        }
+
+        return element;
+    }
+
+    /**
      * This factory method will be replaced by {@link VisualkitElement#create(Material)} in the feature.
      *
      * @param type Item type
@@ -34,8 +62,7 @@ public final class VisualkitElement implements Killable {
 
     private @NotNull ItemStack item;
 
-    private VisualkitElement(@NotNull Material type)
-    {
+    private VisualkitElement(@NotNull Material type) {
         this.type = type;
         item = new ItemStack(type, stack);
     }
