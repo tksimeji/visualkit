@@ -2,7 +2,7 @@
 
 ![Banner](./assets/042a7581-620a-4df7-bb12-e873befa8529.png)
 
-![Version](https://img.shields.io/badge/version-0.1.1-blue?style=flat-square)
+![Version](https://img.shields.io/badge/version-0.1.2-blue?style=flat-square)
 ![Licence](https://img.shields.io/badge/licence-MIT-red?style=flat-square)
 
 Visualkit is a free, open-source GUI framework for [Paper](https://papermc.io/software/paper) server.
@@ -156,7 +156,7 @@ setElement(0, null);
 
 Define a method to handle clicks on any slot.
 
-Add `com.tksimeji.visualkit.api.Handler` to a method that take no arguments.
+Add a method with the annotation `com.tksimeji.visualkit.api.Handler`.
 In addition to slots, you can add click and mouse conditions to the Handler annotation.
 
 ```java
@@ -170,6 +170,24 @@ Of course, you can also use asm to specify the slot.
 
 ```java
 @Handler(asm = {@Asm(from = 0, to = 8)}, slot = {9, 10})
+```
+
+It can also take slot, click, and mouse state as arguments.
+However, these arguments are injected only if the following conditions are met:
+
+| Name   | Type                               |
+|:-------|:-----------------------------------|
+| $slot  | `int` / `java.lang.Integer`        |
+| $click | `com.tksimeji.visualkit.api.Click` |
+| $mouse | `com.tksimeji.visualkit.api.Mouse` |
+
+This is useful when you specify a broad conditions in the annotation.
+
+```java
+@Handler(slot = 0)
+public void onClick(int $slot, Click $click, Mouse $mouse) {
+    // do something
+}
 ```
 
 ### 4. Display the GUI

@@ -10,20 +10,25 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 public abstract class InventoryUI<I extends Inventory> implements IInventoryUI<I> {
-    protected final Player player;
+    protected final @NotNull Player player;
 
     protected final @NotNull Map<@NotNull Integer, @NotNull VisualkitElement> elements = new KillableHashMap<>();
     protected final @NotNull Set<@NotNull Method> handlers = Arrays.stream(getClass().getDeclaredMethods())
             .filter(method -> method.isAnnotationPresent(Handler.class) && method.getParameters().length == 0)
             .collect(Collectors.toSet());
+
+    private final @NotNull Set<@NotNull Field> placed = new HashSet<>();
 
     /**
      * Creating a GUI.
@@ -76,9 +81,27 @@ public abstract class InventoryUI<I extends Inventory> implements IInventoryUI<I
                     Arrays.stream(annotation.click()).toList().contains(click) &&
                     Arrays.stream(annotation.mouse()).toList().contains(mouse);
         }).forEach(handler -> {
+            Parameter[] parameters = handler.getParameters();
+            Object[] args = new Object[parameters.length];
+
+            for (int i = 0; i < args.length; i ++) {
+                Parameter parameter = parameters[i];
+                Class<?> type = parameter.getType();
+
+                if (parameter.getName().equals("$slot") && Integer.class.isAssignableFrom(type)) {
+                    args[i] = slot;
+                } else if (parameter.getName().equals("$click") && Click.class.isAssignableFrom(type)) {
+                    args[i] = click;
+                } else if (parameter.getName().equals("$mouse") && Mouse.class.isAssignableFrom(type)) {
+                    args[i] = mouse;
+                } else {
+                    args[i] = null;
+                }
+            }
+
            try {
                handler.setAccessible(true);
-               handler.invoke(this);
+               handler.invoke(this, args);
            } catch (InvocationTargetException | IllegalAccessException e) {
                throw new RuntimeException(e);
            }
@@ -104,7 +127,9 @@ public abstract class InventoryUI<I extends Inventory> implements IInventoryUI<I
         onTick();
 
         Arrays.stream(getClass().getDeclaredFields())
-                .filter(field -> field.isAnnotationPresent(Element.class) && field.getType() == VisualkitElement.class)
+                .filter(field -> ! placed.contains(field) &&
+                        field.isAnnotationPresent(Element.class) &&
+                        field.getType() == VisualkitElement.class)
                 .forEach(field -> {
                     field.setAccessible(true);
 
@@ -113,6 +138,7 @@ public abstract class InventoryUI<I extends Inventory> implements IInventoryUI<I
 
                         AsmUtility.of(field.getAnnotation(Element.class)).forEach(slot -> {
                             setElement(slot, element);
+                            placed.add(field);
                         });
                     } catch (IllegalAccessException e) {
                         throw new RuntimeException(e);
