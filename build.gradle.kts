@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "com.tksimeji"
-version = "0.1.3"
+version = "0.2.0"
 
 repositories {
     mavenCentral()
@@ -21,6 +21,7 @@ repositories {
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.21.1-R0.1-SNAPSHOT")
+    implementation("com.tksimeji:mojango:0.0.0")
 }
 
 publishing {

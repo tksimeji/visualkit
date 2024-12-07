@@ -3,6 +3,7 @@ package com.tksimeji.visualkit.element;
 import com.tksimeji.visualkit.Killable;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -10,7 +11,9 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public final class VisualkitElement implements Killable {
+import java.util.UUID;
+
+public class VisualkitElement implements Killable {
     /**
      * Create a new element.
      *
@@ -19,6 +22,45 @@ public final class VisualkitElement implements Killable {
      */
     public static @NotNull VisualkitElement create(@NotNull Material type) {
         return new VisualkitElement(type);
+    }
+
+    /**
+     * Create a new head element.
+     *
+     * @return New element
+     */
+    public static @NotNull HeadElement head() {
+        return new HeadElement();
+    }
+
+    /**
+     * Create a new head element.
+     *
+     * @param url Texture URL
+     * @return New element
+     */
+    public static @NotNull HeadElement head(@NotNull String url) {
+        return head().url(url);
+    }
+
+    /**
+     * Create a new head element.
+     *
+     * @param uuid Player UUID
+     * @return New element
+     */
+    public static @NotNull HeadElement head(@NotNull UUID uuid) {
+        return head().uuid(uuid);
+    }
+
+    /**
+     * Create a new head element.
+     *
+     * @param player Player name
+     * @return New element
+     */
+    public static @NotNull HeadElement head(@NotNull OfflinePlayer player) {
+        return head().player(player);
     }
 
     /**
@@ -49,20 +91,9 @@ public final class VisualkitElement implements Killable {
         return element;
     }
 
-    /**
-     * This factory method will be replaced by {@link VisualkitElement#create(Material)} in the feature.
-     *
-     * @param type Item type
-     * @return New element
-     */
-    @Deprecated(since = "0.1.1", forRemoval = true)
-    public static @NotNull VisualkitElement of(@NotNull Material type) {
-        return create(type);
-    }
-
     private @NotNull ItemStack item;
 
-    private VisualkitElement(@NotNull Material type) {
+    protected VisualkitElement(@NotNull Material type) {
         this.type = type;
         item = new ItemStack(type, stack);
     }

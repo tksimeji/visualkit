@@ -2,7 +2,7 @@
 
 ![Banner](./assets/042a7581-620a-4df7-bb12-e873befa8529.png)
 
-![Version](https://img.shields.io/badge/version-0.1.3-blue?style=flat-square)
+![Version](https://img.shields.io/badge/version-0.2.0-blue?style=flat-square)
 ![Licence](https://img.shields.io/badge/licence-MIT-red?style=flat-square)
 
 Visualkit is a free, open-source GUI framework for [Paper](https://papermc.io/software/paper) server.
@@ -131,6 +131,17 @@ private final VisualkitElement cookieButton = VisualkitElement
         .create(Material.COOKIE)
         .title(Component.text("Click me!").color(NamedTextColor.GREEN).decorate(TextDecoration.BOLD))
         .lore(Component.text("Clicks: ${count}"));
+
+// Note: The player head API was added in 0.2.x.
+
+VisualkitElement.head()
+    .url("https");
+
+VisualkitElement.head("http://textures.minecraft.net/texture/a60ed3827ed16f34b367ff96fdd6a56cb365f522e58122c147fc919fa90b208c");
+
+VisualkitElement.head(UUID.fromString("ee54c324-9ab4-472e-aa4d-392f15b820fb"));
+
+VisualkitElement.head(Bukkit.getPlayer("tksimeji"));
 ```
 
 Alternatively, you can specify an `org.bukkit.inventory.ItemStack`.
