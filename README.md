@@ -1,9 +1,11 @@
 # Visualkit
 
-![Banner](./assets/042a7581-620a-4df7-bb12-e873befa8529.png)
+The Minecraft GUI framework
 
 ![Version](https://img.shields.io/badge/version-0.2.1-blue?style=flat-square)
 ![Licence](https://img.shields.io/badge/licence-MIT-red?style=flat-square)
+
+![Eye-catching](./assets/4d27ea8b-0615-4f81-8ed8-6a2d0a58132d.png)
 
 Visualkit is a free, open-source GUI framework for [Paper](https://papermc.io/software/paper) server.
 
@@ -11,6 +13,8 @@ Maximum respect to [Bram Moolenaar](https://github.com/brammool), the developer 
 
 I also sympathized with his philanthropic side, so I decided to add the same text as the Vim startup screen to the
 Visualkit banner.
+
+![Banner](./assets/042a7581-620a-4df7-bb12-e873befa8529.png)
 
 #### "Help poor children in Uganda!"
 
