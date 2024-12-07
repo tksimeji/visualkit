@@ -2,7 +2,7 @@
 
 ![Banner](./assets/042a7581-620a-4df7-bb12-e873befa8529.png)
 
-![Version](https://img.shields.io/badge/version-0.2.0-blue?style=flat-square)
+![Version](https://img.shields.io/badge/version-0.2.1-blue?style=flat-square)
 ![Licence](https://img.shields.io/badge/licence-MIT-red?style=flat-square)
 
 Visualkit is a free, open-source GUI framework for [Paper](https://papermc.io/software/paper) server.
