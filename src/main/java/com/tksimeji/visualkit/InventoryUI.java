@@ -131,6 +131,8 @@ public abstract class InventoryUI<I extends Inventory> implements IInventoryUI<I
     public final void tick() {
         onTick();
 
+        elements.forEach(this::setElement);
+
         Arrays.stream(getClass().getDeclaredFields())
                 .filter(field -> ! placed.contains(field) &&
                         field.isAnnotationPresent(Element.class) &&
@@ -144,7 +146,7 @@ public abstract class InventoryUI<I extends Inventory> implements IInventoryUI<I
                         AsmUtility.of(field.getAnnotation(Element.class)).forEach(slot -> {
                             if (element instanceof VisualkitElement e) {
                                 setElement(slot, e);
-                            } if (element instanceof ItemStack e) {
+                            } else if (element instanceof ItemStack e) {
                                 setElement(slot, e);
                             } else {
                                 throw new UnsupportedOperationException();
