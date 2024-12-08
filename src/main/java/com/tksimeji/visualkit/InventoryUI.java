@@ -23,12 +23,12 @@ import java.util.stream.Collectors;
 public abstract class InventoryUI<I extends Inventory> implements IInventoryUI<I> {
     protected final @NotNull Player player;
 
-    protected final @NotNull Map<@NotNull Integer, @NotNull VisualkitElement> elements = new KillableHashMap<>();
-    protected final @NotNull Set<@NotNull Method> handlers = Arrays.stream(getClass().getDeclaredMethods())
-            .filter(method -> method.isAnnotationPresent(Handler.class) && method.getParameters().length == 0)
+    protected final @NotNull Map<Integer, VisualkitElement> elements = new KillableHashMap<>();
+    protected final @NotNull Set<Method> handlers = Arrays.stream(getClass().getDeclaredMethods())
+            .filter(method -> method.isAnnotationPresent(Handler.class))
             .collect(Collectors.toSet());
 
-    private final @NotNull Set<@NotNull Field> placed = new HashSet<>();
+    private final @NotNull Set<Field> placed = new HashSet<>();
 
     /**
      * Creating a GUI.
@@ -65,8 +65,9 @@ public abstract class InventoryUI<I extends Inventory> implements IInventoryUI<I
         elements.put(slot, element);
 
         ItemStack item = element.asItemStack(this);
+        ItemStack old = asInventory().getItem(slot);
 
-        if (item.equals(asInventory().getItem(slot))) {
+        if (item.equals(old)) {
             return;
         }
 
@@ -93,7 +94,7 @@ public abstract class InventoryUI<I extends Inventory> implements IInventoryUI<I
                 Parameter parameter = parameters[i];
                 Class<?> type = parameter.getType();
 
-                if (parameter.getName().equals("$slot") && Integer.class.isAssignableFrom(type)) {
+                if (parameter.getName().equals("$slot") && (Integer.class.isAssignableFrom(type)) || int.class.isAssignableFrom(type)) {
                     args[i] = slot;
                 } else if (parameter.getName().equals("$click") && Click.class.isAssignableFrom(type)) {
                     args[i] = click;

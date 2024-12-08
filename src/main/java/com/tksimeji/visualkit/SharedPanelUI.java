@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 
 public abstract class SharedPanelUI extends SimplePanelUI implements ISharedPanelUI {
-    private final @NotNull Set<@NotNull Player> audiences = new HashSet<>();
+    private final @NotNull Set<Player> audiences = new HashSet<>();
 
     /**
      * Start a GUI for any player(s).
@@ -22,7 +22,7 @@ public abstract class SharedPanelUI extends SimplePanelUI implements ISharedPane
      *
      * @param audiences Audience
      */
-    public SharedPanelUI(@NotNull List<@NotNull Player> audiences) {
+    public SharedPanelUI(@NotNull List<Player> audiences) {
         audiences.forEach(this::addAudience);
     }
 

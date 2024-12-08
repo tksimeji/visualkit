@@ -18,9 +18,9 @@ import java.util.Optional;
 import java.util.Set;
 
 public final class Xmpl implements Killable, Tickable {
-    private static final @NotNull Set<@NotNull Xmpl> instances = new HashSet<>();
+    private static final @NotNull Set<Xmpl> instances = new HashSet<>();
 
-    public static @NotNull Set<@NotNull Xmpl> getInstances() {
+    public static @NotNull Set<Xmpl> getInstances() {
         return new HashSet<>(instances);
     }
 

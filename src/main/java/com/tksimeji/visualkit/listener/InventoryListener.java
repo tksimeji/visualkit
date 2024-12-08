@@ -1,6 +1,7 @@
 package com.tksimeji.visualkit.listener;
 
 import com.tksimeji.visualkit.IInventoryUI;
+import com.tksimeji.visualkit.InventoryUI;
 import com.tksimeji.visualkit.Visualkit;
 import com.tksimeji.visualkit.api.Click;
 import com.tksimeji.visualkit.api.Mouse;
@@ -36,16 +37,8 @@ public final class InventoryListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onInventoryClose(@NotNull InventoryCloseEvent event) {
-        if (! (event.getPlayer() instanceof Player player)) {
-            return;
-        }
-
-        IInventoryUI<?> ui = Visualkit.getInventoryUI(player);
-
-        if (ui == null) {
-            return;
-        }
-
-        ui.close();
+        Visualkit.sessions(InventoryUI.class).stream()
+                .filter(session -> session.asInventory() ==  event.getView().getTopInventory())
+                .forEach(InventoryUI::close);
     }
 }

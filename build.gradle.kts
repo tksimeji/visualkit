@@ -5,10 +5,11 @@ plugins {
     `maven-publish`
     id("cl.franciscosolis.sonatype-central-upload") version "1.0.2"
     id("com.github.johnrengelman.shadow") version "7.+"
+    kotlin("jvm") version "2.1.0"
 }
 
 group = "com.tksimeji"
-version = "0.2.1"
+version = "0.2.2"
 
 repositories {
     mavenCentral()
@@ -22,7 +23,8 @@ repositories {
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.21.1-R0.1-SNAPSHOT")
-    implementation("com.tksimeji:mojango:0.0.0")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+    implementation("com.tksimeji:mojango:0.0.1")
 }
 
 publishing {

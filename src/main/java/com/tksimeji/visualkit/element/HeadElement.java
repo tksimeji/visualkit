@@ -3,6 +3,7 @@ package com.tksimeji.visualkit.element;
 import com.destroystokyo.paper.profile.PlayerProfile;
 import com.tksimeji.mojango.Mojango;
 import com.tksimeji.mojango.texture.Skin;
+import com.tksimeji.visualkit.Visualkit;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -15,9 +16,13 @@ import org.jetbrains.annotations.Nullable;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 public final class HeadElement extends VisualkitElement {
+    private static final Map<String, UUID> UUID_CACHE = new HashMap<>();
+
     HeadElement() {
         super(Material.PLAYER_HEAD);
     }
@@ -81,8 +86,10 @@ public final class HeadElement extends VisualkitElement {
             return this;
         }
 
-        Skin skin = Mojango.INSTANCE.account(uuid).getSkin();
-        url(skin != null ? skin.getUrl() : null);
+        Bukkit.getScheduler().runTaskAsynchronously(Visualkit.plugin(), () -> {
+            Skin skin = Mojango.INSTANCE.account(uuid).getSkin();
+            url(skin != null ? skin.getUrl() : null);
+        });
 
         return this;
     }
@@ -107,7 +114,11 @@ public final class HeadElement extends VisualkitElement {
 
         SkullMeta skullMeta = (SkullMeta) itemStack.getItemMeta();
 
-        PlayerProfile profile = Bukkit.createProfile(UUID.randomUUID());
+        UUID uuid = UUID_CACHE.getOrDefault(url.toString(), UUID.randomUUID());
+
+        UUID_CACHE.put(url.toString(), uuid);
+
+        PlayerProfile profile = Bukkit.createProfile(uuid);
         PlayerTextures textures = profile.getTextures();
 
         textures.setSkin(url);

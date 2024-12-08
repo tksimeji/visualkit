@@ -11,7 +11,7 @@ public interface ISharedPanelUI extends IPanelUI {
      *
      * @return Audience list
      */
-    @NotNull List<@NotNull Player> getAudience();
+    @NotNull List<Player> getAudience();
 
     /**
      * Add an audience.

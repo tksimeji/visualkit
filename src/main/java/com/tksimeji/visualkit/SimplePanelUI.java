@@ -22,7 +22,7 @@ abstract class SimplePanelUI implements IPanelUI {
     final @NotNull Scoreboard scoreboard = sm.getNewScoreboard();
     private final @NotNull Objective objective = scoreboard.registerNewObjective(UUID.randomUUID().toString(), Criteria.DUMMY, title());
 
-    private final @NotNull List<@NotNull Xmpl> lines = new KillableArrayList<>();
+    private final @NotNull List<Xmpl> lines = new KillableArrayList<>();
 
     private int blanks = 0;
 

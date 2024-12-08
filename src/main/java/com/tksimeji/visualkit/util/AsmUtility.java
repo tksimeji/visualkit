@@ -13,16 +13,16 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public final class AsmUtility {
-    public static @NotNull Set<@NotNull Integer> of(@NotNull Element annotation) {
+    public static @NotNull Set<Integer> of(@NotNull Element annotation) {
         return concat(of(annotation.value()), of(annotation.asm()));
     }
 
-    public static @NotNull Set<@NotNull Integer> of(@NotNull Handler annotation) {
+    public static @NotNull Set<Integer> of(@NotNull Handler annotation) {
         return concat(of(annotation.slot()), of(annotation.asm()));
     }
 
-    public static @NotNull Set<@NotNull Integer> of(@NotNull Asm... asms) {
-        Set<@NotNull Integer> set = new HashSet<>();
+    public static @NotNull Set<Integer> of(@NotNull Asm... asms) {
+        Set<Integer> set = new HashSet<>();
 
         for (Asm asm : asms) {
             set.addAll(concat(of(asm.value()), range(asm.from(), asm.to())));
@@ -31,11 +31,11 @@ public final class AsmUtility {
         return set;
     }
 
-    public static @NotNull Set<@NotNull Integer> of(int... slots) {
+    public static @NotNull Set<Integer> of(int... slots) {
         return Arrays.stream(slots).boxed().collect(Collectors.toSet());
     }
 
-    public static @NotNull Set<@NotNull Integer> range(int from, int to) {
+    public static @NotNull Set<Integer> range(int from, int to) {
         if (to < from || from < 0) {
             return Set.of();
         }
@@ -43,7 +43,7 @@ public final class AsmUtility {
         return of(IntStream.rangeClosed(from, to).toArray());
     }
 
-    public static @NotNull Set<@NotNull Integer> concat(@NotNull Set<@NotNull Integer> i, @NotNull Set<@NotNull Integer> j) {
+    public static @NotNull Set<Integer> concat(@NotNull Set<Integer> i, @NotNull Set<Integer> j) {
         return Stream.concat(i.stream(), j.stream()).collect(Collectors.toSet());
     }
 }

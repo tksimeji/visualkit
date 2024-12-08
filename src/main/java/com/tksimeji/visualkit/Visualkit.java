@@ -23,7 +23,7 @@ import java.util.Set;
 public final class Visualkit extends JavaPlugin {
     private static Visualkit instance;
 
-    static final @NotNull Set<@NotNull VisualkitUI> sessions = new HashSet<>();
+    static final @NotNull Set<VisualkitUI> sessions = new HashSet<>();
 
     public static @NotNull Visualkit plugin() {
         return instance;
@@ -37,7 +37,7 @@ public final class Visualkit extends JavaPlugin {
         return instance.getComponentLogger();
     }
 
-    public static @NotNull List<@NotNull VisualkitUI> sessions() {
+    public static @NotNull List<VisualkitUI> sessions() {
         return new ArrayList<>(sessions);
     }
 
