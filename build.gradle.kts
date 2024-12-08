@@ -70,8 +70,6 @@ java {
 }
 
 tasks.named<SonatypeCentralUploadTask>("sonatypeCentralUpload") {
-    println(System.getenv("PGP_SIGNING_KEY"))
-
     dependsOn("jar", "sourcesJar", "javadocJar", "generatePomFileForMavenPublication")
 
     username = System.getenv("SONATYPE_CENTRAL_USERNAME")
