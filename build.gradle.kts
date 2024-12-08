@@ -4,6 +4,7 @@ plugins {
     java
     `maven-publish`
     id("cl.franciscosolis.sonatype-central-upload") version "1.0.2"
+    id("com.github.johnrengelman.shadow") version "7.+"
 }
 
 group = "com.tksimeji"
