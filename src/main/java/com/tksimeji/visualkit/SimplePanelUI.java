@@ -49,7 +49,7 @@ abstract class SimplePanelUI implements IPanelUI {
             }
         }
 
-        if (ComponentUtility.equals(line, lines.get(index).getSource())) {
+        if (ComponentUtility.equals(ComponentUtility.empty().append(line), lines.get(index).getSource())) {
             return;
         }
 

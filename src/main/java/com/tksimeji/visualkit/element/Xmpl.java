@@ -2,17 +2,14 @@ package com.tksimeji.visualkit.element;
 
 import com.tksimeji.visualkit.Killable;
 import com.tksimeji.visualkit.Tickable;
+import com.tksimeji.visualkit.util.ComponentUtility;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.TextReplacementConfig;
-import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Field;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -28,12 +25,6 @@ public final class Xmpl implements Killable, Tickable {
         return new Xmpl(Component.empty());
     }
 
-    static @NotNull Component component() {
-        TextComponent.Builder plain = Component.text().color(NamedTextColor.WHITE);
-        Arrays.stream(TextDecoration.values()).forEach(decoration -> plain.decoration(decoration, false));
-        return plain.build();
-    }
-
     private final @NotNull Component source;
 
     private @Nullable Component component;
@@ -44,7 +35,7 @@ public final class Xmpl implements Killable, Tickable {
     }
 
     public Xmpl(@NotNull Component source, @Nullable Object target) {
-        this.source = component().append(source);
+        this.source = ComponentUtility.empty().append(source);
         this.target = target;
         instances.add(this);
     }
