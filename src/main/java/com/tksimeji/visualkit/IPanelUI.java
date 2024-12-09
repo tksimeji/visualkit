@@ -11,7 +11,7 @@ public interface IPanelUI extends VisualkitUI, Killable {
      * @param index Line index
      * @return Line
      */
-    @Nullable Component get(int index);
+    @Nullable Component getLine(int index);
 
     /**
      * Write on any line.
@@ -19,40 +19,61 @@ public interface IPanelUI extends VisualkitUI, Killable {
      * @param index Line index
      * @param line Content
      */
-    void set(int index, @NotNull Component line);
+    void setLine(int index, @NotNull Component line);
 
     /**
      * Add any line.
      *
      * @param line Content
      */
-    void add(@NotNull Component line);
+    void addLine(@NotNull Component line);
 
     /**
      * Add any number of blank lines.
      *
      * @param amount Number of lines
      */
-    void add(int amount);
+    void addLine(int amount);
 
     /**
      * Add a blank line.
      */
-    void add();
+    void addLine();
 
     /**
      * Remove any line.
      *
      * @param index Line index
      */
-    void remove(int index);
+    void removeLine(int index);
 
     /**
      * Leave any line blank.
      *
      * @param index Line index
      */
-    void clear(int index);
+    void clearLine(int index);
+
+    /**
+     * Get panel title.
+     *
+     * @return Title
+     */
+    @NotNull Component getTitle();
+
+    /**
+     * Set panel title.
+     *
+     * @param title New title
+     */
+    void setTitle(@NotNull Component title);
+
+    /**
+     * Determine if the panel is empty.
+     *
+     * @return True if there are no lines
+     */
+    boolean isEmpty();
 
     /**
      * Delete all lines and initialize.
@@ -65,11 +86,4 @@ public interface IPanelUI extends VisualkitUI, Killable {
      * @return Number of lines
      */
     int size();
-
-    /**
-     * Determine if the panel is empty.
-     *
-     * @return True if there are no lines
-     */
-    boolean empty();
 }

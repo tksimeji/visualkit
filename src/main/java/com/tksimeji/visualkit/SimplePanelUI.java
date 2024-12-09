@@ -17,10 +17,10 @@ import java.util.UUID;
 abstract class SimplePanelUI implements IPanelUI {
     static final @NotNull ScoreboardManager sm = Bukkit.getScoreboardManager();
 
-    private @NotNull Xmpl title = new Xmpl(title(), this);
+    private @NotNull Xmpl title = new Xmpl(Component.empty(), this);
 
     final @NotNull Scoreboard scoreboard = sm.getNewScoreboard();
-    private final @NotNull Objective objective = scoreboard.registerNewObjective(UUID.randomUUID().toString(), Criteria.DUMMY, title());
+    private final @NotNull Objective objective = scoreboard.registerNewObjective(UUID.randomUUID().toString(), Criteria.DUMMY, title.asComponent());
 
     private final @NotNull List<Xmpl> lines = new KillableArrayList<>();
 
@@ -32,7 +32,7 @@ abstract class SimplePanelUI implements IPanelUI {
     }
 
     @Override
-    public final @Nullable Component get(int index) {
+    public final @Nullable Component getLine(int index) {
         if (index < 0 || size() <= index) {
             return null;
         }
@@ -42,7 +42,7 @@ abstract class SimplePanelUI implements IPanelUI {
     }
 
     @Override
-    public final void set(int index, @NotNull Component line) {
+    public final void setLine(int index, @NotNull Component line) {
         if (lines.size() <= index) {
             for (int i = size(); i <= index; i ++) {
                 lines.add(new Xmpl(ComponentUtility.space(blanks ++), this));
@@ -60,39 +60,53 @@ abstract class SimplePanelUI implements IPanelUI {
     }
 
     @Override
-    public final void add(@NotNull Component line) {
-        set(size(), line);
+    public final void addLine(@NotNull Component line) {
+        setLine(size(), line);
     }
 
     @Override
-    public final void add(int amount) {
+    public final void addLine(int amount) {
         if (amount < 0) {
             throw new IllegalArgumentException();
         }
 
         for (int i = 0; i < amount; i ++) {
-            add();
+            addLine();
         }
     }
 
     @Override
-    public final void add() {
-        add(ComponentUtility.space(blanks ++));
+    public final void addLine() {
+        addLine(ComponentUtility.space(blanks ++));
     }
 
     @Override
-    public final void remove(int index) {
+    public final void removeLine(int index) {
         lines.remove(index);
         push();
     }
 
-    @Override
-    public final void clear(int index) {
-        if (index < 0 || size() <= index) {
-            return;
-        }
+    public @NotNull Component getTitle() {
+        return objective.displayName();
+    }
 
-        set(index, Component.empty());
+    public void setTitle(@NotNull Component title) {
+        this.title.kill();
+        this.title = new Xmpl(title, this);
+    }
+
+    private @Nullable Score getScore(int index) {
+        int score = size() - index - 1;
+
+        return scoreboard.getEntries().stream().filter(entry -> {
+            Score s = objective.getScore(entry);
+            return s.getScore() == score;
+        }).findFirst().map(objective::getScore).orElse(null);
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return lines.isEmpty();
     }
 
     @Override
@@ -108,18 +122,8 @@ abstract class SimplePanelUI implements IPanelUI {
     }
 
     @Override
-    public boolean empty() {
-        return lines.isEmpty();
-    }
-
-    @Override
     public final void tick() {
         onTick();
-
-        if (! ComponentUtility.equals(title.getSource(), title())) {
-            title.kill();
-            title = new Xmpl(title(), this);
-        }
 
         if (! ComponentUtility.equals(objective.displayName(), title.asComponent())) {
             objective.displayName(title.asComponent());
@@ -156,14 +160,5 @@ abstract class SimplePanelUI implements IPanelUI {
             Score score = objective.getScore(LegacyComponentSerializer.legacySection().serialize(lines.get(i ++).asComponent()));
             score.setScore(j);
         }
-    }
-
-    private @Nullable Score getScore(int index) {
-        int score = size() - index - 1;
-
-        return scoreboard.getEntries().stream().filter(entry -> {
-            Score s = objective.getScore(entry);
-            return s.getScore() == score;
-        }).findFirst().map(objective::getScore).orElse(null);
     }
 }

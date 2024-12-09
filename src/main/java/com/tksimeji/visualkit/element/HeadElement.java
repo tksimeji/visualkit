@@ -7,6 +7,7 @@ import com.tksimeji.visualkit.Visualkit;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.profile.PlayerTextures;
@@ -86,10 +87,16 @@ public final class HeadElement extends VisualkitElement {
             return this;
         }
 
-        Bukkit.getScheduler().runTaskAsynchronously(Visualkit.plugin(), () -> {
-            Skin skin = Mojango.INSTANCE.account(uuid).getSkin();
-            url(skin != null ? skin.getUrl() : null);
-        });
+        Player p = Bukkit.getPlayer(uuid);
+
+        if (p != null && p.getPlayerProfile().getTextures().getSkin() != null) {
+            url(p.getPlayerProfile().getTextures().getSkin().toString());
+        } else {
+            Bukkit.getScheduler().runTaskAsynchronously(Visualkit.plugin(), () -> {
+                Skin skin = Mojango.INSTANCE.account(uuid).getSkin();
+                url(skin != null ? skin.getUrl() : null);
+            });
+        }
 
         return this;
     }

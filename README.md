@@ -2,7 +2,7 @@
 
 The Minecraft GUI framework
 
-![Version](https://img.shields.io/badge/version-0.2.3-blue?style=flat-square)
+![Version](https://img.shields.io/badge/version-0.2.4-blue?style=flat-square)
 ![Licence](https://img.shields.io/badge/licence-MIT-red?style=flat-square)
 
 ![Eye-catching](./assets/4d27ea8b-0615-4f81-8ed8-6a2d0a58132d.png)
@@ -237,14 +237,9 @@ The Panel GUI is a user interface that utilizes the scoreboard sidebar.
 
 ### 1. Create a class that extends `com.tksimeji.visualkit.SharedPanelUI`
 
-You need to define a title method that returns a `net.kyori.adventure.text.Component`.
-
 ```java
 public class MyPanelUI extends PanelUI {
-    @Override
-    public @NotNull Component title() {
-        return Component.text("INFO").color(NamedTextColor.YELLOW).decorate(TextDecoration.BOLD);
-    }
+    // do something
 }
 ```
 
@@ -265,10 +260,12 @@ private int ping;
 public MyPanelUI(@NotNull Player player) {
     super(player);
     
-    add(Component.text("Hello, ${name}!"));
-    add();
-    add(Component.text("Health:").appendSpace().append(Component.text("${health}♥").color(NamedTextColor.RED)));
-    set(3, Component.text("Ping:").appendSpace().append(Component.text("${ping} ms").color(NamedTextColor.GREEN)));
+    setTitle(Component.text("INFO").color(NamedTextColor.YELLOW));
+    
+    addLine(Component.text("Hello, ${name}!"));
+    addLine();
+    addLine(Component.text("Health:").appendSpace().append(Component.text("${health}♥").color(NamedTextColor.RED)));
+    setLine(3, Component.text("Ping:").appendSpace().append(Component.text("${ping} ms").color(NamedTextColor.GREEN)));
 }
 
 // Some code omitted //
