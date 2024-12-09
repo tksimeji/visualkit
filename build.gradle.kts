@@ -9,7 +9,7 @@ plugins {
 }
 
 group = "com.tksimeji"
-version = "0.2.5"
+version = "0.3.0"
 
 repositories {
     mavenCentral()

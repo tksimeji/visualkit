@@ -4,6 +4,7 @@ import com.tksimeji.visualkit.Killable;
 import com.tksimeji.visualkit.Tickable;
 import com.tksimeji.visualkit.util.ComponentUtility;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.ComponentLike;
 import net.kyori.adventure.text.TextReplacementConfig;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.jetbrains.annotations.NotNull;
@@ -14,7 +15,7 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
-public final class Xmpl implements Killable, Tickable {
+public final class Xmpl implements ComponentLike, Killable, Tickable {
     private static final @NotNull Set<Xmpl> instances = new HashSet<>();
 
     public static @NotNull Set<Xmpl> getInstances() {
@@ -52,6 +53,7 @@ public final class Xmpl implements Killable, Tickable {
         this.target = target;
     }
 
+    @Override
     public @NotNull Component asComponent() {
         return component != null ? component : getSource();
     }

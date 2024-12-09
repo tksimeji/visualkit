@@ -2,6 +2,7 @@ package com.tksimeji.visualkit;
 
 import com.tksimeji.visualkit.listener.InventoryListener;
 import com.tksimeji.visualkit.listener.PlayerListener;
+import com.tksimeji.visualkit.listener.PluginListener;
 import com.tksimeji.visualkit.listener.ServerListener;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
@@ -68,8 +69,9 @@ public final class Visualkit extends JavaPlugin {
         instance = this;
 
         Bukkit.getPluginManager().registerEvents(new InventoryListener(), this);
-        Bukkit.getPluginManager().registerEvents(new ServerListener(), this);
         Bukkit.getPluginManager().registerEvents(new PlayerListener(), this);
+        Bukkit.getPluginManager().registerEvents(new PluginListener(), this);
+        Bukkit.getPluginManager().registerEvents(new ServerListener(), this);
 
         logger().info(Component.text("       __    ").color(TextColor.color(255, 86, 217)));
         logger().info(Component.text("___  _|  | __").color(TextColor.color(255, 124, 255)).append(Component.text("    Visualkit - " + version()).color(NamedTextColor.WHITE)));

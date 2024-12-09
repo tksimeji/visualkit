@@ -2,7 +2,7 @@
 
 The Minecraft GUI framework
 
-![Version](https://img.shields.io/badge/version-0.2.5-blue?style=flat-square)
+![Version](https://img.shields.io/badge/version-0.3.0-blue?style=flat-square)
 ![Licence](https://img.shields.io/badge/licence-MIT-red?style=flat-square)
 
 ![Eye-catching](./assets/4d27ea8b-0615-4f81-8ed8-6a2d0a58132d.png)
@@ -91,6 +91,51 @@ expect that the implementation of `net.kyori.adventure.text.Component` will be e
 You can also use the "&" symbol to decorate text.
 
 e.g: ```&aHello, world!```
+
+## ![Localize](./assets/3e6145d3-d123-4f27-9785-a9fa481b8074.png) Localize
+
+The ability for players to view the UI in their own language is an important part of the UX.
+Visualkit makes it easy to implement displays that match the player's language settings.
+
+Translations are defined by language files.
+
+The language file must be placed directly under the jar as `lang/{Minecraft locale code}.json`.
+In a standard configuration for build systems such as Maven or Gradle,
+it will look like this: ``src/main/resources/lang/en_us.json``.
+
+A language file has the following syntax:
+
+```json
+{
+  "key": "&d&ltranslation"
+}
+```
+
+As you can see, every translation has a key.
+There are no strict rules for the key, but dotted snake case is recommended.
+
+In this way, translations are loaded into Visualkit by defining the language file in a specific location and syntax.
+Next, let's look at how to reference the translations defined in the language file from code.
+
+```java
+// Note: These return a net.kyori.adventure.text.Component
+
+// Get by locale code and full translation key
+Language.translate(MinecraftLocale.EN_US, new NamespacedKey(plugin, "key"));
+
+// Get by locale code and translation key
+Language.translate(MinecraftLocale.EN_US, "key");
+
+// Get by player and full translation key
+Languate.translate(player, new NamespacedKey(plugin, "key"));
+
+// Get by player and translation key
+Language.translate(player, "key");
+```
+
+If you pass a translation key without specifying a namespace, the namespace of the calling plugin will be automatically picked up.
+
+Also, if a player is passed as an argument, the language setting of that player will be applied.
 
 ## ![Chest GUI](./assets/a6e12e13-5b3b-4e72-a847-d19267b4422d.png) Create a chest GUI
 
