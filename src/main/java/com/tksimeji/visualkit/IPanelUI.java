@@ -48,13 +48,6 @@ public interface IPanelUI extends VisualkitUI, Killable {
     void removeLine(int index);
 
     /**
-     * Leave any line blank.
-     *
-     * @param index Line index
-     */
-    void clearLine(int index);
-
-    /**
      * Get panel title.
      *
      * @return Title
