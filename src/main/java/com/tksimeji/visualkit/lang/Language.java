@@ -33,7 +33,7 @@ public class Language extends HashMap<NamespacedKey, Component> {
                     .build());
         }
 
-        return Languages.getInstance(locale).get(key);
+        return component;
     }
 
     public static @NotNull Component translate(@NotNull String key, @NotNull MinecraftLocale locale, String... args) {
