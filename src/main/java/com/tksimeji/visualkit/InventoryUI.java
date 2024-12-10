@@ -94,11 +94,11 @@ public abstract class InventoryUI<I extends Inventory> implements IInventoryUI<I
                 Parameter parameter = parameters[i];
                 Class<?> type = parameter.getType();
 
-                if (parameter.getName().equals("$slot") && (Integer.class.isAssignableFrom(type)) || int.class.isAssignableFrom(type)) {
+                if (Integer.class.isAssignableFrom(type) || int.class.isAssignableFrom(type)) {
                     args[i] = slot;
-                } else if (parameter.getName().equals("$click") && Click.class.isAssignableFrom(type)) {
+                } else if (Click.class.isAssignableFrom(type)) {
                     args[i] = click;
-                } else if (parameter.getName().equals("$mouse") && Mouse.class.isAssignableFrom(type)) {
+                } else if (Mouse.class.isAssignableFrom(type)) {
                     args[i] = mouse;
                 } else {
                     args[i] = null;
@@ -120,7 +120,8 @@ public abstract class InventoryUI<I extends Inventory> implements IInventoryUI<I
 
         Visualkit.sessions.remove(this);
 
-        if (! player.getOpenInventory().getTopInventory().isEmpty()) {
+        if (! player.getOpenInventory().getTopInventory().isEmpty() &&
+                Visualkit.sessions(InventoryUI.class).stream().noneMatch(s -> s.getPlayer() == player)) {
             player.closeInventory();
         }
 

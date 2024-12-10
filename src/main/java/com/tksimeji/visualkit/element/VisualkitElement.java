@@ -1,9 +1,15 @@
 package com.tksimeji.visualkit.element;
 
+import com.google.common.collect.Lists;
 import com.tksimeji.visualkit.Killable;
+import com.tksimeji.visualkit.Visualkit;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.Registry;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -11,6 +17,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Arrays;
 import java.util.UUID;
 
 public class VisualkitElement implements Killable {
@@ -203,6 +210,13 @@ public class VisualkitElement implements Killable {
         meta.setCustomModelData(0 <= model ? model : null);
         meta.addItemFlags(ItemFlag.values());
         meta.removeEnchantments();
+
+        meta.setHideTooltip((meta.displayName() == null && ! meta.hasLore()) || meta.isHideTooltip());
+
+        Arrays.stream(Lists.newArrayList(Registry.ATTRIBUTE).toArray(new Attribute[0])).forEach(attribute -> {
+            meta.removeAttributeModifier(attribute);
+            meta.addAttributeModifier(attribute, new AttributeModifier(new NamespacedKey(Visualkit.plugin(), attribute.getKey().getKey()), 0, AttributeModifier.Operation.ADD_NUMBER));
+        });
 
         if (aura) {
             meta.addEnchant(Enchantment.INFINITY, 1, false);
