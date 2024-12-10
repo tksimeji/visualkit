@@ -68,7 +68,7 @@ public final class Languages {
                         continue;
                     }
 
-                    obj.keySet().forEach(key -> lang.put(new NamespacedKey(plugin, key), LegacyComponentSerializer.legacySection().deserialize((obj.get(key).getAsString()))));
+                    obj.keySet().forEach(key -> lang.put(new NamespacedKey(plugin, key), LegacyComponentSerializer.legacySection().deserialize((obj.get(key).getAsString().replace('&', '§')))));
                 }
             }
         } catch (IOException e) {
