@@ -1,5 +1,6 @@
 package com.tksimeji.visualkit.lang;
 
+import com.tksimeji.visualkit.Visualkit;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
@@ -24,7 +25,18 @@ public class Language extends HashMap<NamespacedKey, Component> {
         }
 
         StackTraceElement caller = ! stackTrace[2].getClassName().equals(Language.class.getName()) ? stackTrace[2] :
-                Arrays.stream(stackTrace).filter(i -> ! i.getClassName().equals(Language.class.getName())).findFirst().orElseThrow(IllegalStateException::new);
+                Arrays.stream(stackTrace).filter(i -> {
+                    try {
+                        Class.forName(i.getClassName(), false, Visualkit.plugin().getClass().getClassLoader());
+                        return false;
+                    } catch (ClassNotFoundException e) {
+                        return true;
+                    }
+                }).findFirst().orElseThrow(IllegalStateException::new);
+
+        if (caller == null) {
+            throw new IllegalStateException();
+        }
 
         Plugin plugin = Arrays.stream(Bukkit.getPluginManager().getPlugins())
                 .filter(p -> {

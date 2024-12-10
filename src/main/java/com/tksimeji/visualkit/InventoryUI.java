@@ -150,7 +150,7 @@ public abstract class InventoryUI<I extends Inventory> implements IInventoryUI<I
                             } else if (element instanceof ItemStack e) {
                                 setElement(slot, e);
                             } else {
-                                throw new UnsupportedOperationException();
+                                throw new UnsupportedOperationException("Unsupported element class: " + element.getClass().getName());
                             }
 
                             placed.add(field);
