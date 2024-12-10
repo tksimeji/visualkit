@@ -2,7 +2,7 @@
 
 The Minecraft GUI framework
 
-![Version](https://img.shields.io/badge/version-0.3.1-blue?style=flat-square)
+![Version](https://img.shields.io/badge/version-0.3.3-blue?style=flat-square)
 ![Licence](https://img.shields.io/badge/licence-MIT-red?style=flat-square)
 
 ![Eye-catching](./assets/4d27ea8b-0615-4f81-8ed8-6a2d0a58132d.png)
@@ -107,7 +107,7 @@ A language file has the following syntax:
 
 ```json
 {
-  "key": "&d&ltranslation"
+  "greeting": "&d&lHello, ${name}!"
 }
 ```
 
@@ -121,16 +121,16 @@ Next, let's look at how to reference the translations defined in the language fi
 // Note: These return a net.kyori.adventure.text.Component
 
 // Get by locale code and full translation key
-Language.translate(MinecraftLocale.EN_US, new NamespacedKey(plugin, "key"));
+Language.translate(new NamespacedKey(plugin, "key"), MinecraftLocale.EN_US, "arg1=value1", "arg2=value2");
 
 // Get by locale code and translation key
-Language.translate(MinecraftLocale.EN_US, "key");
+Language.translate(MinecraftLocale.EN_US, "key", "arg1=value1", "arg2=value2");
 
 // Get by player and full translation key
-Languate.translate(player, new NamespacedKey(plugin, "key"));
+Languate.translate(new NamespacedKey(plugin, "key"), player, "arg1=value1", "arg2=value2");
 
 // Get by player and translation key
-Language.translate(player, "key");
+Language.translate("key", player, "arg1=value1", "arg2=value2");
 ```
 
 If you pass a translation key without specifying a namespace, the namespace of the calling plugin will be automatically picked up.

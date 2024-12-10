@@ -2,6 +2,7 @@ package com.tksimeji.visualkit.lang;
 
 import com.tksimeji.visualkit.Visualkit;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextReplacementConfig;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.command.CommandSender;
@@ -13,11 +14,29 @@ import java.util.*;
 public class Language extends HashMap<NamespacedKey, Component> {
     private static final @NotNull Map<Plugin, MinecraftLocale> locales = new HashMap<>();
 
-    public static @NotNull Component translate(@NotNull MinecraftLocale locale, @NotNull NamespacedKey key) {
+    public static @NotNull Component translate(@NotNull NamespacedKey key, @NotNull MinecraftLocale locale, String... args) {
+        Component component = Languages.getInstance(locale).get(key);
+
+        for (String arg : args) {
+            int index = arg.indexOf("=");
+
+            if (index < 0) {
+                throw new IllegalArgumentException();
+            }
+
+            String name = arg.substring(0, index);
+            String value = arg.substring(index + 1);
+
+            component = component.replaceText(TextReplacementConfig.builder()
+                    .matchLiteral("${" + name + "}")
+                    .replacement(value)
+                    .build());
+        }
+
         return Languages.getInstance(locale).get(key);
     }
 
-    public static @NotNull Component translate(@NotNull MinecraftLocale locale, @NotNull String key) {
+    public static @NotNull Component translate(@NotNull String key, @NotNull MinecraftLocale locale, String... args) {
         StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
 
         if (stackTrace.length <= 2) {
@@ -54,15 +73,15 @@ public class Language extends HashMap<NamespacedKey, Component> {
             throw new UnsupportedOperationException();
         }
 
-        return translate(locale, new NamespacedKey(plugin, key));
+        return translate(new NamespacedKey(plugin, key), locale, args);
     }
 
-    public static @NotNull Component translate(@NotNull CommandSender player, @NotNull NamespacedKey key) {
-        return translate(Objects.requireNonNull(MinecraftLocale.of(player)), key);
+    public static @NotNull Component translate(@NotNull NamespacedKey key, @NotNull CommandSender sender, String... args) {
+        return translate(key, Objects.requireNonNull(MinecraftLocale.of(sender)), args);
     }
 
-    public static @NotNull Component translate(@NotNull CommandSender player, @NotNull String key) {
-        return translate(Objects.requireNonNull(MinecraftLocale.of(player)), key);
+    public static @NotNull Component translate(@NotNull String key, @NotNull CommandSender sender, String... args) {
+        return translate(key, Objects.requireNonNull(MinecraftLocale.of(sender)), args);
     }
 
     public static void locale(@NotNull Plugin plugin, @NotNull MinecraftLocale locale) {
