@@ -1,6 +1,6 @@
 package com.tksimeji.visualkit;
 
-import com.tksimeji.visualkit.element.Xmpl;
+import com.tksimeji.visualkit.xmpl.Xmpl;
 import com.tksimeji.visualkit.util.ComponentUtility;
 import com.tksimeji.visualkit.util.KillableArrayList;
 import net.kyori.adventure.text.Component;
@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-abstract class SimplePanelUI implements IPanelUI {
+abstract class SimplePanelUI extends VisualkitUI implements IPanelUI {
     static final @NotNull ScoreboardManager sm = Bukkit.getScoreboardManager();
 
     private @NotNull Xmpl title = new Xmpl(Component.empty(), this);

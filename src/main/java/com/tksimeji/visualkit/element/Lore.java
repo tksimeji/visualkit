@@ -2,6 +2,8 @@ package com.tksimeji.visualkit.element;
 
 import com.tksimeji.visualkit.Killable;
 import com.tksimeji.visualkit.util.KillableArrayList;
+import com.tksimeji.visualkit.xmpl.XmplTarget;
+import com.tksimeji.visualkit.xmpl.Xmpl;
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -24,7 +26,7 @@ public final class Lore extends KillableArrayList<Xmpl> implements Killable {
         return target;
     }
 
-    public void setTarget(@Nullable Object target) {
+    public void setTarget(@Nullable XmplTarget target) {
         this.target = target;
         forEach(line -> line.setTarget(target));
     }

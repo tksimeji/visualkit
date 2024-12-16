@@ -1,4 +1,4 @@
-package com.tksimeji.visualkit.element;
+package com.tksimeji.visualkit.xmpl;
 
 import com.tksimeji.visualkit.Killable;
 import com.tksimeji.visualkit.Tickable;
@@ -10,7 +10,6 @@ import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.lang.reflect.Field;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -22,20 +21,20 @@ public final class Xmpl implements ComponentLike, Killable, Tickable {
         return new HashSet<>(instances);
     }
 
-    static @NotNull Xmpl empty() {
+    public static @NotNull Xmpl empty() {
         return new Xmpl(Component.empty());
     }
 
     private final @NotNull Component source;
 
     private @Nullable Component component;
-    private @Nullable Object target;
+    private @Nullable XmplTarget target;
 
     public Xmpl(@NotNull Component source) {
         this(source, null);
     }
 
-    public Xmpl(@NotNull Component source, @Nullable Object target) {
+    public Xmpl(@NotNull Component source, @Nullable XmplTarget target) {
         this.source = ComponentUtility.empty().append(source);
         this.target = target;
         instances.add(this);
@@ -49,7 +48,7 @@ public final class Xmpl implements ComponentLike, Killable, Tickable {
         return target;
     }
 
-    public void setTarget(@Nullable Object target) {
+    public void setTarget(@Nullable XmplTarget target) {
         this.target = target;
     }
 
@@ -66,24 +65,17 @@ public final class Xmpl implements ComponentLike, Killable, Tickable {
 
         component = source.asComponent();
 
-        try {
-            for (Field field : target.getClass().getDeclaredFields()) {
-                field.setAccessible(true);
+        target.getXmplMap().forEach((key, value) -> {
+            String placeholder = "${" + key + "}";
+            Component replacement = value instanceof Component c ? c :
+                    value instanceof String s ? LegacyComponentSerializer.legacySection().deserialize(s) :
+                            Component.text(Optional.ofNullable(value).orElse("null").toString());
 
-                Object value = field.get(target);
-
-                String placeholder = "${" + field.getName() + "}";
-                Component replacement = value instanceof Component c ? c :
-                        LegacyComponentSerializer.legacySection().deserialize(Optional.ofNullable(value).orElse("null").toString().replace('&', '§'));
-
-                component = component.replaceText(TextReplacementConfig.builder()
-                        .matchLiteral(placeholder)
-                        .replacement(replacement)
-                        .build());
-            }
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
+            component = component.replaceText(TextReplacementConfig.builder()
+                    .matchLiteral(placeholder)
+                    .replacement(replacement)
+                    .build());
+        });
     }
 
     @Override

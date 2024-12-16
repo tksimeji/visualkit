@@ -4,7 +4,7 @@ import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public interface IPanelUI extends VisualkitUI, Killable {
+public interface IPanelUI extends IVisualkitUI, Killable {
     /**
      * Get any line.
      *

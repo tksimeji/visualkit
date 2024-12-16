@@ -4,6 +4,7 @@ import com.tksimeji.visualkit.api.*;
 import com.tksimeji.visualkit.element.VisualkitElement;
 import com.tksimeji.visualkit.util.KillableHashMap;
 import com.tksimeji.visualkit.util.AsmUtility;
+import com.tksimeji.visualkit.util.ReflectionUtility;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -14,17 +15,14 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
-public abstract class InventoryUI<I extends Inventory> implements IInventoryUI<I> {
+public abstract class InventoryUI<I extends Inventory> extends VisualkitUI implements IInventoryUI<I> {
     protected final @NotNull Player player;
 
     protected final @NotNull Map<Integer, VisualkitElement> elements = new KillableHashMap<>();
-    protected final @NotNull Set<Method> handlers = Arrays.stream(getClass().getDeclaredMethods())
+    protected final @NotNull Set<Method> handlers = ReflectionUtility.getMethods(getClass()).stream()
             .filter(method -> method.isAnnotationPresent(Handler.class))
             .collect(Collectors.toSet());
 
@@ -81,37 +79,46 @@ public abstract class InventoryUI<I extends Inventory> implements IInventoryUI<I
 
     @Override
     public final void onClick(int slot, @NotNull Click click, @NotNull Mouse mouse) {
-        handlers.stream().filter(handler -> {
-            Handler annotation = handler.getAnnotation(Handler.class);
-            return AsmUtility.of(annotation).stream().anyMatch(s -> s == slot) &&
-                    Arrays.stream(annotation.click()).toList().contains(click) &&
-                    Arrays.stream(annotation.mouse()).toList().contains(mouse);
-        }).forEach(handler -> {
-            Parameter[] parameters = handler.getParameters();
-            Object[] args = new Object[parameters.length];
+        elements.entrySet().stream()
+                .filter(entry -> entry.getKey() == slot)
+                .forEach(entry -> {
+                    VisualkitElement element = entry.getValue();
+                    Optional.ofNullable(element.handler()).ifPresent(handler -> handler.onClick(slot, click, mouse));
+                    Optional.ofNullable(element.sound()).ifPresent(sound -> player.playSound(player, sound, element.volume(), element.pitch()));
+                });
 
-            for (int i = 0; i < args.length; i++) {
-                Parameter parameter = parameters[i];
-                Class<?> type = parameter.getType();
+        handlers.stream()
+                .filter(handler -> {
+                    Handler annotation = handler.getAnnotation(Handler.class);
+                    return AsmUtility.of(annotation).stream().anyMatch(s -> s == slot) &&
+                        Arrays.stream(annotation.click()).toList().contains(click) &&
+                        Arrays.stream(annotation.mouse()).toList().contains(mouse);
+                }).forEach(handler -> {
+                    Parameter[] parameters = handler.getParameters();
+                    Object[] args = new Object[parameters.length];
 
-                if (Integer.class.isAssignableFrom(type) || int.class.isAssignableFrom(type)) {
-                    args[i] = slot;
-                } else if (Click.class.isAssignableFrom(type)) {
-                    args[i] = click;
-                } else if (Mouse.class.isAssignableFrom(type)) {
-                    args[i] = mouse;
-                } else {
-                    args[i] = null;
-                }
-            }
+                    for (int i = 0; i < args.length; i++) {
+                        Parameter parameter = parameters[i];
+                        Class<?> type = parameter.getType();
 
-            try {
-                handler.setAccessible(true);
-                handler.invoke(this, args);
-            } catch (InvocationTargetException | IllegalAccessException e) {
-                throw new RuntimeException(e);
-            }
-        });
+                        if (Integer.class.isAssignableFrom(type) || int.class.isAssignableFrom(type)) {
+                            args[i] = slot;
+                        } else if (Click.class.isAssignableFrom(type)) {
+                            args[i] = click;
+                        } else if (Mouse.class.isAssignableFrom(type)) {
+                            args[i] = mouse;
+                        } else {
+                            args[i] = null;
+                        }
+                    }
+
+                    try {
+                        handler.setAccessible(true);
+                        handler.invoke(this, args);
+                    } catch (InvocationTargetException | IllegalAccessException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
     }
 
     @Override
@@ -135,7 +142,7 @@ public abstract class InventoryUI<I extends Inventory> implements IInventoryUI<I
 
         elements.forEach(this::setElement);
 
-        Arrays.stream(getClass().getDeclaredFields())
+        ReflectionUtility.getFields(getClass()).stream()
                 .filter(field -> ! placed.contains(field) &&
                         field.isAnnotationPresent(Element.class) &&
                         (VisualkitElement.class.isAssignableFrom(field.getType()) || ItemStack.class.isAssignableFrom(field.getType())))
@@ -150,11 +157,13 @@ public abstract class InventoryUI<I extends Inventory> implements IInventoryUI<I
                                 setElement(slot, e);
                             } else if (element instanceof ItemStack e) {
                                 setElement(slot, e);
-                            } else {
+                            } else if (element != null) {
                                 throw new UnsupportedOperationException("Unsupported element class: " + element.getClass().getName());
                             }
 
-                            placed.add(field);
+                            if (element != null) {
+                                placed.add(field);
+                            }
                         });
                     } catch (IllegalAccessException e) {
                         throw new RuntimeException(e);

@@ -4,6 +4,7 @@ import com.destroystokyo.paper.profile.PlayerProfile;
 import com.tksimeji.mojango.Mojango;
 import com.tksimeji.mojango.texture.Skin;
 import com.tksimeji.visualkit.Visualkit;
+import com.tksimeji.visualkit.xmpl.XmplTarget;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -112,7 +113,7 @@ public final class HeadElement extends VisualkitElement {
     }
 
     @Override
-    public @NotNull ItemStack asItemStack(@NotNull Object object) {
+    public @NotNull ItemStack asItemStack(@NotNull XmplTarget object) {
         ItemStack itemStack = super.asItemStack(object);
 
         if (url == null) {

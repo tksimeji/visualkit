@@ -24,7 +24,7 @@ import java.util.Set;
 public final class Visualkit extends JavaPlugin {
     private static Visualkit instance;
 
-    static final @NotNull Set<VisualkitUI> sessions = new HashSet<>();
+    static final @NotNull Set<IVisualkitUI> sessions = new HashSet<>();
 
     public static @NotNull Visualkit plugin() {
         return instance;
@@ -38,11 +38,11 @@ public final class Visualkit extends JavaPlugin {
         return instance.getComponentLogger();
     }
 
-    public static @NotNull List<VisualkitUI> sessions() {
+    public static @NotNull List<IVisualkitUI> sessions() {
         return new ArrayList<>(sessions);
     }
 
-    public static <T extends VisualkitUI> @NotNull List<T> sessions(@NotNull Class<T> clazz) {
+    public static <T extends IVisualkitUI> @NotNull List<T> sessions(@NotNull Class<T> clazz) {
         return sessions().stream()
                 .filter(s -> clazz.isAssignableFrom(s.getClass()))
                 .map(s -> (T) s)

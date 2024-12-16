@@ -2,7 +2,7 @@
 
 The Minecraft GUI framework
 
-![Version](https://img.shields.io/badge/version-0.3.5-blue?style=flat-square)
+![Version](https://img.shields.io/badge/version-0.3.6-blue?style=flat-square)
 ![Licence](https://img.shields.io/badge/licence-MIT-red?style=flat-square)
 
 ![Eye-catching](./assets/4d27ea8b-0615-4f81-8ed8-6a2d0a58132d.png)
@@ -179,7 +179,8 @@ private int count;
 private final VisualkitElement cookieButton = VisualkitElement
         .create(Material.COOKIE)
         .title(Component.text("Click me!").color(NamedTextColor.GREEN).decorate(TextDecoration.BOLD))
-        .lore(Component.text("Clicks: ${count}"));
+        .lore(Component.text("Clicks: ${count}"))
+        .sound(Sound.UI_BUTTON_CLICK, 1.0f, 1.2f);
 
 // Note: The player head API was added in 0.2.x.
 
@@ -239,6 +240,13 @@ In addition to slots, you can add click and mouse conditions to the Handler anno
 public void onCookieClick() {
     count ++;
 }
+
+// Alternatively, handlers can be specified directly on the element.
+
+@Element(13)
+private final VisualkitElement cookieButton = VisualkitElement
+        .create(Material.COOKIE)
+        .handler((slot, click, mouse) -> count ++);
 ```
 
 Of course, you can also use asm to specify the slot.

@@ -10,7 +10,7 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public interface IInventoryUI<I extends Inventory> extends VisualkitUI {
+public interface IInventoryUI<I extends Inventory> extends IVisualkitUI {
     /**
      * Defines the UI title.
      *

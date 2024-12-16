@@ -3,11 +3,12 @@ package com.tksimeji.visualkit.element;
 import com.google.common.collect.Lists;
 import com.tksimeji.visualkit.Killable;
 import com.tksimeji.visualkit.Visualkit;
+import com.tksimeji.visualkit.api.Click;
+import com.tksimeji.visualkit.api.Mouse;
+import com.tksimeji.visualkit.xmpl.XmplTarget;
+import com.tksimeji.visualkit.xmpl.Xmpl;
 import net.kyori.adventure.text.Component;
-import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.Registry;
+import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.enchantments.Enchantment;
@@ -18,6 +19,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 public class VisualkitElement implements Killable {
@@ -108,6 +110,15 @@ public class VisualkitElement implements Killable {
     private @NotNull Material type;
 
     /**
+     * Get the item type.
+     *
+     * @return Item type
+     */
+    public @NotNull Material type() {
+        return type;
+    }
+
+    /**
      * Set the item type.
      *
      * @param type Item type
@@ -119,6 +130,15 @@ public class VisualkitElement implements Killable {
     }
 
     private @NotNull Xmpl title = Xmpl.empty();
+
+    /**
+     * Get the title
+     *
+     * @return Title
+     */
+    public @NotNull Component title() {
+        return title.asComponent();
+    }
 
     /**
      * Set the title.
@@ -135,6 +155,15 @@ public class VisualkitElement implements Killable {
     private @NotNull Lore lore = Lore.empty();
 
     /**
+     * Get the lore.
+     *
+     * @return Lore
+     */
+    public @NotNull List<Component> lore() {
+        return lore.asComponentList();
+    }
+
+    /**
      * Set the lore.
      *
      * @param components Lore
@@ -147,6 +176,15 @@ public class VisualkitElement implements Killable {
     }
 
     private int stack = 1;
+
+    /**
+     * Get the stack count.
+     *
+     * @return Stack count
+     */
+    public int stack() {
+        return stack;
+    }
 
     /**
      * Set the stack count.
@@ -162,6 +200,15 @@ public class VisualkitElement implements Killable {
     private int model = -1;
 
     /**
+     * Get the custom model data.
+     *
+     * @return Custom model data
+     */
+    public int model() {
+        return model;
+    }
+
+    /**
      * Set the custom model data.
      *
      * @param model Custom model data
@@ -175,6 +222,15 @@ public class VisualkitElement implements Killable {
     private boolean aura = false;
 
     /**
+     * Get whether the item has an enchantment aura.
+     *
+     * @return True if has aura
+     */
+    public boolean aura() {
+        return aura;
+    }
+
+    /**
      * Set whether to have an enchantment aura.
      *
      * @param aura True if has aura
@@ -182,6 +238,84 @@ public class VisualkitElement implements Killable {
      */
     public @NotNull VisualkitElement aura(boolean aura) {
         this.aura = aura;
+        return this;
+    }
+
+    private @Nullable Handler handler = null;
+
+    /**
+     * Get the handler to be called on click.
+     *
+     * @return Handler
+     */
+    public @Nullable Handler handler() {
+        return handler;
+    }
+
+    /**
+     * Set the handler to be called on click.
+     *
+     * @param handler Handler
+     * @return Updated element
+     */
+    public @NotNull VisualkitElement handler(@NotNull Handler handler) {
+        this.handler = handler;
+        return this;
+    }
+
+    private @Nullable Sound sound;
+    private float volume = 1.0f;
+    private float pitch = 1.0f;
+
+    /**
+     * Get the sound to be played on click.
+     *
+     * @return Sound
+     */
+    public @Nullable Sound sound() {
+        return sound;
+    }
+
+    /**
+     * Get the volume of the sound being played.
+     *
+     * @return Sound volume
+     */
+    public float volume() {
+        return volume;
+    }
+
+    /**
+     * Get the pitch of the sound being played.
+     *
+     * @return Sound pitch
+     */
+    public float pitch() {
+        return pitch;
+    }
+
+    /**
+     * Set the sound to be played on click.
+     *
+     * @param sound Sound
+     * @return Updated element
+     */
+    public @NotNull VisualkitElement sound(@NotNull Sound sound) {
+        return sound(sound, 1.0f, 1.0f);
+    }
+
+    /**
+     * Set the sound to be played on click.
+     *
+     * @param sound Sound
+     * @param volume Sound volume
+     * @param pitch Sound pitch
+     * @return Updated element
+     */
+    public @NotNull VisualkitElement sound(@NotNull Sound sound, float volume, float pitch) {
+        this.sound = sound;
+        this.volume = volume;
+        this.pitch = pitch;
         return this;
     }
 
@@ -194,12 +328,12 @@ public class VisualkitElement implements Killable {
     /**
      * Build an ItemStack
      *
-     * @param object XMPL Target
+     * @param target XMPL Target
      * @return ItemStack
      */
-    public @NotNull ItemStack asItemStack(@NotNull Object object) {
-        title.setTarget(object);
-        lore.setTarget(object);
+    public @NotNull ItemStack asItemStack(@NotNull XmplTarget target) {
+        title.setTarget(target);
+        lore.setTarget(target);
 
         ItemStack item = this.item.getType() != type ? (this.item = new ItemStack(type, stack)) : this.item;
         item.setAmount(stack);
@@ -224,5 +358,9 @@ public class VisualkitElement implements Killable {
 
         item.setItemMeta(meta);
         return item;
+    }
+
+    public interface Handler {
+        void onClick(int slot, @NotNull Click click, @NotNull Mouse mouse);
     }
 }

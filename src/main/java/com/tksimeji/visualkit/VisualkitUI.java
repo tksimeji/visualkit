@@ -1,8 +1,37 @@
 package com.tksimeji.visualkit;
 
-public interface VisualkitUI extends Tickable {
-    /**
-     * Called every server tick.
-     */
-    default void onTick() {}
+import com.tksimeji.visualkit.util.ReflectionUtility;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.HashMap;
+import java.util.Map;
+
+public abstract class VisualkitUI implements IVisualkitUI {
+    private final @NotNull Map<String, Object> xmplMap = new HashMap<>();
+
+    @Override
+    public final @NotNull Map<String, Object> getXmplMap() {
+        ReflectionUtility.getFields(getClass()).stream()
+                .peek(field -> field.setAccessible(true))
+                .forEach(field -> {
+                    try {
+                        bind(field.getName(), field.get(this));
+                    } catch (IllegalAccessException e) {
+                        throw new IllegalArgumentException(e);
+                    }
+                });
+
+        return xmplMap;
+    }
+
+    @Override
+    public final void bind(@NotNull String key, @Nullable Object value) {
+        xmplMap.put(key, value);
+    }
+
+    @Override
+    public final void unbind(@NotNull String key) {
+        xmplMap.remove(key);
+    }
 }
