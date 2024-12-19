@@ -4,6 +4,7 @@ import com.tksimeji.visualkit.xmpl.Xmpl;
 import com.tksimeji.visualkit.util.ComponentUtility;
 import com.tksimeji.visualkit.util.KillableArrayList;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.scoreboard.*;
@@ -45,17 +46,27 @@ abstract class SimplePanelUI extends VisualkitUI implements IPanelUI {
     public final void setLine(int index, @NotNull Component line) {
         if (lines.size() <= index) {
             for (int i = size(); i <= index; i ++) {
-                lines.add(new Xmpl(ComponentUtility.space(blanks ++), this));
+                lines.add(new Xmpl(ComponentUtility.spaces(blanks ++), this));
             }
         }
 
-        if (ComponentUtility.equals(ComponentUtility.empty().append(line), lines.get(index).getSource())) {
+        int blanks = this.blanks;
+
+        TextComponent.Builder builder = Component.text().append(ComponentUtility.empty().append(ComponentUtility.content(line).isBlank() ? ComponentUtility.spaces(blanks ++) : line));
+
+        while (lines.stream().anyMatch(l -> ComponentUtility.equals(builder.asComponent(), l.getSource()))) {
+            builder.appendSpace();
+        }
+
+        if (ComponentUtility.equals(builder.asComponent(), lines.get(index).getSource())) {
             return;
         }
 
         Optional.ofNullable(lines.get(index)).ifPresent(Xmpl::kill);
 
-        lines.set(index, new Xmpl(line, this));
+        this.blanks = blanks;
+
+        lines.set(index, new Xmpl(builder.build(), this));
         push();
     }
 
@@ -77,7 +88,7 @@ abstract class SimplePanelUI extends VisualkitUI implements IPanelUI {
 
     @Override
     public final void addLine() {
-        addLine(ComponentUtility.space(blanks ++));
+        addLine(Component.empty());
     }
 
     @Override
