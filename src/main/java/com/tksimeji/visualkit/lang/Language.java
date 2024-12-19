@@ -58,14 +58,7 @@ public class Language extends HashMap<NamespacedKey, Component> {
         }
 
         Plugin plugin = Arrays.stream(Bukkit.getPluginManager().getPlugins())
-                .filter(p -> {
-                    try {
-                        Class.forName(caller.getClassName(), false, p.getClass().getClassLoader());
-                        return true;
-                    } catch (ClassNotFoundException e) {
-                        return false;
-                    }
-                })
+                .filter(p -> caller.getClassLoaderName().equals(p.getClass().getClassLoader().getName()))
                 .findFirst()
                 .orElse(null);
 
