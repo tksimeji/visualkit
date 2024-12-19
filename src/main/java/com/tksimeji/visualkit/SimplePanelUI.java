@@ -52,13 +52,14 @@ abstract class SimplePanelUI extends VisualkitUI implements IPanelUI {
 
         int blanks = this.blanks;
 
-        TextComponent.Builder builder = Component.text().append(ComponentUtility.empty().append(ComponentUtility.content(line).isBlank() ? ComponentUtility.spaces(blanks ++) : line));
+        TextComponent.Builder builder = Component.text().append(ComponentUtility.content(line).isBlank() ? ComponentUtility.spaces(blanks ++) : line);
 
-        while (lines.stream().anyMatch(l -> ComponentUtility.equals(builder.asComponent(), l.getSource()))) {
+        while (lines.stream().anyMatch(l -> ComponentUtility.equals(ComponentUtility.empty().append(builder.asComponent()), l.getSource()))) {
             builder.appendSpace();
         }
 
-        if (ComponentUtility.equals(builder.asComponent(), lines.get(index).getSource())) {
+        if (ComponentUtility.serialize(ComponentUtility.empty().append(builder.build())).replaceAll("&.\\s*$", "")
+                .equals(ComponentUtility.serialize(lines.get(index).getSource()).replaceAll("&.\\s*$", ""))) {
             return;
         }
 

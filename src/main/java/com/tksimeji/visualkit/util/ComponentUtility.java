@@ -39,6 +39,6 @@ public final class ComponentUtility {
             return c1 == c2;
         }
 
-        return LegacyComponentSerializer.legacySection().serialize(c1).equals(LegacyComponentSerializer.legacySection().serialize(c2));
+        return serialize(c1).equals(serialize(c2));
     }
 }

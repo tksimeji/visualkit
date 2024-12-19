@@ -22,7 +22,7 @@ public final class Xmpl implements ComponentLike, Killable, Tickable {
     }
 
     public static @NotNull Xmpl empty() {
-        return new Xmpl(Component.empty());
+        return new Xmpl(ComponentUtility.empty());
     }
 
     private final @NotNull Component source;
