@@ -5,7 +5,7 @@ The Minecraft GUI framework
 ![Version](https://img.shields.io/badge/version-0.3.8-blue?style=flat-square)
 ![Licence](https://img.shields.io/badge/licence-MIT-red?style=flat-square)
 
-![Eye-catching](./assets/b706df0a-22c2-4185-9813-6e4a0981ca11.png)
+<img alt="Eye-catching" src="./assets/b706df0a-22c2-4185-9813-6e4a0981ca11.png" width="64%">
 
 Visualkit is a free, open-source GUI framework for [Paper](https://papermc.io/software/paper) server.
 
