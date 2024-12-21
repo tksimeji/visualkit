@@ -193,7 +193,7 @@ public class VisualkitElement implements Killable {
      * @return Updated element
      */
     public @NotNull VisualkitElement stack(int stack) {
-        this.stack = Math.max(Math.min(stack, 1), this.type.getMaxStackSize());
+        this.stack = Math.max(Math.min(stack, this.type.getMaxStackSize()), 1);
         return this;
     }
 
