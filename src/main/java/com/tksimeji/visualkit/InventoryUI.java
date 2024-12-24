@@ -168,7 +168,6 @@ public abstract class InventoryUI<I extends Inventory> extends VisualkitUI imple
         }
 
         player.updateInventory();
-        elements.clear();
     }
 
     @Override
