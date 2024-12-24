@@ -153,7 +153,11 @@ public abstract class InventoryUI<I extends Inventory> extends VisualkitUI imple
                             args[i] = click;
                         } else if (Mouse.class.isAssignableFrom(type)) {
                             args[i] = mouse;
-                        } else {
+                        } else if (VisualkitElement.class.isAssignableFrom(type)) {
+                            args[i] = getElement(slot);
+                        } else if (ItemStack.class.isAssignableFrom(type)) {
+                            args[i] = asInventory().getItem(slot);
+                        }else {
                             args[i] = null;
                         }
                     }

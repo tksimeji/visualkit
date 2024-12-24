@@ -301,17 +301,19 @@ Of course, you can also use asm to specify the slot.
 It can also take slot, click, and mouse state as arguments.
 However, these arguments are injected only if the following conditions are met:
 
-| Type                               |
-|:-----------------------------------|
-| `int` / `java.lang.Integer`        |
-| `com.tksimeji.visualkit.api.Click` |
-| `com.tksimeji.visualkit.api.Mouse` |
+| Type                                              |
+|:--------------------------------------------------|
+| `int` / `java.lang.Integer`                       |
+| `com.tksimeji.visualkit.api.Click`                |
+| `com.tksimeji.visualkit.api.Mouse`                |
+| `com.tksimeji.visualkit.element.VisualkitElement` |
+| `org.bukkit.inventory.ItemStack`                  |
 
 This is useful when you specify a broad conditions in the annotation.
 
 ```java
 @Handler(slot = 0)
-public void onClick(int slot, Click click, Mouse mouse) {
+public void onClick(int slot, Click click, Mouse mouse, VisualkitElement element, ItemStack itemStack) {
     // do something
 }
 ```
