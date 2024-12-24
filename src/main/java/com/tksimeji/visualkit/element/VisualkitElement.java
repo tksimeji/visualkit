@@ -258,11 +258,18 @@ public class VisualkitElement implements Killable {
      * @param handler Handler
      * @return Updated element
      */
-    public @NotNull VisualkitElement handler(@NotNull Handler handler) {
-        if (! (handler instanceof Handler1 || handler instanceof Handler2)) {
-            throw new IllegalArgumentException();
-        }
+    public @NotNull VisualkitElement handler(@NotNull Handler1 handler) {
+        this.handler = handler;
+        return this;
+    }
 
+    /**
+     * Set the handler to be called on click.
+     *
+     * @param handler Handler
+     * @return Updated element
+     */
+    public @NotNull VisualkitElement handler(@NotNull Handler2 handler) {
         this.handler = handler;
         return this;
     }

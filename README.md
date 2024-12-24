@@ -2,7 +2,7 @@
 
 The Minecraft GUI framework
 
-![Version](https://img.shields.io/badge/version-0.4.0-blue?style=flat-square)
+![Version](https://img.shields.io/badge/version-0.4.2-blue?style=flat-square)
 ![Licence](https://img.shields.io/badge/licence-MIT-red?style=flat-square)
 
 <img alt="Eye-catching" src="./assets/b706df0a-22c2-4185-9813-6e4a0981ca11.png" width="64%">
