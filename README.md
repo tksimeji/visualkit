@@ -283,7 +283,14 @@ public void onCookieClick() {
 @Element(13)
 private final VisualkitElement cookieButton = VisualkitElement
         .create(Material.COOKIE)
-        .handler((slot, click, mouse) -> count ++);
+        .handler(() -> count ++);
+
+// It can also take arguments
+
+@Element(13)
+private final VisualkitElement cookieButton = VisualkitElement
+        .create(Material.COOKIE)
+        .handler((slot, click, mouse) -> samething());
 ```
 
 Of course, you can also use asm to specify the slot.
