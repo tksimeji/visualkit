@@ -118,7 +118,13 @@ public abstract class InventoryUI<I extends Inventory> extends VisualkitUI imple
                 .filter(entry -> entry.getKey() == slot)
                 .forEach(entry -> {
                     VisualkitElement element = entry.getValue();
-                    Optional.ofNullable(element.handler()).ifPresent(handler -> handler.onClick(slot, click, mouse));
+                    Optional.ofNullable(element.handler()).ifPresent(handler -> {
+                        if (handler instanceof VisualkitElement.Handler1 h1) {
+                            h1.onClick(slot, click, mouse);
+                        } else if (handler instanceof VisualkitElement.Handler2 h2) {
+                            h2.onClick();
+                        }
+                    });
                     Optional.ofNullable(element.sound()).ifPresent(sound -> player.playSound(player, sound, element.volume(), element.pitch()));
                 });
 
