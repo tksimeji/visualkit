@@ -259,7 +259,7 @@ public class VisualkitElement implements Killable {
      * @return Updated element
      */
     public @NotNull VisualkitElement handler(@NotNull Handler handler) {
-        if (! (handler instanceof Handler1 || handler instanceof Handler2)) {
+        if (! (handler instanceof Handler1 && handler instanceof Handler2)) {
             throw new IllegalArgumentException();
         }
 
