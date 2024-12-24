@@ -259,6 +259,10 @@ public class VisualkitElement implements Killable {
      * @return Updated element
      */
     public @NotNull VisualkitElement handler(@NotNull Handler handler) {
+        if (! (handler instanceof Handler1 || handler instanceof Handler2)) {
+            throw new IllegalArgumentException();
+        }
+
         this.handler = handler;
         return this;
     }
@@ -360,7 +364,13 @@ public class VisualkitElement implements Killable {
         return item;
     }
 
-    public interface Handler {
+    public interface Handler {}
+
+    public interface Handler1 extends Handler {
         void onClick(int slot, @NotNull Click click, @NotNull Mouse mouse);
+    }
+
+    public interface Handler2 extends Handler {
+        void onClick();
     }
 }
