@@ -6,7 +6,7 @@ import org.jetbrains.annotations.Nullable;
 
 public interface IPanelUI extends IVisualkitUI, Killable {
     /**
-     * Get any line.
+     * Gets any line.
      *
      * @param index Line index
      * @return Line
@@ -48,14 +48,14 @@ public interface IPanelUI extends IVisualkitUI, Killable {
     void removeLine(int index);
 
     /**
-     * Get panel title.
+     * Gets panel title.
      *
      * @return Title
      */
     @NotNull Component getTitle();
 
     /**
-     * Set panel title.
+     * Sets panel title.
      *
      * @param title New title
      */
@@ -74,7 +74,7 @@ public interface IPanelUI extends IVisualkitUI, Killable {
     void clear();
 
     /**
-     * Get the number of lines.
+     * Gets the number of lines.
      *
      * @return Number of lines
      */

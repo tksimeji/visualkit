@@ -49,7 +49,7 @@ public final class HeadElement extends VisualkitElement {
     private @Nullable URL url;
 
     /**
-     * Set any skin to a texture.
+     * Sets any skin to a texture.
      * However, you cannot specify a texture server other than {@code textures.minecraft.net}.
      *
      * @param url Texture URL
@@ -77,7 +77,7 @@ public final class HeadElement extends VisualkitElement {
     }
 
     /**
-     * Set the texture to any player's skin.
+     * Sets the texture to any player's skin.
      *
      * @param uuid  Player UUID
      * @return Updated element
@@ -103,7 +103,7 @@ public final class HeadElement extends VisualkitElement {
     }
 
     /**
-     * Set the texture to any player's skin.
+     * Sets the texture to any player's skin.
      *
      * @param player Player name
      * @return Updated element

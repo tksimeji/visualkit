@@ -32,7 +32,15 @@ public final class InventoryListener implements Listener {
 
         PolicyTarget target = event.getClickedInventory() == ui.asInventory() ? PolicyTarget.UI : PolicyTarget.INVENTORY;
 
-        event.setCancelled(ui.getPolicy(event.getSlot(), target) == SlotPolicy.FIXATION || event.isCancelled());
+        int slot = event.getSlot();
+
+        if (0 <= slot) {
+            event.setCancelled(ui.getPolicy(slot, target) == SlotPolicy.FIXATION || event.isCancelled());
+        } else {
+            slot = -1;
+            event.setCancelled((ui.getPolicy(slot, PolicyTarget.UI) == SlotPolicy.FIXATION && ui.getPolicy(slot, PolicyTarget.INVENTORY) == SlotPolicy.FIXATION) ||
+                    event.isCancelled());
+        }
 
         ItemStack currentItem = event.getCurrentItem();
 
@@ -101,10 +109,16 @@ public final class InventoryListener implements Listener {
         }
 
         event.setCancelled(event.getRawSlots().stream().anyMatch(raw -> {
-            PolicyTarget target = raw < ui.asInventory().getSize() ? PolicyTarget.UI : PolicyTarget.INVENTORY;
+            PolicyTarget target = raw < ui.getSize() ? PolicyTarget.UI : PolicyTarget.INVENTORY;
             int slot = player.getOpenInventory().convertSlot(raw);
             return ui.getPolicy(slot, target) != SlotPolicy.VARIATION;
         }) || event.isCancelled());
+
+        if (event.isCancelled() || event.getInventory() != ui.asInventory()) {
+            return;
+        }
+
+        event.getInventorySlots().forEach(slot -> ui.onClick(slot, Click.DRAG, Mouse.RIGHT));
     }
 
     @EventHandler(priority = EventPriority.MONITOR)

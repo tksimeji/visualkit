@@ -110,7 +110,7 @@ public class VisualkitElement implements Killable {
     private @NotNull Material type;
 
     /**
-     * Get the item type.
+     * Gets the item type.
      *
      * @return Item type
      */
@@ -119,7 +119,7 @@ public class VisualkitElement implements Killable {
     }
 
     /**
-     * Set the item type.
+     * Sets the item type.
      *
      * @param type Item type
      * @return Updated element
@@ -132,7 +132,7 @@ public class VisualkitElement implements Killable {
     private @NotNull Xmpl title = Xmpl.empty();
 
     /**
-     * Get the title
+     * Gets the title
      *
      * @return Title
      */
@@ -141,7 +141,7 @@ public class VisualkitElement implements Killable {
     }
 
     /**
-     * Set the title.
+     * Sets the title.
      *
      * @param title Title
      * @return Updated element
@@ -155,7 +155,7 @@ public class VisualkitElement implements Killable {
     private @NotNull Lore lore = Lore.empty();
 
     /**
-     * Get the lore.
+     * Gets the lore.
      *
      * @return Lore
      */
@@ -164,7 +164,7 @@ public class VisualkitElement implements Killable {
     }
 
     /**
-     * Set the lore.
+     * Sets the lore.
      *
      * @param components Lore
      * @return Updated element
@@ -178,7 +178,7 @@ public class VisualkitElement implements Killable {
     private int stack = 1;
 
     /**
-     * Get the stack count.
+     * Gets the stack count.
      *
      * @return Stack count
      */
@@ -187,7 +187,7 @@ public class VisualkitElement implements Killable {
     }
 
     /**
-     * Set the stack count.
+     * Sets the stack count.
      *
      * @param stack Stack count
      * @return Updated element
@@ -200,7 +200,7 @@ public class VisualkitElement implements Killable {
     private int model = -1;
 
     /**
-     * Get the custom model data.
+     * Gets the custom model data.
      *
      * @return Custom model data
      */
@@ -209,7 +209,7 @@ public class VisualkitElement implements Killable {
     }
 
     /**
-     * Set the custom model data.
+     * Sets the custom model data.
      *
      * @param model Custom model data
      * @return Updated element
@@ -222,7 +222,7 @@ public class VisualkitElement implements Killable {
     private boolean aura = false;
 
     /**
-     * Get whether the item has an enchantment aura.
+     * Gets whether the item has an enchantment aura.
      *
      * @return True if has aura
      */
@@ -231,7 +231,7 @@ public class VisualkitElement implements Killable {
     }
 
     /**
-     * Set whether to have an enchantment aura.
+     * Sets whether to have an enchantment aura.
      *
      * @param aura True if has aura
      * @return Updated element
@@ -244,7 +244,7 @@ public class VisualkitElement implements Killable {
     private @Nullable Handler handler = null;
 
     /**
-     * Get the handler to be called on click.
+     * Gets the handler to be called on click.
      *
      * @return Handler
      */
@@ -253,7 +253,7 @@ public class VisualkitElement implements Killable {
     }
 
     /**
-     * Set the handler to be called on click.
+     * Sets the handler to be called on click.
      *
      * @param handler Handler
      * @return Updated element
@@ -264,7 +264,7 @@ public class VisualkitElement implements Killable {
     }
 
     /**
-     * Set the handler to be called on click.
+     * Sets the handler to be called on click.
      *
      * @param handler Handler
      * @return Updated element
@@ -279,7 +279,7 @@ public class VisualkitElement implements Killable {
     private float pitch = 1.0f;
 
     /**
-     * Get the sound to be played on click.
+     * Gets the sound to be played on click.
      *
      * @return Sound
      */
@@ -288,7 +288,7 @@ public class VisualkitElement implements Killable {
     }
 
     /**
-     * Get the volume of the sound being played.
+     * Gets the volume of the sound being played.
      *
      * @return Sound volume
      */
@@ -297,7 +297,7 @@ public class VisualkitElement implements Killable {
     }
 
     /**
-     * Get the pitch of the sound being played.
+     * Gets the pitch of the sound being played.
      *
      * @return Sound pitch
      */
@@ -306,7 +306,7 @@ public class VisualkitElement implements Killable {
     }
 
     /**
-     * Set the sound to be played on click.
+     * Sets the sound to be played on click.
      *
      * @param sound Sound
      * @return Updated element
@@ -316,7 +316,7 @@ public class VisualkitElement implements Killable {
     }
 
     /**
-     * Set the sound to be played on click.
+     * Sets the sound to be played on click.
      *
      * @param sound Sound
      * @param volume Sound volume

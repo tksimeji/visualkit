@@ -52,7 +52,7 @@ public interface IInventoryUI<I extends Inventory> extends IVisualkitUI {
     void setElement(int slot, @Nullable ItemStack element);
 
     /**
-     * Get the policy of a given slot.
+     * Gets the policy of a given slot.
      *
      * @param slot Slot index number
      * @return Slot Policy
@@ -60,7 +60,7 @@ public interface IInventoryUI<I extends Inventory> extends IVisualkitUI {
     @NotNull SlotPolicy getPolicy(int slot);
 
     /**
-     * Get the policy of a given slot.
+     * Gets the policy of a given slot.
      *
      * @param slot Slot index number
      * @param target Target
@@ -69,7 +69,7 @@ public interface IInventoryUI<I extends Inventory> extends IVisualkitUI {
     @NotNull SlotPolicy getPolicy(int slot, @NotNull PolicyTarget target);
 
     /**
-     * Set a policy in any slot.
+     * Sets a policy in any slot.
      *
      * @param slot Slot index number
      * @param policy Slot policy
@@ -77,7 +77,7 @@ public interface IInventoryUI<I extends Inventory> extends IVisualkitUI {
     void setPolicy(int slot, @NotNull SlotPolicy policy);
 
     /**
-     * Set a policy in any slot.
+     * Sets a policy in any slot.
      *
      * @param slot Slot index number
      * @param target Target
@@ -86,7 +86,14 @@ public interface IInventoryUI<I extends Inventory> extends IVisualkitUI {
     void setPolicy(int slot, @NotNull SlotPolicy policy, @NotNull PolicyTarget target);
 
     /**
-     * Get GUI inventory.
+     * Gets the size of the inventory
+     *
+     * @return Inventory size
+     */
+    int getSize();
+
+    /**
+     * Gets GUI inventory.
      *
      * @return Inventory
      */

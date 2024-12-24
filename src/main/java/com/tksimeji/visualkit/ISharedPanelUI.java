@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface ISharedPanelUI extends IPanelUI {
     /**
-     * Get a list of audiences.
+     * Gets a list of audiences.
      *
      * @return Audience list
      */

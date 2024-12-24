@@ -53,7 +53,7 @@ public abstract class InventoryUI<I extends Inventory> extends VisualkitUI imple
 
     @Override
     public final void setElement(int slot, @Nullable VisualkitElement element) {
-        if (slot < 0 || asInventory().getSize() <= slot) {
+        if (slot < 0 || getSize() <= slot) {
             return;
         }
 
@@ -88,7 +88,7 @@ public abstract class InventoryUI<I extends Inventory> extends VisualkitUI imple
     @Override
     public @NotNull SlotPolicy getPolicy(int slot, @NotNull PolicyTarget target) {
         if (target == PolicyTarget.INVENTORY) {
-            slot += asInventory().getSize();
+            slot += getSize();
         }
 
         return Optional.ofNullable(policies.get(slot)).orElse(SlotPolicy.FIXATION);
@@ -102,14 +102,19 @@ public abstract class InventoryUI<I extends Inventory> extends VisualkitUI imple
     @Override
     public void setPolicy(int slot, @NotNull SlotPolicy policy, @NotNull PolicyTarget target) {
         if (target == PolicyTarget.INVENTORY) {
-            slot += asInventory().getSize();
+            slot += getSize();
         }
 
-        if (slot < 0 || asInventory().getSize() + player.getOpenInventory().getBottomInventory().getSize() <= slot) {
+        if (slot < -1 || getSize() + player.getOpenInventory().getBottomInventory().getSize() <= slot) {
             return;
         }
 
         policies.put(slot, policy);
+    }
+
+    @Override
+    public int getSize() {
+        return asInventory().getSize();
     }
 
     @Override
