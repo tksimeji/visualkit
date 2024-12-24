@@ -2,6 +2,8 @@ package com.tksimeji.visualkit;
 
 import com.tksimeji.visualkit.api.*;
 import com.tksimeji.visualkit.element.VisualkitElement;
+import com.tksimeji.visualkit.policy.PolicyTarget;
+import com.tksimeji.visualkit.policy.SlotPolicy;
 import com.tksimeji.visualkit.util.KillableHashMap;
 import com.tksimeji.visualkit.util.AsmUtility;
 import com.tksimeji.visualkit.util.ReflectionUtility;
@@ -22,11 +24,12 @@ public abstract class InventoryUI<I extends Inventory> extends VisualkitUI imple
     protected final @NotNull Player player;
 
     protected final @NotNull Map<Integer, VisualkitElement> elements = new KillableHashMap<>();
+    protected final @NotNull Map<Integer, SlotPolicy> policies = new HashMap<>();
     protected final @NotNull Set<Method> handlers = ReflectionUtility.getMethods(getClass()).stream()
             .filter(method -> method.isAnnotationPresent(Handler.class))
             .collect(Collectors.toSet());
 
-    private final @NotNull Set<Field> placed = new HashSet<>();
+    private final @NotNull Set<Field> crawledFields = new HashSet<>();
 
     /**
      * Creating a GUI.
@@ -74,7 +77,39 @@ public abstract class InventoryUI<I extends Inventory> extends VisualkitUI imple
 
     @Override
     public void setElement(int slot, @Nullable ItemStack element) {
-        setElement(slot, VisualkitElement.of(element));
+        setElement(slot, element != null ? VisualkitElement.of(element) : null);
+    }
+
+    @Override
+    public @NotNull SlotPolicy getPolicy(int slot) {
+        return getPolicy(slot, PolicyTarget.UI);
+    }
+
+    @Override
+    public @NotNull SlotPolicy getPolicy(int slot, @NotNull PolicyTarget target) {
+        if (target == PolicyTarget.INVENTORY) {
+            slot += asInventory().getSize();
+        }
+
+        return Optional.ofNullable(policies.get(slot)).orElse(SlotPolicy.FIXATION);
+    }
+
+    @Override
+    public void setPolicy(int slot, @NotNull SlotPolicy policy) {
+        setPolicy(slot, policy, PolicyTarget.UI);
+    }
+
+    @Override
+    public void setPolicy(int slot, @NotNull SlotPolicy policy, @NotNull PolicyTarget target) {
+        if (target == PolicyTarget.INVENTORY) {
+            slot += asInventory().getSize();
+        }
+
+        if (slot < 0 || asInventory().getSize() + player.getOpenInventory().getBottomInventory().getSize() <= slot) {
+            return;
+        }
+
+        policies.put(slot, policy);
     }
 
     @Override
@@ -143,12 +178,11 @@ public abstract class InventoryUI<I extends Inventory> extends VisualkitUI imple
         elements.forEach(this::setElement);
 
         ReflectionUtility.getFields(getClass()).stream()
-                .filter(field -> ! placed.contains(field) &&
+                .filter(field -> ! crawledFields.contains(field) &&
                         field.isAnnotationPresent(Element.class) &&
                         (VisualkitElement.class.isAssignableFrom(field.getType()) || ItemStack.class.isAssignableFrom(field.getType())))
+                .peek(field -> field.setAccessible(true))
                 .forEach(field -> {
-                    field.setAccessible(true);
-
                     try {
                         Object element = field.get(InventoryUI.this);
 
@@ -162,9 +196,29 @@ public abstract class InventoryUI<I extends Inventory> extends VisualkitUI imple
                             }
 
                             if (element != null) {
-                                placed.add(field);
+                                crawledFields.add(field);
                             }
                         });
+                    } catch (IllegalAccessException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+
+        ReflectionUtility.getFields(getClass()).stream()
+                .filter(field -> ! crawledFields.contains(field) &&
+                        field.isAnnotationPresent(Policy.class) &&
+                        field.getType() == SlotPolicy.class)
+                .peek(field -> field.setAccessible(true))
+                .forEach(field -> {
+                    Policy annotation = field.getAnnotation(Policy.class);
+
+                    try {
+                        SlotPolicy policy = (SlotPolicy) field.get(InventoryUI.this);
+
+                        if (policy != null) {
+                            AsmUtility.of(annotation).forEach(slot -> setPolicy(slot, policy, annotation.target()));
+                            crawledFields.add(field);
+                        }
                     } catch (IllegalAccessException e) {
                         throw new RuntimeException(e);
                     }

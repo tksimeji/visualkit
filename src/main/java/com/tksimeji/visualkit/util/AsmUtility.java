@@ -3,6 +3,7 @@ package com.tksimeji.visualkit.util;
 import com.tksimeji.visualkit.api.Element;
 import com.tksimeji.visualkit.api.Handler;
 import com.tksimeji.visualkit.api.Asm;
+import com.tksimeji.visualkit.api.Policy;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -14,6 +15,10 @@ import java.util.stream.Stream;
 
 public final class AsmUtility {
     public static @NotNull Set<Integer> of(@NotNull Element annotation) {
+        return concat(of(annotation.value()), of(annotation.asm()));
+    }
+
+    public static @NotNull Set<Integer> of(@NotNull Policy annotation) {
         return concat(of(annotation.value()), of(annotation.asm()));
     }
 

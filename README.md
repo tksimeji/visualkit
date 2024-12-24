@@ -2,12 +2,15 @@
 
 The Minecraft GUI framework
 
-![Version](https://img.shields.io/badge/version-0.3.10-blue?style=flat-square)
+![Version](https://img.shields.io/badge/version-0.4.0_beta-blue?style=flat-square)
 ![Licence](https://img.shields.io/badge/licence-MIT-red?style=flat-square)
 
 <img alt="Eye-catching" src="./assets/b706df0a-22c2-4185-9813-6e4a0981ca11.png" width="64%">
 
 Visualkit is a free, open-source GUI framework for [Paper](https://papermc.io/software/paper) server.
+
+> [!WARNING]
+> This version contains new features that are in development and may be unstable.
 
 Maximum respect to [Bram Moolenaar](https://github.com/brammool), the developer of [Vim](https://www.vim.org/).
 
@@ -228,7 +231,41 @@ setElement(0, new ItemStack(Material.COOKIE, 1));
 setElement(0, null);
 ```
 
-### 3. Add handler
+### 3. Add policy
+
+A policy defines the behavior of a slot.
+
+> [!TIP]
+> The default policy is `SlotPolicy.FIXATION`
+
+#### Defines a filed with a `com.tksimeji.visualkit.api.Policy` annotation:
+
+```java
+// The method for specifying the scope is the same as for @Element
+
+@Policy(1)
+private final SlotPolicy policy = SlotPolicy.VARIATION;
+
+// It can be applied to the UI as well as the player's inventory
+@Policy(1, target = PolicyTarget.INVENTORY)
+private final SlotPolicy policy = SlotPolicy.VARIATION;
+```
+
+#### Setting policies from code:
+
+```java
+// The target will automatically be PolicyTarget.UI
+@NotNull SlotPolicy getPolicy(int slot);
+
+@NotNull SlotPolicy getPolicy(int slot, @NotNull PolicyTarget target);
+
+// The target will automatically be PolicyTarget.UI
+void setPolicy(int slot, @NotNull SlotPolicy policy);
+
+void setPolicy(int slot, @NotNull SlotPolicy policy, @NotNull PolicyTarget target);
+```
+
+### 4. Add handler
 
 Define a method to handle clicks on any slot.
 

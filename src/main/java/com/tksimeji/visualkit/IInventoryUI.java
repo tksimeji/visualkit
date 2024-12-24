@@ -3,6 +3,8 @@ package com.tksimeji.visualkit;
 import com.tksimeji.visualkit.api.Click;
 import com.tksimeji.visualkit.api.Mouse;
 import com.tksimeji.visualkit.element.VisualkitElement;
+import com.tksimeji.visualkit.policy.PolicyTarget;
+import com.tksimeji.visualkit.policy.SlotPolicy;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -26,7 +28,7 @@ public interface IInventoryUI<I extends Inventory> extends IVisualkitUI {
     @NotNull Player getPlayer();
 
     /**
-     * Gets the element of a given slot.
+     * Get the element of a given slot.
      *
      * @param slot Slot index number
      * @return GUI element
@@ -36,7 +38,7 @@ public interface IInventoryUI<I extends Inventory> extends IVisualkitUI {
     /**
      * Place an element in any slot.
      *
-     * @param slot    Slot index number
+     * @param slot Slot index number
      * @param element The element to place, if null it will become an empty slot
      */
     void setElement(int slot, @Nullable VisualkitElement element);
@@ -48,6 +50,40 @@ public interface IInventoryUI<I extends Inventory> extends IVisualkitUI {
      * @param element The element to place, if null it will become an empty slot
      */
     void setElement(int slot, @Nullable ItemStack element);
+
+    /**
+     * Get the policy of a given slot.
+     *
+     * @param slot Slot index number
+     * @return Slot Policy
+     */
+    @NotNull SlotPolicy getPolicy(int slot);
+
+    /**
+     * Get the policy of a given slot.
+     *
+     * @param slot Slot index number
+     * @param target Target
+     * @return Slot Policy
+     */
+    @NotNull SlotPolicy getPolicy(int slot, @NotNull PolicyTarget target);
+
+    /**
+     * Set a policy in any slot.
+     *
+     * @param slot Slot index number
+     * @param policy Slot policy
+     */
+    void setPolicy(int slot, @NotNull SlotPolicy policy);
+
+    /**
+     * Set a policy in any slot.
+     *
+     * @param slot Slot index number
+     * @param target Target
+     * @param policy Slot policy
+     */
+    void setPolicy(int slot, @NotNull SlotPolicy policy, @NotNull PolicyTarget target);
 
     /**
      * Get GUI inventory.
