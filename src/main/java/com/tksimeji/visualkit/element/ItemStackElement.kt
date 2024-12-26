@@ -1,6 +1,7 @@
 package com.tksimeji.visualkit.element
 
 import com.tksimeji.visualkit.element.IVisualkitElement.Handler
+import com.tksimeji.visualkit.util.ComponentUtility
 import net.kyori.adventure.text.Component
 import org.bukkit.Material
 import org.bukkit.Sound
@@ -23,7 +24,7 @@ class ItemStackElement internal constructor(private val itemStack: ItemStack): I
     }
 
     override fun title(title: Component?): ItemStackElement {
-        itemStack.setItemMeta(itemStack.itemMeta?.also { it.displayName(title) })
+        itemStack.setItemMeta(itemStack.itemMeta?.also { it.displayName(if (title != null) ComponentUtility.empty().append(title) else null) })
         return this
     }
 
@@ -32,7 +33,7 @@ class ItemStackElement internal constructor(private val itemStack: ItemStack): I
     }
 
     override fun lore(vararg components: Component?): ItemStackElement {
-        itemStack.setItemMeta(itemStack.itemMeta?.also { it.lore(components.toList()) })
+        itemStack.setItemMeta(itemStack.itemMeta?.also { it.lore(components.filterNotNull().map { c -> ComponentUtility.empty().append(c) }) })
         return this
     }
 
