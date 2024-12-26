@@ -1,6 +1,8 @@
 package com.tksimeji.visualkit;
 
 import com.tksimeji.visualkit.api.*;
+import com.tksimeji.visualkit.element.IVisualkitElement;
+import com.tksimeji.visualkit.element.ItemStackElement;
 import com.tksimeji.visualkit.element.VisualkitElement;
 import com.tksimeji.visualkit.policy.PolicyTarget;
 import com.tksimeji.visualkit.policy.SlotPolicy;
@@ -23,10 +25,11 @@ import java.util.stream.Collectors;
 public abstract class InventoryUI<I extends Inventory> extends VisualkitUI implements IInventoryUI<I> {
     protected final @NotNull Player player;
 
-    protected final @NotNull Map<Integer, VisualkitElement> elements = new KillableHashMap<>();
+    protected final @NotNull Map<Integer, IVisualkitElement<?>> elements = new KillableHashMap<>();
     protected final @NotNull Map<Integer, SlotPolicy> policies = new HashMap<>();
     protected final @NotNull Set<Method> handlers = ReflectionUtility.getMethods(getClass()).stream()
-            .filter(method -> method.isAnnotationPresent(Handler.class))
+            .filter(method -> method.isAnnotationPresent(Handler.class) &&
+                    (List.of(Void.TYPE, Boolean.class, boolean.class).contains(method.getReturnType())))
             .collect(Collectors.toSet());
 
     private final @NotNull Set<Field> crawledFields = new HashSet<>();
@@ -47,12 +50,12 @@ public abstract class InventoryUI<I extends Inventory> extends VisualkitUI imple
     }
 
     @Override
-    public final @Nullable VisualkitElement getElement(int slot) {
+    public final @Nullable IVisualkitElement<?> getElement(int slot) {
         return elements.get(slot);
     }
 
     @Override
-    public final void setElement(int slot, @Nullable VisualkitElement element) {
+    public final void setElement(int slot, @Nullable IVisualkitElement<?> element) {
         if (slot < 0 || getSize() <= slot) {
             return;
         }
@@ -65,10 +68,17 @@ public abstract class InventoryUI<I extends Inventory> extends VisualkitUI imple
 
         elements.put(slot, element);
 
-        ItemStack item = element.asItemStack(this);
+        ItemStack item = null;
+
+        if (element instanceof VisualkitElement ve) {
+            item = ve.asItemStack(this);
+        } else if (element instanceof ItemStackElement is) {
+            item = is.asItemStack();
+        }
+
         ItemStack old = asInventory().getItem(slot);
 
-        if (item.equals(old)) {
+        if (item != null && item.equals(old)) {
             return;
         }
 
@@ -77,7 +87,7 @@ public abstract class InventoryUI<I extends Inventory> extends VisualkitUI imple
 
     @Override
     public void setElement(int slot, @Nullable ItemStack element) {
-        setElement(slot, element != null ? VisualkitElement.of(element) : null);
+        setElement(slot, element != null ? VisualkitElement.item(element) : null);
     }
 
     @Override
@@ -118,28 +128,28 @@ public abstract class InventoryUI<I extends Inventory> extends VisualkitUI imple
     }
 
     @Override
-    public final void onClick(int slot, @NotNull Click click, @NotNull Mouse mouse) {
+    public final boolean onClick(int slot, @NotNull Click click, @NotNull Mouse mouse, @Nullable ItemStack item) {
         elements.entrySet().stream()
                 .filter(entry -> entry.getKey() == slot)
                 .forEach(entry -> {
-                    VisualkitElement element = entry.getValue();
+                    IVisualkitElement<?> element = entry.getValue();
                     Optional.ofNullable(element.handler()).ifPresent(handler -> {
-                        if (handler instanceof VisualkitElement.Handler1 h1) {
+                        if (handler instanceof IVisualkitElement.Handler1 h1) {
                             h1.onClick(slot, click, mouse);
-                        } else if (handler instanceof VisualkitElement.Handler2 h2) {
+                        } else if (handler instanceof IVisualkitElement.Handler2 h2) {
                             h2.onClick();
                         }
                     });
                     Optional.ofNullable(element.sound()).ifPresent(sound -> player.playSound(player, sound, element.volume(), element.pitch()));
                 });
 
-        handlers.stream()
+        return handlers.stream()
                 .filter(handler -> {
                     Handler annotation = handler.getAnnotation(Handler.class);
                     return AsmUtility.of(annotation).stream().anyMatch(s -> s == slot) &&
                         Arrays.stream(annotation.click()).toList().contains(click) &&
                         Arrays.stream(annotation.mouse()).toList().contains(mouse);
-                }).forEach(handler -> {
+                }).allMatch(handler -> {
                     Parameter[] parameters = handler.getParameters();
                     Object[] args = new Object[parameters.length];
 
@@ -153,18 +163,17 @@ public abstract class InventoryUI<I extends Inventory> extends VisualkitUI imple
                             args[i] = click;
                         } else if (Mouse.class.isAssignableFrom(type)) {
                             args[i] = mouse;
-                        } else if (VisualkitElement.class.isAssignableFrom(type)) {
-                            args[i] = getElement(slot);
                         } else if (ItemStack.class.isAssignableFrom(type)) {
-                            args[i] = asInventory().getItem(slot);
-                        }else {
+                            args[i] = item;
+                        } else {
                             args[i] = null;
                         }
                     }
 
                     try {
                         handler.setAccessible(true);
-                        handler.invoke(this, args);
+                        Object result = handler.invoke(this, args);
+                        return result == null || ((boolean) result);
                     } catch (InvocationTargetException | IllegalAccessException e) {
                         throw new RuntimeException(e);
                     }
@@ -194,14 +203,14 @@ public abstract class InventoryUI<I extends Inventory> extends VisualkitUI imple
         ReflectionUtility.getFields(getClass()).stream()
                 .filter(field -> ! crawledFields.contains(field) &&
                         field.isAnnotationPresent(Element.class) &&
-                        (VisualkitElement.class.isAssignableFrom(field.getType()) || ItemStack.class.isAssignableFrom(field.getType())))
+                        (IVisualkitElement.class.isAssignableFrom(field.getType()) || ItemStack.class.isAssignableFrom(field.getType())))
                 .peek(field -> field.setAccessible(true))
                 .forEach(field -> {
                     try {
                         Object element = field.get(InventoryUI.this);
 
                         AsmUtility.of(field.getAnnotation(Element.class)).forEach(slot -> {
-                            if (element instanceof VisualkitElement e) {
+                            if (element instanceof IVisualkitElement<?> e) {
                                 setElement(slot, e);
                             } else if (element instanceof ItemStack e) {
                                 setElement(slot, e);

@@ -2,7 +2,7 @@ package com.tksimeji.visualkit;
 
 import com.tksimeji.visualkit.api.Click;
 import com.tksimeji.visualkit.api.Mouse;
-import com.tksimeji.visualkit.element.VisualkitElement;
+import com.tksimeji.visualkit.element.IVisualkitElement;
 import com.tksimeji.visualkit.policy.PolicyTarget;
 import com.tksimeji.visualkit.policy.SlotPolicy;
 import net.kyori.adventure.text.Component;
@@ -33,7 +33,7 @@ public interface IInventoryUI<I extends Inventory> extends IVisualkitUI {
      * @param slot Slot index number
      * @return GUI element
      */
-    @Nullable VisualkitElement getElement(int slot);
+    @Nullable IVisualkitElement<?> getElement(int slot);
 
     /**
      * Place an element in any slot.
@@ -41,7 +41,7 @@ public interface IInventoryUI<I extends Inventory> extends IVisualkitUI {
      * @param slot Slot index number
      * @param element The element to place, if null it will become an empty slot
      */
-    void setElement(int slot, @Nullable VisualkitElement element);
+    void setElement(int slot, @Nullable IVisualkitElement<?> element);
 
     /**
      * Place on element in any slot.
@@ -105,15 +105,16 @@ public interface IInventoryUI<I extends Inventory> extends IVisualkitUI {
      * @param slot  Clicked slot
      * @param click Click Type
      * @param mouse The mouse button used
+     * @param item Clicked item
      */
-    default void onClick(int slot, @NotNull Click click, @NotNull Mouse mouse) {
+    default boolean onClick(int slot, @NotNull Click click, @NotNull Mouse mouse, @Nullable ItemStack item) {
+        return true;
     }
 
     /**
      * Called when the GUI is closed.
      */
-    default void onClose() {
-    }
+    default void onClose() {}
 
     /**
      * Close the GUI.

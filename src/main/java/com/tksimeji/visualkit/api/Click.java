@@ -4,5 +4,6 @@ public enum Click {
     SINGLE,
     DOUBLE,
     SHIFT,
-    DRAG
+    DRAG,
+    QUICK_MOVE
 }

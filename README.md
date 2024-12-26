@@ -2,7 +2,7 @@
 
 The Minecraft GUI framework
 
-![Version](https://img.shields.io/badge/version-0.4.3-blue?style=flat-square)
+![Version](https://img.shields.io/badge/version-0.4.4-blue?style=flat-square)
 ![Licence](https://img.shields.io/badge/licence-MIT-red?style=flat-square)
 
 <img alt="Eye-catching" src="./assets/b706df0a-22c2-4185-9813-6e4a0981ca11.png" width="64%">
@@ -277,6 +277,13 @@ public void onCookieClick() {
     count ++;
 }
 
+// You can also specify whether to allow clicks in the return value
+
+@Handler(slot = 13, click = Click.SINGLE, mouse = {Mouse.LEFT, Mouse.RIGHT})
+public boolean onCookieClick() {
+    count ++;
+}
+
 // Alternatively, handlers can be specified directly on the element.
 
 @Element(13)
@@ -301,19 +308,18 @@ Of course, you can also use asm to specify the slot.
 It can also take slot, click, and mouse state as arguments.
 However, these arguments are injected only if the following conditions are met:
 
-| Type                                              |
-|:--------------------------------------------------|
-| `int` / `java.lang.Integer`                       |
-| `com.tksimeji.visualkit.api.Click`                |
-| `com.tksimeji.visualkit.api.Mouse`                |
-| `com.tksimeji.visualkit.element.VisualkitElement` |
-| `org.bukkit.inventory.ItemStack`                  |
+| Type                               |
+|:-----------------------------------|
+| `int` / `java.lang.Integer`        |
+| `com.tksimeji.visualkit.api.Click` |
+| `com.tksimeji.visualkit.api.Mouse` |
+| `org.bukkit.inventory.ItemStack`   |
 
 This is useful when you specify a broad conditions in the annotation.
 
 ```java
 @Handler(slot = 0)
-public void onClick(int slot, Click click, Mouse mouse, VisualkitElement element, ItemStack itemStack) {
+public void onClick(int slot, Click click, Mouse mouse, ItemStack itemStack) {
     // do something
 }
 ```
