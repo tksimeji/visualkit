@@ -28,64 +28,6 @@ public interface IInventoryUI<I extends Inventory> extends IVisualkitUI {
     @NotNull Player getPlayer();
 
     /**
-     * Get the element of a given slot.
-     *
-     * @param slot Slot index number
-     * @return GUI element
-     */
-    @Nullable IVisualkitElement<?> getElement(int slot);
-
-    /**
-     * Place an element in any slot.
-     *
-     * @param slot Slot index number
-     * @param element The element to place, if null it will become an empty slot
-     */
-    void setElement(int slot, @Nullable IVisualkitElement<?> element);
-
-    /**
-     * Place on element in any slot.
-     *
-     * @param slot    Slot index number
-     * @param element The element to place, if null it will become an empty slot
-     */
-    void setElement(int slot, @Nullable ItemStack element);
-
-    /**
-     * Gets the policy of a given slot.
-     *
-     * @param slot Slot index number
-     * @return Slot Policy
-     */
-    @NotNull SlotPolicy getPolicy(int slot);
-
-    /**
-     * Gets the policy of a given slot.
-     *
-     * @param slot Slot index number
-     * @param target Target
-     * @return Slot Policy
-     */
-    @NotNull SlotPolicy getPolicy(int slot, @NotNull PolicyTarget target);
-
-    /**
-     * Sets a policy in any slot.
-     *
-     * @param slot Slot index number
-     * @param policy Slot policy
-     */
-    void setPolicy(int slot, @NotNull SlotPolicy policy);
-
-    /**
-     * Sets a policy in any slot.
-     *
-     * @param slot Slot index number
-     * @param target Target
-     * @param policy Slot policy
-     */
-    void setPolicy(int slot, @NotNull SlotPolicy policy, @NotNull PolicyTarget target);
-
-    /**
      * Gets the size of the inventory
      *
      * @return Inventory size
