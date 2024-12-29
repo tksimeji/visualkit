@@ -1,8 +1,6 @@
 package com.tksimeji.visualkit.listener;
 
 import com.tksimeji.visualkit.*;
-import io.papermc.paper.event.player.AsyncChatEvent;
-import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -23,21 +21,5 @@ public final class PlayerListener implements Listener {
                 s.removeAudience(player);
             }
         });
-    }
-
-    @EventHandler
-    public void on(AsyncChatEvent event) {
-        new AnvilUI(event.getPlayer()) {
-            @NotNull
-            @Override
-            public Component title() {
-                return Component.text("Search");
-            }
-
-            @Override
-            public void onTyped(@NotNull String string) {
-                System.out.println(string);
-            }
-        };
     }
 }
