@@ -197,7 +197,12 @@ public abstract class MerchantUI extends ContainerUI<MerchantInventory> implemen
                         int index = annotation.index();
 
                         if (field.get(MerchantUI.this) instanceof VisualkitTrade trade) {
-                            setTrade(Math.max(index, size()), trade);
+                            if (index < 0) {
+                                addTrade(trade);
+                            } else {
+                                setTrade(Math.max(index, size()), trade);
+                            }
+
                             crawledFields.add(field);
                         }
                     } catch (IllegalAccessException e) {
