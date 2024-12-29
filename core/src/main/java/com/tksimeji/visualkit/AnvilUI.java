@@ -1,6 +1,6 @@
 package com.tksimeji.visualkit;
 
-import com.tksimeji.visualkit.api.Click;
+import com.tksimeji.visualkit.api.Action;
 import com.tksimeji.visualkit.api.Mouse;
 import com.tksimeji.visualkit.util.ComponentUtility;
 import net.kyori.adventure.text.Component;
@@ -53,7 +53,7 @@ public abstract class AnvilUI extends ContainerUI<AnvilInventory> implements IAn
     }
 
     @Override
-    public final boolean onClick(int slot, @NotNull Click click, @NotNull Mouse mouse, @Nullable ItemStack item) {
+    public final boolean onClick(int slot, @NotNull Action action, @NotNull Mouse mouse, @Nullable ItemStack item) {
         if (slot == 2) {
             player.closeInventory();
         }

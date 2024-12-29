@@ -2,7 +2,7 @@
 
 The Minecraft GUI framework
 
-![Version](https://img.shields.io/badge/version-0.5.0--beta.2-blue?style=flat-square)
+![Version](https://img.shields.io/badge/version-0.5.0--beta.3-blue?style=flat-square)
 ![Adapter](https://img.shields.io/badge/adapter-1.21.1--1.21.4-yellow?style=flat-square)
 ![Licence](https://img.shields.io/badge/licence-MIT-red?style=flat-square)
 
@@ -273,17 +273,17 @@ void setPolicy(int slot, @NotNull SlotPolicy policy, @NotNull PolicyTarget targe
 Define a method to handle clicks on any slot.
 
 Add a method with the annotation `com.tksimeji.visualkit.api.Handler`.
-In addition to slots, you can add click and mouse conditions to the Handler annotation.
+In addition to slots, you can add action and mouse conditions to the Handler annotation.
 
 ```java
-@Handler(slot = 13, click = Click.SINGLE, mouse = {Mouse.LEFT, Mouse.RIGHT})
+@Handler(slot = 13, action = Action.SINGLE, mouse = {Mouse.LEFT, Mouse.RIGHT})
 public void onCookieClick() {
     count ++;
 }
 
 // You can also specify whether to allow clicks in the return value
 
-@Handler(slot = 13, click = Click.SINGLE, mouse = {Mouse.LEFT, Mouse.RIGHT})
+@Handler(slot = 13, action = Action.SINGLE, mouse = {Mouse.LEFT, Mouse.RIGHT})
 public boolean onCookieClick() {
     count ++;
 }
@@ -300,7 +300,7 @@ private final VisualkitElement cookieButton = VisualkitElement
 @Element(13)
 private final VisualkitElement cookieButton = VisualkitElement
         .create(Material.COOKIE)
-        .handler((slot, click, mouse) -> samething());
+        .handler((slot, action, mouse) -> samething());
 ```
 
 Of course, you can also use asm to specify the slot.
@@ -309,21 +309,21 @@ Of course, you can also use asm to specify the slot.
 @Handler(asm = {@Asm(from = 0, to = 8)}, slot = {9, 10})
 ```
 
-It can also take slot, click, and mouse state as arguments.
+It can also take slot, action, and mouse state as arguments.
 However, these arguments are injected only if the following conditions are met:
 
-| Type                               |
-|:-----------------------------------|
-| `int` / `java.lang.Integer`        |
-| `com.tksimeji.visualkit.api.Click` |
-| `com.tksimeji.visualkit.api.Mouse` |
-| `org.bukkit.inventory.ItemStack`   |
+| Type                                |
+|:------------------------------------|
+| `int` / `java.lang.Integer`         |
+| `com.tksimeji.visualkit.api.Action` |
+| `com.tksimeji.visualkit.api.Mouse`  |
+| `org.bukkit.inventory.ItemStack`    |
 
 This is useful when you specify a broad conditions in the annotation.
 
 ```java
 @Handler(slot = 0)
-public void onClick(int slot, Click click, Mouse mouse, ItemStack itemStack) {
+public void onClick(int slot, Click action, Mouse mouse, ItemStack itemStack) {
     // do something
 }
 ```
@@ -338,6 +338,100 @@ new MyChestUI(player);
 ```
 
 The GUI will be displayed to the player specified as an argument.
+
+## ![Anvil GUI](./assets/0977cc82-2c93-4214-86d6-0caeeee1166b.png) Create a Anvil GUI
+
+This is a GUI that uses an anvil. It is intended to be used as a text input screen.
+
+### 1. Create a class that extends `com.tksimeji.visualkit.AnvilUI`
+
+```java
+public class MyAnvilUI extends AnvilUI {
+    // do something
+}
+```
+
+### 2. Set up placeholders and dummy item
+
+Their implementation is optional.
+
+```java
+@Override
+public @Nullable String placeholder() {
+    return "Enter your search term";
+}
+
+@Override
+public @NotNull Material dummy() {
+    return Material.COMPASS;
+}
+```
+
+### 3. Add processing when character input is completed
+
+```java
+@Override
+public void onTyped(@NotNull String string) {
+    player.sendMessage(Component.text("You typed \"" + string + "\"."));
+}
+```
+
+## ![Merchant GUI](./assets/54aa3ec7-5a11-4a79-901b-da66eb9f667f.png) Create a Merchant GUI
+
+The Merchant GUI uses the GUI used to trade with villagers and wandering traders.
+
+### 1. Create a class that extends `com.tksimeji.visualkit.MerchantUI`
+
+```java
+public class MyMerchantUI extends MerchantUI {
+    // do something
+}
+```
+
+### 2. Add displayed transactions
+
+If it is always constant, you can also declare it as a field.
+
+```java
+@Target(index = 0)
+private final @NotNull VisualkitTrade = VisualkitTrade.create(new ItemStack(Material.DIAMOND), 2)
+        .requirement(new ItemStack(Material.EMERALD, 16))
+        .onSelect(() -> doSomething())
+        .onPurchare(() -> doSomething());
+```
+
+Of course, you can add and remove them dynamically.
+
+```java
+setTrade(0, VisualkitTrade.create(new ItemStack(Material.REDSTONE)));
+
+addTrade(VisualkitTrade.create(new ItemStack(Material.REDSTONE)));
+
+removeTrade(0);
+
+removeTrade(trade);
+```
+
+### 3. Add a handler
+
+Add methods that will be called when selecting and purchasing a trade.
+
+```java
+@Handler(slot = 0, action = Action.SELECT)
+void handler1() {}
+
+@Handler(slot = 0, action = Action.PURCHARE)
+void handler2() {}
+```
+
+Details can be passed as arguments.
+
+| type                                          | description |
+|:----------------------------------------------|-------------|
+| `int` / `java.lang.Integer`                   | index       |
+| `com.tksimeji.visualkit.trade.VisualkitTrade` | trade       |
+
+You can also specify whether to pass the event through by returning a boolean value.
 
 ## ![Panel GUI](./assets/4a48ded0-5caf-4a18-bcb4-095fffb6f8bf.png) Create a Panel GUI
 

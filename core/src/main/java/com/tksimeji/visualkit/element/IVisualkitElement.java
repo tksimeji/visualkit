@@ -1,7 +1,7 @@
 package com.tksimeji.visualkit.element;
 
 import com.tksimeji.visualkit.Killable;
-import com.tksimeji.visualkit.api.Click;
+import com.tksimeji.visualkit.api.Action;
 import com.tksimeji.visualkit.api.Mouse;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
@@ -158,7 +158,7 @@ public interface IVisualkitElement<T extends IVisualkitElement<T>> extends Killa
     interface Handler {}
 
     interface Handler1 extends Handler {
-        void onClick(int slot, @NotNull Click click, @NotNull Mouse mouse);
+        void onClick(int slot, @NotNull Action action, @NotNull Mouse mouse);
     }
 
     interface Handler2 extends Handler {

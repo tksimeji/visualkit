@@ -4,7 +4,7 @@ import com.tksimeji.visualkit.ChestUI;
 import com.tksimeji.visualkit.ContainerUI;
 import com.tksimeji.visualkit.IMerchantUI;
 import com.tksimeji.visualkit.Visualkit;
-import com.tksimeji.visualkit.api.Click;
+import com.tksimeji.visualkit.api.Action;
 import com.tksimeji.visualkit.api.Mouse;
 import com.tksimeji.visualkit.policy.PolicyTarget;
 import com.tksimeji.visualkit.policy.SlotPolicy;
@@ -34,9 +34,9 @@ public final class InventoryListener implements Listener {
 
         ItemStack item = Optional.ofNullable(event.getCurrentItem()).orElseGet(() -> event.getCursor().getType().isAir() ? null : event.getCursor());
         Mouse mouse = event.getClick().isLeftClick() ? Mouse.LEFT : Mouse.RIGHT;
-        Click click = event.getClick() == ClickType.DOUBLE_CLICK ? Click.DOUBLE : event.isShiftClick() ? Click.SHIFT : Click.SINGLE;
+        Action action = event.getClick() == ClickType.DOUBLE_CLICK ? Action.DOUBLE_CLICK : event.isShiftClick() ? Action.SHIFT_CLICK : Action.SINGLE_CLICK;
 
-        event.setCancelled(! ui.onClick(event.getSlot(), click, mouse, item));
+        event.setCancelled(! ui.onClick(event.getSlot(), action, mouse, item));
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -53,7 +53,7 @@ public final class InventoryListener implements Listener {
 
         int slot = Math.max(event.getSlot(), -1);
         Mouse mouse = event.getClick().isLeftClick() ? Mouse.LEFT : Mouse.RIGHT;
-        Click click = event.getClick() == ClickType.DOUBLE_CLICK ? Click.DOUBLE : event.isShiftClick() ? Click.SHIFT : Click.SINGLE;
+        Action action = event.getClick() == ClickType.DOUBLE_CLICK ? Action.DOUBLE_CLICK : event.isShiftClick() ? Action.SHIFT_CLICK : Action.SINGLE_CLICK;
 
         PolicyTarget target = event.getClickedInventory() == ui.asInventory() ? PolicyTarget.UI : PolicyTarget.INVENTORY;
 
@@ -94,7 +94,7 @@ public final class InventoryListener implements Listener {
 
                 itemStack.setAmount(itemStackAmount);
 
-                if (inventory != ui.asInventory()|| ui.onClick(i, Click.QUICK_MOVE, mouse, item)) {
+                if (inventory != ui.asInventory()|| ui.onClick(i, Action.QUICK_MOVE, mouse, item)) {
                     inventory.setItem(i, item);
                     remainingAmount -= amount;
                 }
@@ -112,7 +112,7 @@ public final class InventoryListener implements Listener {
             return;
         }
 
-        event.setCancelled(! ui.onClick(slot, click, mouse, item) || event.isCancelled());
+        event.setCancelled(! ui.onClick(slot, action, mouse, item) || event.isCancelled());
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -134,7 +134,7 @@ public final class InventoryListener implements Listener {
             ItemStack item = entry.getValue();
             PolicyTarget target = raw < ui.getSize() ? PolicyTarget.UI : PolicyTarget.INVENTORY;
 
-            return ui.getPolicy(slot, target) != SlotPolicy.VARIATION || (target == PolicyTarget.UI && ! ui.onClick(slot, Click.DRAG, Mouse.RIGHT, item));
+            return ui.getPolicy(slot, target) != SlotPolicy.VARIATION || (target == PolicyTarget.UI && ! ui.onClick(slot, Action.DRAG, Mouse.RIGHT, item));
         }) || event.isCancelled());
     }
 
@@ -150,7 +150,6 @@ public final class InventoryListener implements Listener {
         if (! (event.getWhoClicked() instanceof Player player)) {
             return;
         }
-        event.setCancelled(true);
 
         IMerchantUI ui = Visualkit.getSession(IMerchantUI.class, player);
 
@@ -158,6 +157,6 @@ public final class InventoryListener implements Listener {
             return;
         }
 
-        ui.onSelected(event.getIndex());
+        event.setCancelled(! ui.onSelected(event.getIndex()));
     }
 }

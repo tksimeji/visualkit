@@ -39,7 +39,6 @@ public final class PlayerListener implements Listener {
             return;
         }
 
-        ui.onPurchase(trade);
-        event.setCancelled(! trade.purchasable() || event.isCancelled());
+        event.setCancelled(! ui.onPurchase(trade) || ! trade.purchasable() || event.isCancelled());
     }
 }

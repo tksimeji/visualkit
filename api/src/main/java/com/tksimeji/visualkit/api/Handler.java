@@ -14,7 +14,7 @@ public @interface Handler {
 
     Asm[] asm() default {};
 
-    @NotNull Click[] click() default {Click.SINGLE, Click.DOUBLE, Click.SHIFT, Click.DRAG, Click.QUICK_MOVE};
+    @NotNull Action[] action() default {Action.SINGLE_CLICK, Action.DOUBLE_CLICK, Action.SHIFT_CLICK, Action.QUICK_MOVE, Action.DRAG, Action.SELECT, Action.PURCHASE};
 
     @NotNull Mouse[] mouse() default {Mouse.LEFT, Mouse.RIGHT};
 }

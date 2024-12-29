@@ -64,14 +64,14 @@ public interface IMerchantUI extends IContainerUI<MerchantInventory> {
      *
      * @param index Trade list position
      */
-    void onSelected(int index);
+    boolean onSelected(int index);
 
     /**
      * Called when a trade is purchased.
      *
      * @param trade Trade
      */
-    void onPurchase(@NotNull VisualkitTrade trade);
+    boolean onPurchase(@NotNull VisualkitTrade trade);
 
     /**
      * Delete all trade

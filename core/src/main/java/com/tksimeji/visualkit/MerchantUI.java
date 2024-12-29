@@ -1,5 +1,7 @@
 package com.tksimeji.visualkit;
 
+import com.tksimeji.visualkit.api.Action;
+import com.tksimeji.visualkit.api.Handler;
 import com.tksimeji.visualkit.api.Trade;
 import com.tksimeji.visualkit.trade.VisualkitTrade;
 import com.tksimeji.visualkit.util.ReflectionUtility;
@@ -11,7 +13,11 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @ApiStatus.Experimental
 public abstract class MerchantUI extends ContainerUI<MerchantInventory> implements IMerchantUI {
@@ -21,6 +27,12 @@ public abstract class MerchantUI extends ContainerUI<MerchantInventory> implemen
     private final @NotNull Merchant merchant = Bukkit.createMerchant(title());
 
     private final @NotNull List<VisualkitTrade> trades = new ArrayList<>();
+
+    private final @NotNull Set<Method> handlers = ReflectionUtility.getMethods(getClass()).stream()
+            .filter(method -> method.isAnnotationPresent(Handler.class) &&
+                    (method.getReturnType() == Void.class || method.getReturnType() == Boolean.class || method.getReturnType() == boolean.class))
+            .collect(Collectors.toSet());
+
     private final @NotNull Set<Field> crawledFields = new HashSet<>();
 
     private boolean pushed;
@@ -76,13 +88,83 @@ public abstract class MerchantUI extends ContainerUI<MerchantInventory> implemen
     }
 
     @Override
-    public final void onSelected(int index) {
-        Optional.ofNullable(getTrade(index)).flatMap(trade -> Optional.ofNullable(trade.onSelect())).ifPresent(VisualkitTrade.SelectHandler::onSelect);
+    public final boolean onSelected(int index) {
+        VisualkitTrade trade = getTrade(index);
+
+        if (trade == null) {
+            return false;
+        }
+
+        Optional.ofNullable(trade.onSelect()).ifPresent(VisualkitTrade.SelectHandler::onSelect);
+
+        return handlers.stream()
+                .filter(handler -> {
+                    Handler annotation = handler.getAnnotation(Handler.class);
+                    return Arrays.stream(annotation.action()).anyMatch(action -> action == Action.SELECT) &&
+                        (annotation.slot().length == 0 || Arrays.stream(annotation.slot()).anyMatch(slot -> slot == index));
+                }).allMatch(handler -> {
+                    Parameter[] parameters = handler.getParameters();
+                    Object[] args = new Object[parameters.length];
+
+                    for (int i = 0; i < args.length; i ++) {
+                        Parameter parameter = parameters[i];
+                        Class<?> type = parameter.getType();
+
+                        if (Integer.class.isAssignableFrom(type) || int.class.isAssignableFrom(type)) {
+                            args[i] = index;
+                        } else if (VisualkitTrade.class.isAssignableFrom(type)) {
+                            args[i] = trade;
+                        } else {
+                            args[i] = null;
+                        }
+                    }
+
+                    try {
+                        handler.setAccessible(true);
+                        Object result = handler.invoke(this, args);
+                        return result == null || ((boolean) result);
+                    } catch (InvocationTargetException | IllegalAccessException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
     }
 
     @Override
-    public final void onPurchase(@NotNull VisualkitTrade trade) {
+    public final boolean onPurchase(@NotNull VisualkitTrade trade) {
         Optional.ofNullable(trade.onPurchase()).ifPresent(VisualkitTrade.PurchaseHandler::onPurchase);
+
+        int index = trades.indexOf(trade);
+
+        return handlers.stream()
+                .filter(handler -> {
+                    Handler annotation = handler.getAnnotation(Handler.class);
+                    return Arrays.stream(annotation.action()).anyMatch(action -> action == Action.PURCHASE) &&
+                            (annotation.slot().length == 0 || Arrays.stream(annotation.slot()).anyMatch(slot -> slot == index));
+                }).allMatch(handler -> {
+                    Parameter[] parameters = handler.getParameters();
+                    Object[] args = new Object[parameters.length];
+
+                    for (int i = 0; i < args.length; i ++) {
+                        Parameter parameter = parameters[i];
+                        Class<?> type = parameter.getType();
+
+                        if (Integer.class.isAssignableFrom(type) || int.class.isAssignableFrom(type)) {
+                            args[i] = index;
+                        } else if (VisualkitTrade.class.isAssignableFrom(type)) {
+                            args[i] = trade;
+                        } else {
+                            args[i] = null;
+                        }
+                    }
+
+                    try {
+                        handler.setAccessible(true);
+                        Object result = handler.invoke(this, args);
+                        return result == null || ((boolean) result);
+                    } catch (InvocationTargetException | IllegalAccessException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
     }
 
     public final void push() {

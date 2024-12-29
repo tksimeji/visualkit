@@ -1,6 +1,6 @@
 package com.tksimeji.visualkit;
 
-import com.tksimeji.visualkit.api.Click;
+import com.tksimeji.visualkit.api.Action;
 import com.tksimeji.visualkit.api.Mouse;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
@@ -42,11 +42,11 @@ public interface IContainerUI<I extends Inventory> extends IVisualkitUI {
      * Called when the GUI is clicked.
      *
      * @param slot  Clicked slot
-     * @param click Click Type
+     * @param action Click Type
      * @param mouse The mouse button used
      * @param item Clicked item
      */
-    default boolean onClick(int slot, @NotNull Click click, @NotNull Mouse mouse, @Nullable ItemStack item) {
+    default boolean onClick(int slot, @NotNull Action action, @NotNull Mouse mouse, @Nullable ItemStack item) {
         return true;
     }
 

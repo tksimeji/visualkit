@@ -58,13 +58,11 @@ public final class Visualkit extends JavaPlugin {
     }
 
     public static <T extends IVisualkitUI> @Nullable T getSession(@NotNull Class<T> clazz, @Nullable Player player) {
-        return getSessions(clazz).stream().filter(s -> {
-            return switch (s) {
-                case ContainerUI<?> i -> i.getPlayer() == player;
-                case PanelUI i -> i.getPlayer() == player;
-                case SharedPanelUI i -> i.isAudience(player);
-                case null, default -> false;
-            };
+        return getSessions(clazz).stream().filter(s -> switch (s) {
+            case ContainerUI<?> i -> i.getPlayer() == player;
+            case PanelUI i -> i.getPlayer() == player;
+            case SharedPanelUI i -> i.isAudience(player);
+            case null, default -> false;
         }).findFirst().orElse(null);
     }
 

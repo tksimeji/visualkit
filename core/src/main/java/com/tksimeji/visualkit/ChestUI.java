@@ -120,14 +120,14 @@ public abstract class ChestUI extends ContainerUI<Inventory> implements IChestUI
     }
 
     @Override
-    public final boolean onClick(int slot, @NotNull Click click, @NotNull Mouse mouse, @Nullable ItemStack item) {
+    public final boolean onClick(int slot, @NotNull Action action, @NotNull Mouse mouse, @Nullable ItemStack item) {
         elements.entrySet().stream()
                 .filter(entry -> entry.getKey() == slot)
                 .forEach(entry -> {
                     IVisualkitElement<?> element = entry.getValue();
                     Optional.ofNullable(element.handler()).ifPresent(handler -> {
                         if (handler instanceof IVisualkitElement.Handler1 h1) {
-                            h1.onClick(slot, click, mouse);
+                            h1.onClick(slot, action, mouse);
                         } else if (handler instanceof IVisualkitElement.Handler2 h2) {
                             h2.onClick();
                         }
@@ -138,21 +138,23 @@ public abstract class ChestUI extends ContainerUI<Inventory> implements IChestUI
         return handlers.stream()
                 .filter(handler -> {
                     Handler annotation = handler.getAnnotation(Handler.class);
-                    return AsmUtility.of(annotation).stream().anyMatch(s -> s == slot) &&
-                            Arrays.stream(annotation.click()).toList().contains(click) &&
+                    Set<Integer> slots = AsmUtility.of(annotation);
+
+                    return (slots.isEmpty() || slots.stream().anyMatch(s -> s == slot)) &&
+                            Arrays.stream(annotation.action()).toList().contains(action) &&
                             Arrays.stream(annotation.mouse()).toList().contains(mouse);
                 }).allMatch(handler -> {
                     Parameter[] parameters = handler.getParameters();
                     Object[] args = new Object[parameters.length];
 
-                    for (int i = 0; i < args.length; i++) {
+                    for (int i = 0; i < args.length; i ++) {
                         Parameter parameter = parameters[i];
                         Class<?> type = parameter.getType();
 
                         if (Integer.class.isAssignableFrom(type) || int.class.isAssignableFrom(type)) {
                             args[i] = slot;
-                        } else if (Click.class.isAssignableFrom(type)) {
-                            args[i] = click;
+                        } else if (Action.class.isAssignableFrom(type)) {
+                            args[i] = action;
                         } else if (Mouse.class.isAssignableFrom(type)) {
                             args[i] = mouse;
                         } else if (ItemStack.class.isAssignableFrom(type)) {
