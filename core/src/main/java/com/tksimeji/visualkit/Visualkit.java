@@ -57,7 +57,7 @@ public final class Visualkit extends JavaPlugin {
                 .toList();
     }
 
-    public static <T extends IVisualkitUI> @Nullable T getSessions(@NotNull Class<T> clazz, @Nullable Player player) {
+    public static <T extends IVisualkitUI> @Nullable T getSession(@NotNull Class<T> clazz, @Nullable Player player) {
         return getSessions(clazz).stream().filter(s -> {
             return switch (s) {
                 case ContainerUI<?> i -> i.getPlayer() == player;

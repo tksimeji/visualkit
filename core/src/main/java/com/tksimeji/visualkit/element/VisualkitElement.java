@@ -231,7 +231,7 @@ public class VisualkitElement implements IVisualkitElement<VisualkitElement> {
     }
 
     /**
-     * Build an ItemStack
+     * Build an {@link ItemStack}
      *
      * @param target Xmpl target
      * @return ItemStack

@@ -2,6 +2,7 @@ package com.tksimeji.visualkit.listener;
 
 import com.tksimeji.visualkit.ChestUI;
 import com.tksimeji.visualkit.ContainerUI;
+import com.tksimeji.visualkit.IMerchantUI;
 import com.tksimeji.visualkit.Visualkit;
 import com.tksimeji.visualkit.api.Click;
 import com.tksimeji.visualkit.api.Mouse;
@@ -20,12 +21,12 @@ import java.util.Optional;
 
 public final class InventoryListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onContainerClick(@NotNull InventoryClickEvent event) {
+    public void onInventoryClick(@NotNull InventoryClickEvent event) {
         if (! (event.getWhoClicked() instanceof Player player)) {
             return;
         }
 
-        ContainerUI<?> ui = Visualkit.getSessions(ContainerUI.class, player);
+        ContainerUI<?> ui = Visualkit.getSession(ContainerUI.class, player);
 
         if (ui == null || ui instanceof ChestUI || event.getClickedInventory() != ui.asInventory()) {
             return;
@@ -39,12 +40,12 @@ public final class InventoryListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onChestClick(@NotNull InventoryClickEvent event) {
+    public void onInventoryClick2(@NotNull InventoryClickEvent event) {
         if (! (event.getWhoClicked() instanceof Player player)) {
             return;
         }
 
-        ChestUI ui = Visualkit.getSessions(ChestUI.class, player);
+        ChestUI ui = Visualkit.getSession(ChestUI.class, player);
 
         if (ui == null) {
             return;
@@ -120,7 +121,7 @@ public final class InventoryListener implements Listener {
             return;
         }
 
-        ChestUI ui = Visualkit.getSessions(ChestUI.class, player);
+        ChestUI ui = Visualkit.getSession(ChestUI.class, player);
 
         if (ui == null) {
             return;
@@ -142,5 +143,21 @@ public final class InventoryListener implements Listener {
         Visualkit.getSessions(ContainerUI.class).stream()
                 .filter(session -> session.asInventory() ==  event.getView().getTopInventory())
                 .forEach(ContainerUI::close);
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onTradeSelect(@NotNull TradeSelectEvent event) {
+        if (! (event.getWhoClicked() instanceof Player player)) {
+            return;
+        }
+        event.setCancelled(true);
+
+        IMerchantUI ui = Visualkit.getSession(IMerchantUI.class, player);
+
+        if (ui == null) {
+            return;
+        }
+
+        ui.onSelected(event.getIndex());
     }
 }

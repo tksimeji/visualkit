@@ -173,6 +173,11 @@ public abstract class ChestUI extends ContainerUI<Inventory> implements IChestUI
     }
 
     @Override
+    public final void close() {
+        super.close();
+    }
+
+    @Override
     public final void tick() {
         super.tick();
 

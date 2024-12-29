@@ -78,4 +78,9 @@ public abstract class AnvilUI extends ContainerUI<AnvilInventory> implements IAn
 
         onTyped(string);
     }
+
+    @Override
+    public final void close() {
+        super.close();
+    }
 }

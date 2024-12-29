@@ -13,7 +13,7 @@ public abstract class PanelUI extends SimplePanelUI {
     }
 
     static void hide(@NotNull Player player) {
-        IPanelUI ui = Visualkit.getSessions(IPanelUI.class, player);
+        IPanelUI ui = Visualkit.getSession(IPanelUI.class, player);
 
         player.setScoreboard(sm.getMainScoreboard());
 

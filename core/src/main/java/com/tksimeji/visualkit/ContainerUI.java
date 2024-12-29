@@ -22,12 +22,12 @@ public abstract class ContainerUI<I extends Inventory> extends VisualkitUI imple
     }
 
     @Override
-    public int getSize() {
+    public final int getSize() {
         return asInventory().getSize();
     }
 
     @Override
-    public final void close() {
+    public void close() {
         onClose();
 
         Visualkit.sessions.remove(this);
