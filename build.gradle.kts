@@ -1,7 +1,7 @@
 import cl.franciscosolis.sonatypecentralupload.SonatypeCentralUploadTask
 
 group = "com.tksimeji"
-version = "0.5.0-beta.1"
+version = "0.5.0-beta.2"
 
 plugins {
     java
@@ -92,6 +92,13 @@ publishing {
             }
         }
     }
+}
+
+tasks.named<Jar>("jar") {
+    subprojects.forEach { subprojects ->
+        from(subprojects.sourceSets.main.get().output)
+    }
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 
 tasks.named<SonatypeCentralUploadTask>("sonatypeCentralUpload") {
