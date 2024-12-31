@@ -2,12 +2,9 @@
 
 The Minecraft GUI framework
 
-![Version](https://img.shields.io/badge/version-0.5.0--beta.3-blue?style=flat-square)
+![Version](https://img.shields.io/badge/version-0.5.0-blue?style=flat-square)
 ![Adapter](https://img.shields.io/badge/adapter-1.21.1--1.21.4-yellow?style=flat-square)
 ![Licence](https://img.shields.io/badge/licence-MIT-red?style=flat-square)
-
-> [!WARNING]
-> This branch contains active development and is unstable.
 
 <img alt="Eye-catching" src="./assets/b706df0a-22c2-4185-9813-6e4a0981ca11.png" width="64%">
 
