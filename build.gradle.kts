@@ -1,7 +1,7 @@
 import cl.franciscosolis.sonatypecentralupload.SonatypeCentralUploadTask
 
 group = "com.tksimeji"
-version = "0.5.0"
+version = "0.5.1"
 
 plugins {
     java

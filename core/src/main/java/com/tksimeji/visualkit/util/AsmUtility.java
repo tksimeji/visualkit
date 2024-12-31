@@ -23,7 +23,7 @@ public final class AsmUtility {
     }
 
     public static @NotNull Set<Integer> of(@NotNull Handler annotation) {
-        return concat(of(annotation.slot()), of(annotation.asm()));
+        return concat(of(annotation.index()), of(annotation.asm()));
     }
 
     public static @NotNull Set<Integer> of(@NotNull Asm... asms) {

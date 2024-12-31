@@ -2,7 +2,7 @@
 
 The Minecraft GUI framework
 
-![Version](https://img.shields.io/badge/version-0.5.0-blue?style=flat-square)
+![Version](https://img.shields.io/badge/version-0.5.1-blue?style=flat-square)
 ![Adapter](https://img.shields.io/badge/adapter-1.21.1--1.21.4-yellow?style=flat-square)
 ![Licence](https://img.shields.io/badge/licence-MIT-red?style=flat-square)
 
@@ -273,14 +273,14 @@ Add a method with the annotation `com.tksimeji.visualkit.api.Handler`.
 In addition to slots, you can add action and mouse conditions to the Handler annotation.
 
 ```java
-@Handler(slot = 13, action = Action.SINGLE, mouse = {Mouse.LEFT, Mouse.RIGHT})
+@Handler(index = 13, action = Action.SINGLE, mouse = {Mouse.LEFT, Mouse.RIGHT})
 public void onCookieClick() {
     count ++;
 }
 
 // You can also specify whether to allow clicks in the return value
 
-@Handler(slot = 13, action = Action.SINGLE, mouse = {Mouse.LEFT, Mouse.RIGHT})
+@Handler(index = 13, action = Action.SINGLE, mouse = {Mouse.LEFT, Mouse.RIGHT})
 public boolean onCookieClick() {
     count ++;
 }
@@ -303,7 +303,7 @@ private final VisualkitElement cookieButton = VisualkitElement
 Of course, you can also use asm to specify the slot.
 
 ```java
-@Handler(asm = {@Asm(from = 0, to = 8)}, slot = {9, 10})
+@Handler(asm = {@Asm(from = 0, to = 8)}, index = {9, 10})
 ```
 
 It can also take slot, action, and mouse state as arguments.
@@ -319,7 +319,7 @@ However, these arguments are injected only if the following conditions are met:
 This is useful when you specify a broad conditions in the annotation.
 
 ```java
-@Handler(slot = 0)
+@Handler(index = 0)
 public void onClick(int slot, Click action, Mouse mouse, ItemStack itemStack) {
     // do something
 }
@@ -414,10 +414,10 @@ removeTrade(trade);
 Add methods that will be called when selecting and purchasing a trade.
 
 ```java
-@Handler(slot = 0, action = Action.SELECT)
+@Handler(index = 0, action = Action.SELECT)
 void handler1() {}
 
-@Handler(slot = 0, action = Action.PURCHARE)
+@Handler(index = 0, action = Action.PURCHARE)
 void handler2() {}
 ```
 

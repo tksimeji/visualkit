@@ -10,7 +10,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Handler {
-    int[] slot() default {};
+    int[] index() default {};
 
     Asm[] asm() default {};
 

@@ -112,7 +112,7 @@ public abstract class MerchantUI extends ContainerUI<MerchantInventory> implemen
                 .filter(handler -> {
                     Handler annotation = handler.getAnnotation(Handler.class);
                     return Arrays.stream(annotation.action()).anyMatch(action -> action == Action.SELECT) &&
-                        (annotation.slot().length == 0 || Arrays.stream(annotation.slot()).anyMatch(slot -> slot == index));
+                        (annotation.index().length == 0 || Arrays.stream(annotation.index()).anyMatch(slot -> slot == index));
                 }).allMatch(handler -> {
                     Parameter[] parameters = handler.getParameters();
                     Object[] args = new Object[parameters.length];
@@ -150,7 +150,7 @@ public abstract class MerchantUI extends ContainerUI<MerchantInventory> implemen
                 .filter(handler -> {
                     Handler annotation = handler.getAnnotation(Handler.class);
                     return Arrays.stream(annotation.action()).anyMatch(action -> action == Action.PURCHASE) &&
-                            (annotation.slot().length == 0 || Arrays.stream(annotation.slot()).anyMatch(slot -> slot == index));
+                            (annotation.index().length == 0 || Arrays.stream(annotation.index()).anyMatch(slot -> slot == index));
                 }).allMatch(handler -> {
                     Parameter[] parameters = handler.getParameters();
                     Object[] args = new Object[parameters.length];
