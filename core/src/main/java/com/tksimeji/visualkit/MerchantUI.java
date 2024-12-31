@@ -54,20 +54,31 @@ public abstract class MerchantUI extends ContainerUI<MerchantInventory> implemen
 
     @Override
     public final void setTrade(int index, @NotNull VisualkitTrade trade) {
+        if (index < 0 || size() < index) {
+            throw new IllegalArgumentException();
+        }
+
+        if (index == size()) {
+            trades.add(null);
+        }
+
+        trade.addObserver(this);
         trades.set(index, trade);
         push();
     }
 
     @Override
     public final void addTrade(@NotNull VisualkitTrade trade) {
-        trades.add(trade);
-        trade.addObserver(this);
-        push();
+        setTrade(size(), trade);
     }
 
     @Override
     public final void removeTrade(int index) {
-        Optional.ofNullable(getTrade(index)).ifPresent(trade -> trade.removeObserver(this));
+        if (index < 0 || size() <= index) {
+            return;
+        }
+
+        Objects.requireNonNull(getTrade(index)).removeObserver(this);
         trades.remove(index);
         push();
     }
@@ -186,6 +197,8 @@ public abstract class MerchantUI extends ContainerUI<MerchantInventory> implemen
 
     @Override
     public final void tick() {
+        Map<Integer, VisualkitTrade> queue = new HashMap<>();
+
         ReflectionUtility.getFields(getClass()).stream()
                 .filter(field -> ! crawledFields.contains(field) &&
                         field.isAnnotationPresent(Trade.class) &&
@@ -200,7 +213,7 @@ public abstract class MerchantUI extends ContainerUI<MerchantInventory> implemen
                             if (index < 0) {
                                 addTrade(trade);
                             } else {
-                                setTrade(Math.max(index, size()), trade);
+                                queue.put(index, trade);
                             }
 
                             crawledFields.add(field);
@@ -209,6 +222,10 @@ public abstract class MerchantUI extends ContainerUI<MerchantInventory> implemen
                         throw new RuntimeException(e);
                     }
                 });
+
+        queue.entrySet().stream()
+                .sorted(Map.Entry.comparingByKey())
+                .forEach(entry -> setTrade(entry.getKey(), entry.getValue()));
     }
 
     @Override
