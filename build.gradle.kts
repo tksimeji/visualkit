@@ -1,5 +1,8 @@
 import cl.franciscosolis.sonatypecentralupload.SonatypeCentralUploadTask
 
+group = "com.tksimeji"
+version = "0.5.0"
+
 plugins {
     java
     `maven-publish`
@@ -8,23 +11,58 @@ plugins {
     kotlin("jvm") version "2.1.0"
 }
 
-group = "com.tksimeji"
-version = "0.4.4"
-
-repositories {
-    mavenCentral()
-    maven("https://repo.papermc.io/repository/maven-public/") {
-        name = "papermc-repo"
+allprojects {
+    apply {
+        plugin("java")
+        plugin("org.jetbrains.kotlin.jvm")
     }
-    maven("https://oss.sonatype.org/content/groups/public/") {
-        name = "sonatype"
+
+    val targetJavaVersion = 21
+
+    java {
+        val javaVersion = JavaVersion.toVersion(targetJavaVersion)
+        sourceCompatibility = javaVersion
+        targetCompatibility = javaVersion
+        if (JavaVersion.current() < javaVersion) {
+            toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
+        }
+
+        withSourcesJar()
+        withJavadocJar()
+    }
+
+    repositories {
+        mavenCentral()
+        maven("https://repo.papermc.io/repository/maven-public/") {
+            name = "papermc-repo"
+        }
+        maven("https://oss.sonatype.org/content/groups/public/") {
+            name = "sonatype"
+        }
+    }
+
+    dependencies {
+        implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+    }
+
+    tasks.withType<JavaCompile>().configureEach {
+        options.encoding = "UTF-8"
+
+        if (targetJavaVersion >= 10 || JavaVersion.current().isJava10Compatible) {
+            options.release.set(targetJavaVersion)
+        }
     }
 }
 
+subprojects {
+    group = rootProject.group
+    version = rootProject.version
+}
+
 dependencies {
-    compileOnly("io.papermc.paper:paper-api:1.21.3-R0.1-SNAPSHOT")
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-    implementation("com.tksimeji:mojango:0.0.1")
+    implementation(project(":api"))
+    implementation(project(":core"))
+    implementation(project(":v1_21_3"))
 }
 
 publishing {
@@ -45,7 +83,7 @@ publishing {
                     developer {
                         id.set("tksimeji")
                         name.set("tksimeji")
-                        email.set("tksimeji@outlook.com")
+                        email.set("tksimeji<at>outlook.com")
                     }
                 }
                 scm {
@@ -56,17 +94,11 @@ publishing {
     }
 }
 
-val targetJavaVersion = 21
-java {
-    val javaVersion = JavaVersion.toVersion(targetJavaVersion)
-    sourceCompatibility = javaVersion
-    targetCompatibility = javaVersion
-    if (JavaVersion.current() < javaVersion) {
-        toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
+tasks.named<Jar>("jar") {
+    subprojects.forEach { subprojects ->
+        from(subprojects.sourceSets.main.get().output)
     }
-
-    withSourcesJar()
-    withJavadocJar()
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 
 tasks.named<SonatypeCentralUploadTask>("sonatypeCentralUpload") {
@@ -87,21 +119,4 @@ tasks.named<SonatypeCentralUploadTask>("sonatypeCentralUpload") {
 
     signingKey.set(File("key.asc").readText())
     signingKeyPassphrase = System.getenv("PGP_SIGNING_KEY_PASSPHRASE")
-}
-
-tasks.withType<JavaCompile>().configureEach {
-    options.encoding = "UTF-8"
-
-    if (targetJavaVersion >= 10 || JavaVersion.current().isJava10Compatible) {
-        options.release.set(targetJavaVersion)
-    }
-}
-
-tasks.processResources {
-    val props = mapOf("version" to version)
-    inputs.properties(props)
-    filteringCharset = "UTF-8"
-    filesMatching("paper-plugin.yml") {
-        expand(props)
-    }
 }
