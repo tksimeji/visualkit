@@ -2,6 +2,7 @@ package com.tksimeji.visualkit.element;
 
 import com.google.common.collect.Lists;
 import com.tksimeji.visualkit.Visualkit;
+import com.tksimeji.visualkit.util.ComponentUtility;
 import com.tksimeji.visualkit.xmpl.XmplTarget;
 import com.tksimeji.visualkit.xmpl.Xmpl;
 import net.kyori.adventure.text.Component;
@@ -17,6 +18,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public class VisualkitElement implements IVisualkitElement<VisualkitElement> {
@@ -104,12 +106,11 @@ public class VisualkitElement implements IVisualkitElement<VisualkitElement> {
         return this;
     }
 
-    private @NotNull Xmpl title = Xmpl.empty();
-
+    private @Nullable Xmpl title = null;
 
     @Override
     public @NotNull Component title() {
-        return title.asComponent();
+        return Optional.ofNullable(title.asComponent()).orElse(ComponentUtility.empty());
     }
 
 
@@ -120,17 +121,20 @@ public class VisualkitElement implements IVisualkitElement<VisualkitElement> {
         return this;
     }
 
-    private @NotNull Lore lore = Lore.empty();
+    private @Nullable Lore lore = null;
 
     @Override
     public @NotNull List<Component> lore() {
-        return lore.asComponentList();
+        return Optional.ofNullable(lore).orElse(Lore.empty()).asComponentList();
     }
 
     @Override
     public @NotNull VisualkitElement lore(@NotNull Component... components) {
-        this.lore.kill();
-        this.lore = new Lore(components);
+        if (lore != null) {
+            lore.kill();
+        }
+
+        lore = new Lore(components);
         return this;
     }
 
@@ -237,15 +241,21 @@ public class VisualkitElement implements IVisualkitElement<VisualkitElement> {
      * @return ItemStack
      */
     public @NotNull ItemStack asItemStack(@NotNull XmplTarget target) {
-        title.setTarget(target);
-        lore.setTarget(target);
-
         ItemStack item = this.item.getType() != type ? (this.item = new ItemStack(type, stack)) : this.item;
         item.setAmount(stack);
 
         ItemMeta meta = item.getItemMeta();
-        meta.displayName(title.asComponent());
-        meta.lore(lore.asComponentList());
+
+        Optional.ofNullable(title).ifPresent(title -> {
+            title.setTarget(target);
+            meta.displayName(title.asComponent());
+        });
+
+        Optional.ofNullable(lore).ifPresent(lore -> {
+            lore.setTarget(target);
+            meta.lore(lore.asComponentList());
+        });
+
         meta.setCustomModelData(0 <= model ? model : null);
         meta.addItemFlags(ItemFlag.values());
         meta.removeEnchantments();
