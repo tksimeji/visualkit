@@ -8,7 +8,6 @@ import com.tksimeji.visualkit.util.ReflectionUtility;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.*;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -19,7 +18,6 @@ import java.lang.reflect.Parameter;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@ApiStatus.Experimental
 public abstract class MerchantUI extends ContainerUI<MerchantInventory> implements IMerchantUI {
 
     private @NotNull MerchantInventory inventory;

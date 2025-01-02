@@ -9,6 +9,9 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
+import java.util.Map;
+
 public interface IChestUI extends IContainerUI<Inventory> {
     /**
      * Defines the size of the chest.
@@ -24,6 +27,20 @@ public interface IChestUI extends IContainerUI<Inventory> {
      * @return GUI element
      */
     @Nullable IVisualkitElement<?> getElement(int slot);
+
+    /**
+     * Gets the element list.
+     *
+     * @return Element list
+     */
+    @NotNull List<IVisualkitElement<?>> getElements();
+
+    /**
+     * Gets the element map.
+     *
+     * @return Element map
+     */
+    @NotNull Map<Integer, IVisualkitElement<?>> getElementMap();
 
     /**
      * Sets an element in any slot.

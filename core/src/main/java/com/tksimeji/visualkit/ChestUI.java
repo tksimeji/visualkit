@@ -47,6 +47,24 @@ public abstract class ChestUI extends ContainerUI<Inventory> implements IChestUI
     }
 
     @Override
+    public final @NotNull List<IVisualkitElement<?>> getElements() {
+        return new ArrayList<>(elements.values());
+    }
+
+    @Override
+    public final @NotNull Map<Integer, IVisualkitElement<?>> getElementMap() {
+        return elements.entrySet()
+                .stream()
+                .sorted(Map.Entry.comparingByKey())
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        Map.Entry::getValue,
+                        (e1, e2) -> e1,
+                        LinkedHashMap::new
+                ));
+    }
+
+    @Override
     public final void setElement(int slot, @Nullable IVisualkitElement<?> element) {
         if (slot < 0 || getSize() <= slot) {
             return;
@@ -121,7 +139,7 @@ public abstract class ChestUI extends ContainerUI<Inventory> implements IChestUI
 
     @Override
     public final boolean onClick(int slot, @NotNull Action action, @NotNull Mouse mouse, @Nullable ItemStack item) {
-        elements.entrySet().stream()
+        getElementMap().entrySet().stream()
                 .filter(entry -> entry.getKey() == slot)
                 .forEach(entry -> {
                     IVisualkitElement<?> element = entry.getValue();
@@ -183,7 +201,7 @@ public abstract class ChestUI extends ContainerUI<Inventory> implements IChestUI
     public final void tick() {
         super.tick();
 
-        elements.forEach(this::setElement);
+        getElementMap().forEach(this::setElement);
 
         ReflectionUtility.getFields(getClass()).stream()
                 .filter(field -> ! crawledFields.contains(field) &&

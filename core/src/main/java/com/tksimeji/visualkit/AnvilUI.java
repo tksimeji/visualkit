@@ -10,14 +10,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.AnvilInventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 import java.util.Optional;
 
-@ApiStatus.Experimental
 public abstract class AnvilUI extends ContainerUI<AnvilInventory> implements IAnvilUI {
     protected @NotNull AnvilInventory inventory;
 
@@ -62,7 +60,7 @@ public abstract class AnvilUI extends ContainerUI<AnvilInventory> implements IAn
     }
 
     @Override
-    public void onClose() {
+    public final void close() {
         player.setLevel(level);
         player.setExp(exp);
 
@@ -77,10 +75,7 @@ public abstract class AnvilUI extends ContainerUI<AnvilInventory> implements IAn
         String string = component != null ? PlainTextComponentSerializer.plainText().serialize(component) : "";
 
         onTyped(string);
-    }
 
-    @Override
-    public final void close() {
         super.close();
     }
 }
