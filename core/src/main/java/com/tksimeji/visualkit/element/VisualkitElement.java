@@ -116,8 +116,8 @@ public class VisualkitElement implements IVisualkitElement<VisualkitElement> {
 
     @Override
     public @NotNull VisualkitElement title(@Nullable Component title) {
-        this.title.kill();
-        this.title = title != null ? new Xmpl(title) : Xmpl.empty();
+        Optional.ofNullable(this.title).ifPresent(Xmpl::kill);
+        this.title = title != null ? new Xmpl(title) : null;
         return this;
     }
 
