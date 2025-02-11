@@ -32,11 +32,11 @@ public final class Visualkit extends JavaPlugin {
     }
 
     public static @NotNull String version() {
-        return instance.getPluginMeta().getVersion();
+        return plugin().getPluginMeta().getVersion();
     }
 
     public static @NotNull ComponentLogger logger() {
-        return instance.getComponentLogger();
+        return plugin().getComponentLogger();
     }
 
     public static @Nullable Adapter adapter() {
@@ -69,6 +69,7 @@ public final class Visualkit extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
+
         Bukkit.getPluginManager().registerEvents(new InventoryListener(), this);
         Bukkit.getPluginManager().registerEvents(new PlayerListener(), this);
         Bukkit.getPluginManager().registerEvents(new PluginListener(), this);
