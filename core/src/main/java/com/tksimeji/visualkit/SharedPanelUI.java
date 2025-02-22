@@ -56,6 +56,6 @@ public abstract class SharedPanelUI extends SimplePanelUI implements ISharedPane
     @Override
     public final void kill() {
         super.kill();
-        audiences.forEach(this::removeAudience);
+        getAudience().forEach(this::removeAudience);
     }
 }

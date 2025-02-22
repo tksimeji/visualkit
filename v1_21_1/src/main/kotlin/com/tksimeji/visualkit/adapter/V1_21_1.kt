@@ -18,9 +18,9 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.ItemMeta
 import org.bukkit.plugin.java.JavaPlugin
 
-object V1_21_3: Adapter {
+object V1_21_1: Adapter {
     override fun supports(): Array<String> {
-        return arrayOf("1.21.3", "1.21.4")
+        return arrayOf("1.21.1")
     }
 
     override fun fun_u32qi0(c1: Player, c2: Component): AnvilInventory {

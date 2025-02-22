@@ -1,14 +1,11 @@
 package com.tksimeji.visualkit.element;
 
-import com.google.common.collect.Lists;
 import com.tksimeji.visualkit.Visualkit;
 import com.tksimeji.visualkit.util.ComponentUtility;
 import com.tksimeji.visualkit.xmpl.XmplTarget;
 import com.tksimeji.visualkit.xmpl.Xmpl;
 import net.kyori.adventure.text.Component;
 import org.bukkit.*;
-import org.bukkit.attribute.Attribute;
-import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -16,7 +13,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -262,10 +258,7 @@ public class VisualkitElement implements IVisualkitElement<VisualkitElement> {
 
         meta.setHideTooltip((meta.displayName() == null && ! meta.hasLore()) || meta.isHideTooltip());
 
-        Arrays.stream(Lists.newArrayList(Registry.ATTRIBUTE).toArray(new Attribute[0])).forEach(attribute -> {
-            meta.removeAttributeModifier(attribute);
-            meta.addAttributeModifier(attribute, new AttributeModifier(new NamespacedKey(Visualkit.plugin(), attribute.getKey().getKey()), 0, AttributeModifier.Operation.ADD_NUMBER));
-        });
+        Visualkit.adapter().fun_adp3uc(item, meta, Visualkit.plugin());
 
         if (aura) {
             meta.addEnchant(Enchantment.INFINITY, 1, false);

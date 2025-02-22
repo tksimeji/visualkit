@@ -1,6 +1,7 @@
 package com.tksimeji.visualkit;
 
 import com.tksimeji.visualkit.adapter.Adapter;
+import com.tksimeji.visualkit.adapter.V1_21_1;
 import com.tksimeji.visualkit.adapter.V1_21_3;
 import com.tksimeji.visualkit.listener.InventoryListener;
 import com.tksimeji.visualkit.listener.PlayerListener;
@@ -25,7 +26,7 @@ public final class Visualkit extends JavaPlugin {
 
     static final @NotNull Set<IVisualkitUI> sessions = new HashSet<>();
 
-    static final @NotNull Set<Adapter> adapters = Set.of(V1_21_3.INSTANCE);
+    static final @NotNull Set<Adapter> adapters = Set.of(V1_21_1.INSTANCE, V1_21_3.INSTANCE);
 
     public static @NotNull Visualkit plugin() {
         return instance;
