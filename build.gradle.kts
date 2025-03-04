@@ -42,6 +42,7 @@ allprojects {
     }
 
     dependencies {
+        implementation("com.google.guava:guava:33.4.0-jre")
         implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     }
 

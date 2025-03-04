@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
 
 import java.util.Collection;
+import java.util.List;
 
 public interface TradeElement extends Element {
     @NotNull ItemStack result();
@@ -13,7 +14,7 @@ public interface TradeElement extends Element {
     @Contract("_ -> this")
     @NotNull TradeElement result(final @NotNull ItemStack result);
 
-    @NotNull Collection<ItemStack> ingredients();
+    @NotNull List<ItemStack> ingredients();
 
     @Contract("_ -> this")
     @NotNull TradeElement ingredients(final @NotNull Collection<ItemStack> ingredients);

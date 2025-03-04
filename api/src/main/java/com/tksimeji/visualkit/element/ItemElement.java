@@ -1,5 +1,6 @@
 package com.tksimeji.visualkit.element;
 
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
 import org.bukkit.Sound;
@@ -10,19 +11,23 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Range;
 
 import java.util.Collection;
+import java.util.List;
 
 public interface ItemElement extends Element {
     @NotNull ItemType type();
 
+    @Contract("_ -> this")
+    @NotNull ItemElement type(final @NotNull ItemType type);
+
     @NotNull Component title();
 
     @Contract("_ -> this")
-    @NotNull ItemElement title(final @NotNull ComponentLike title);
+    @NotNull ItemElement title(final @Nullable ComponentLike title);
 
     @Contract("_ -> this")
-    @NotNull ItemElement title(final @NotNull String title);
+    @NotNull ItemElement title(final @Nullable String title);
 
-    @NotNull Collection<Component> lore();
+    @NotNull List<Component> lore();
 
     @Contract("_ -> this")
     @NotNull ItemElement lore(final @NotNull Collection<ComponentLike> components);
@@ -33,15 +38,20 @@ public interface ItemElement extends Element {
     @Contract("_ -> this")
     @NotNull ItemElement lore(final @NotNull String... strings);
 
-    int amount();
+    @Range(from = 1, to = Integer.MAX_VALUE) int amount();
 
     @Contract("_ -> this")
-    @NotNull ItemElement amount(final int amount);
+    @NotNull ItemElement amount(final @Range(from = 1, to = Integer.MAX_VALUE) int amount);
 
     int customModelData();
 
     @Contract("_ -> this")
     @NotNull ItemElement customModelData(final int customModelData);
+
+    @Nullable Key itemModel();
+
+    @Contract("_ -> this")
+    @NotNull ItemElement itemModel(@Nullable Key itemModel);
 
     boolean aura();
 
@@ -50,15 +60,17 @@ public interface ItemElement extends Element {
 
     @Nullable Sound sound();
 
-    float soundVolume();
+    @Range(from = 0, to = Integer.MAX_VALUE) float soundVolume();
 
-    float soundPitch();
+    @Range(from = 0, to = Integer.MAX_VALUE) float soundPitch();
 
     @Contract("_ -> this")
     @NotNull ItemElement sound(final @Nullable Sound sound);
 
     @Contract("_, _, _ -> this")
-    @NotNull ItemElement sound(final @NotNull Sound sound, final @Range(from = 0, to = Integer.MAX_VALUE) float volume, final @Range(from = 0, to = 2) float pitch);
+    @NotNull ItemElement sound(final @Nullable Sound sound, final @Range(from = 0, to = Integer.MAX_VALUE) float volume, final @Range(from = 0, to = 2) float pitch);
+
+    @Nullable Handler handler();
 
     @Contract("_ -> this")
     @NotNull ItemElement handler(final @Nullable Handler1 handler);

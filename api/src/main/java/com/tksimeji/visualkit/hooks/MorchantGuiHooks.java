@@ -2,15 +2,10 @@ package com.tksimeji.visualkit.hooks;
 
 import com.tksimeji.visualkit.element.TradeElement;
 import org.apache.commons.lang3.NotImplementedException;
-import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public interface MorchantGuiHooks extends Hooks {
-    default @NotNull TradeElement useElement(final @NotNull ItemStack result) {
-        throw new NotImplementedException("The API module cannot be called at runtime.");
-    }
-
     default @Nullable TradeElement useGetElement(final int index) {
         throw new NotImplementedException("The API module cannot be called at runtime.");
     }
