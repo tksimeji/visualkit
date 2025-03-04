@@ -10,13 +10,15 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.AnvilInventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 import java.util.Optional;
 
-@Deprecated(since = "1.0.0", forRemoval = true)
+@Deprecated(forRemoval = true)
+@ApiStatus.ScheduledForRemoval(inVersion = "1.0.0")
 public abstract class AnvilUI extends ContainerUI<AnvilInventory> implements IAnvilUI {
     protected @NotNull AnvilInventory inventory;
 

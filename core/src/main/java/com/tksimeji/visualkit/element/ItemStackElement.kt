@@ -7,9 +7,11 @@ import org.bukkit.Material
 import org.bukkit.Sound
 import org.bukkit.enchantments.Enchantment
 import org.bukkit.inventory.ItemStack
+import org.jetbrains.annotations.ApiStatus
 import java.lang.Deprecated
 
-@Deprecated(since = "1.0.0", forRemoval = true)
+@Deprecated(forRemoval = true)
+@ApiStatus.ScheduledForRemoval(inVersion = "1.0.0")
 class ItemStackElement internal constructor(private val itemStack: ItemStack):
     IVisualkitElement<ItemStackElement> {
     private var handler: Handler? = null

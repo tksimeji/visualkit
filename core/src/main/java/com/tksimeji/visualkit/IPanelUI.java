@@ -1,11 +1,12 @@
 package com.tksimeji.visualkit;
 
 import net.kyori.adventure.text.Component;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-@Deprecated(since = "1.0.0", forRemoval = true)
-public interface IPanelUI extends IVisualkitUI, Killable {
+@Deprecated(forRemoval = true)
+@ApiStatus.ScheduledForRemoval(inVersion = "1.0.0")public interface IPanelUI extends IVisualkitUI, Killable {
     /**
      * Gets any line.
      *

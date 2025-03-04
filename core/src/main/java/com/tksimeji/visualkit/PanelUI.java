@@ -1,10 +1,11 @@
 package com.tksimeji.visualkit;
 
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
-@Deprecated(since = "1.0.0", forRemoval = true)
-public abstract class PanelUI extends SimplePanelUI {
+@Deprecated(forRemoval = true)
+@ApiStatus.ScheduledForRemoval(inVersion = "1.0.0")public abstract class PanelUI extends SimplePanelUI {
     static void show(@NotNull Player player, @NotNull PanelUI ui) {
         player.setScoreboard(ui.scoreboard);
     }

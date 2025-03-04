@@ -6,12 +6,14 @@ import com.tksimeji.visualkit.api.Mouse;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-@Deprecated(since = "1.0.0", forRemoval = true)
+@Deprecated(forRemoval = true)
+@ApiStatus.ScheduledForRemoval(inVersion = "1.0.0")
 public interface IVisualkitElement<T extends IVisualkitElement<T>> extends Killable {
     /**
      * Gets the item type.

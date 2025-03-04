@@ -10,23 +10,23 @@ public interface ScoreboardGuiHooks extends Hooks {
         throw new NotImplementedException("The API module cannot be called at runtime.");
     }
 
-    default void useSetTitle(@NotNull ComponentLike title) {
+    default void useSetTitle(final @NotNull ComponentLike title) {
         throw new NotImplementedException("The API module cannot be called at runtime.");
     }
 
-    default @NotNull Component useGetLine(int index) {
+    default @NotNull Component useGetLine(final int index) {
         throw new NotImplementedException("The API module cannot be called at runtime.");
     }
 
-    default void useSetLine(int index, @NotNull ComponentLike line) {
+    default void useSetLine(final int index, final @NotNull ComponentLike line) {
         throw new NotImplementedException("The API module cannot be called at runtime.");
     }
 
-    default void useAddLine(@NotNull ComponentLike line) {
+    default void useAddLine(final @NotNull ComponentLike line) {
         throw new NotImplementedException("The API module cannot be called at runtime.");
     }
 
-    default void useRemoveLine(int index) {
+    default void useRemoveLine(final int index) {
         throw new NotImplementedException("The API module cannot be called at runtime.");
     }
 
@@ -34,11 +34,11 @@ public interface ScoreboardGuiHooks extends Hooks {
         throw new NotImplementedException("The API module cannot be called at runtime.");
     }
 
-    default void useInsertLine(int index, @NotNull ComponentLike line) {
+    default void useInsertLine(final int index, final @NotNull ComponentLike line) {
         throw new NotImplementedException("The API module cannot be called at runtime.");
     }
 
-    default void useClearLine(int index) {
+    default void useClearLine(final int index) {
         throw new NotImplementedException("The API module cannot be called at runtime.");
     }
 

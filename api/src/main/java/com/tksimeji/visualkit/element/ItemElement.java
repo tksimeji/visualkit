@@ -4,8 +4,10 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
 import org.bukkit.Sound;
 import org.bukkit.inventory.ItemType;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Range;
 
 import java.util.Collection;
 
@@ -14,29 +16,37 @@ public interface ItemElement extends Element {
 
     @NotNull Component title();
 
-    @NotNull ItemElement title(@NotNull ComponentLike title);
+    @Contract("_ -> this")
+    @NotNull ItemElement title(final @NotNull ComponentLike title);
 
-    @NotNull ItemElement title(@NotNull String title);
+    @Contract("_ -> this")
+    @NotNull ItemElement title(final @NotNull String title);
 
     @NotNull Collection<Component> lore();
 
-    @NotNull ItemElement lore(@NotNull Collection<ComponentLike> components);
+    @Contract("_ -> this")
+    @NotNull ItemElement lore(final @NotNull Collection<ComponentLike> components);
 
-    @NotNull ItemElement lore(@NotNull ComponentLike... components);
+    @Contract("_ -> this")
+    @NotNull ItemElement lore(final @NotNull ComponentLike... components);
 
-    @NotNull ItemElement lore(@NotNull String... strings);
+    @Contract("_ -> this")
+    @NotNull ItemElement lore(final @NotNull String... strings);
 
     int amount();
 
-    @NotNull ItemElement amount(int amount);
+    @Contract("_ -> this")
+    @NotNull ItemElement amount(final int amount);
 
     int customModelData();
 
-    @NotNull ItemElement customModelData(int customModelData);
+    @Contract("_ -> this")
+    @NotNull ItemElement customModelData(final int customModelData);
 
     boolean aura();
 
-    @NotNull ItemElement aura(boolean aura);
+    @Contract("_ -> this")
+    @NotNull ItemElement aura(final boolean aura);
 
     @Nullable Sound sound();
 
@@ -44,13 +54,17 @@ public interface ItemElement extends Element {
 
     float soundPitch();
 
-    @NotNull ItemElement sound(@Nullable Sound sound);
+    @Contract("_ -> this")
+    @NotNull ItemElement sound(final @Nullable Sound sound);
 
-    @NotNull ItemElement sound(@NotNull Sound sound, float volume, float pitch);
+    @Contract("_, _, _ -> this")
+    @NotNull ItemElement sound(final @NotNull Sound sound, final @Range(from = 0, to = Integer.MAX_VALUE) float volume, final @Range(from = 0, to = 2) float pitch);
 
-    @NotNull ItemElement handler(@Nullable Handler1 handler);
+    @Contract("_ -> this")
+    @NotNull ItemElement handler(final @Nullable Handler1 handler);
 
-    @NotNull ItemElement handler(@Nullable Handler2 handler);
+    @Contract("_ -> this")
+    @NotNull ItemElement handler(final @Nullable Handler2 handler);
 
     interface Handler {
     }

@@ -1,13 +1,14 @@
 package com.tksimeji.visualkit;
 
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
-@Deprecated(since = "1.0.0", forRemoval = true)
-public abstract class SharedPanelUI extends SimplePanelUI implements ISharedPanelUI {
+@Deprecated(forRemoval = true)
+@ApiStatus.ScheduledForRemoval(inVersion = "1.0.0")public abstract class SharedPanelUI extends SimplePanelUI implements ISharedPanelUI {
     private final @NotNull Set<Player> audiences = new HashSet<>();
 
     /**

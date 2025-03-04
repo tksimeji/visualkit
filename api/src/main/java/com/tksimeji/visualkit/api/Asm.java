@@ -1,6 +1,9 @@
 package com.tksimeji.visualkit.api;
 
-@Deprecated(since = "1.0.0", forRemoval = true)
+import org.jetbrains.annotations.ApiStatus;
+
+@Deprecated(forRemoval = true)
+@ApiStatus.ScheduledForRemoval(inVersion = "1.0.0")
 public @interface Asm {
     int[] value() default {};
 

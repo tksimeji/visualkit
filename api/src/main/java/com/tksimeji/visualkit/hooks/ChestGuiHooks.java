@@ -9,11 +9,11 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collection;
 
 public interface ChestGuiHooks extends Hooks {
-    default @NotNull ItemElement useElement(@NotNull ItemType type) {
+    default @NotNull ItemElement useElement(final @NotNull ItemType type) {
         throw new NotImplementedException("The API module cannot be called at runtime.");
     }
 
-    default @Nullable ItemElement useGetElement(int index) {
+    default @Nullable ItemElement useGetElement(final int index) {
         throw new NotImplementedException("The API module cannot be called at runtime.");
     }
 
@@ -21,11 +21,11 @@ public interface ChestGuiHooks extends Hooks {
         throw new NotImplementedException("The API module cannot be called at runtime.");
     }
 
-    default void useSetElement(int index, @NotNull ItemElement element) {
+    default void useSetElement(final int index, final @NotNull ItemElement element) {
         throw new NotImplementedException("The API module cannot be called at runtime.");
     }
 
-    default void useClearElement(int index) {
+    default void useClearElement(final int index) {
         throw new NotImplementedException("The API module cannot be called at runtime.");
     }
 }

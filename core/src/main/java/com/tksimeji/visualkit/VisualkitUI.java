@@ -1,14 +1,15 @@
 package com.tksimeji.visualkit;
 
 import com.tksimeji.visualkit.util.ReflectionUtility;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
 
-@Deprecated(since = "1.0.0", forRemoval = true)
-public abstract class VisualkitUI implements IVisualkitUI {
+@Deprecated(forRemoval = true)
+@ApiStatus.ScheduledForRemoval(inVersion = "1.0.0")public abstract class VisualkitUI implements IVisualkitUI {
     private final @NotNull Map<String, Object> xmplMap = new HashMap<>();
 
     public VisualkitUI() {

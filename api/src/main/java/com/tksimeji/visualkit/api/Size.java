@@ -1,6 +1,9 @@
 package com.tksimeji.visualkit.api;
 
-@Deprecated(since = "1.0.0", forRemoval = true)
+import org.jetbrains.annotations.ApiStatus;
+
+@Deprecated(forRemoval = true)
+@ApiStatus.ScheduledForRemoval(inVersion = "1.0.0")
 public enum Size {
     SIZE_9(9),
     SIZE_18(18),

@@ -5,12 +5,15 @@ import com.tksimeji.visualkit.util.KillableArrayList;
 import com.tksimeji.visualkit.xmpl.XmplTarget;
 import com.tksimeji.visualkit.xmpl.Xmpl;
 import net.kyori.adventure.text.Component;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.List;
 
+@Deprecated(forRemoval = true)
+@ApiStatus.ScheduledForRemoval(inVersion = "1.0.0")
 public final class Lore extends KillableArrayList<Xmpl> implements Killable {
     static @NotNull Lore empty() {
         return new Lore();

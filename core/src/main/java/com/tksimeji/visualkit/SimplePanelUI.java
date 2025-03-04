@@ -8,6 +8,7 @@ import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.scoreboard.*;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -15,8 +16,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-@Deprecated(since = "1.0.0", forRemoval = true)
-abstract class SimplePanelUI extends VisualkitUI implements IPanelUI {
+@Deprecated(forRemoval = true)
+@ApiStatus.ScheduledForRemoval(inVersion = "1.0.0")abstract class SimplePanelUI extends VisualkitUI implements IPanelUI {
     static final @NotNull ScoreboardManager sm = Bukkit.getScoreboardManager();
 
     private @NotNull Xmpl title = new Xmpl(Component.empty(), this);

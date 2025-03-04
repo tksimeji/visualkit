@@ -7,23 +7,23 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public interface MorchantGuiHooks extends Hooks {
-    default @NotNull TradeElement useElement(@NotNull ItemStack result) {
+    default @NotNull TradeElement useElement(final @NotNull ItemStack result) {
         throw new NotImplementedException("The API module cannot be called at runtime.");
     }
 
-    default @Nullable TradeElement useGetElement(int index) {
+    default @Nullable TradeElement useGetElement(final int index) {
         throw new NotImplementedException("The API module cannot be called at runtime.");
     }
 
-    default void useSetElement(int index, @NotNull TradeElement element) {
+    default void useSetElement(final int index, final @NotNull TradeElement element) {
         throw new NotImplementedException("The API module cannot be called at runtime.");
     }
 
-    default void useAddElement(@NotNull TradeElement element) {
+    default void useAddElement(final @NotNull TradeElement element) {
         throw new NotImplementedException("The API module cannot be called at runtime.");
     }
 
-    default void useRemoveElement(int index) {
+    default void useRemoveElement(final int index) {
         throw new NotImplementedException("The API module cannot be called at runtime.");
     }
 
