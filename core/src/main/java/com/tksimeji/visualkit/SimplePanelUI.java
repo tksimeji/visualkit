@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+@Deprecated(since = "1.0.0", forRemoval = true)
 abstract class SimplePanelUI extends VisualkitUI implements IPanelUI {
     static final @NotNull ScoreboardManager sm = Bukkit.getScoreboardManager();
 

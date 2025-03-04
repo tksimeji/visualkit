@@ -23,6 +23,7 @@ import java.lang.reflect.Parameter;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Deprecated(since = "1.0.0", forRemoval = true)
 public abstract class ChestUI extends ContainerUI<Inventory> implements IChestUI {
     protected final @NotNull Inventory inventory;
 

@@ -7,6 +7,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
+@Deprecated(since = "1.0.0", forRemoval = true)
 public interface IMerchantUI extends IContainerUI<MerchantInventory> {
     /**
      * Gets any trade.

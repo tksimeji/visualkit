@@ -6,6 +6,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
+@Deprecated(since = "1.0.0", forRemoval = true)
 public interface ISharedPanelUI extends IPanelUI {
     /**
      * Gets a list of audiences.

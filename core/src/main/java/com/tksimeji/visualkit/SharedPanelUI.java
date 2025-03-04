@@ -6,6 +6,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
+@Deprecated(since = "1.0.0", forRemoval = true)
 public abstract class SharedPanelUI extends SimplePanelUI implements ISharedPanelUI {
     private final @NotNull Set<Player> audiences = new HashSet<>();
 

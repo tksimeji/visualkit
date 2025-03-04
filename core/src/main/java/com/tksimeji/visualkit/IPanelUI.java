@@ -4,6 +4,7 @@ import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+@Deprecated(since = "1.0.0", forRemoval = true)
 public interface IPanelUI extends IVisualkitUI, Killable {
     /**
      * Gets any line.

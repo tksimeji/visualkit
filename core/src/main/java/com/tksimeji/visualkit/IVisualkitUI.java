@@ -4,6 +4,7 @@ import com.tksimeji.visualkit.xmpl.XmplTarget;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+@Deprecated(since = "1.0.0", forRemoval = true)
 public interface IVisualkitUI extends XmplTarget, Tickable {
     /**
      * Called every server tick.

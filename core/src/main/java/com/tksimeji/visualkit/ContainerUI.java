@@ -4,6 +4,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
 
+@Deprecated(since = "1.0.0", forRemoval = true)
 public abstract class ContainerUI<I extends Inventory> extends VisualkitUI implements IContainerUI<I> {
     protected final @NotNull Player player;
 

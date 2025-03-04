@@ -16,6 +16,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Objects;
 import java.util.Optional;
 
+@Deprecated(since = "1.0.0", forRemoval = true)
 public abstract class AnvilUI extends ContainerUI<AnvilInventory> implements IAnvilUI {
     protected @NotNull AnvilInventory inventory;
 

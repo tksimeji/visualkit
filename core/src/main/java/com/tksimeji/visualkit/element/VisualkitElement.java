@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+@Deprecated(since = "1.0.0", forRemoval = true)
 public class VisualkitElement implements IVisualkitElement<VisualkitElement> {
     /**
      * Create a new element.

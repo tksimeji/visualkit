@@ -1,5 +1,6 @@
 package com.tksimeji.visualkit.api;
 
+@Deprecated(since = "1.0.0", forRemoval = true)
 public enum Size {
     SIZE_9(9),
     SIZE_18(18),

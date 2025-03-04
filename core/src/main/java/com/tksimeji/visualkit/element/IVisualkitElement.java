@@ -11,6 +11,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
+@Deprecated(since = "1.0.0", forRemoval = true)
 public interface IVisualkitElement<T extends IVisualkitElement<T>> extends Killable {
     /**
      * Gets the item type.

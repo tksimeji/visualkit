@@ -9,6 +9,7 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+@Deprecated(since = "1.0.0", forRemoval = true)
 public interface IContainerUI<I extends Inventory> extends IVisualkitUI {
     /**
      * Defines the UI title.

@@ -18,6 +18,7 @@ import java.lang.reflect.Parameter;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Deprecated(since = "1.0.0", forRemoval = true)
 public abstract class MerchantUI extends ContainerUI<MerchantInventory> implements IMerchantUI {
 
     private @NotNull MerchantInventory inventory;

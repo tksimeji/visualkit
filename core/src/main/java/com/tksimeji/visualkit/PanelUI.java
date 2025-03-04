@@ -3,6 +3,7 @@ package com.tksimeji.visualkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+@Deprecated(since = "1.0.0", forRemoval = true)
 public abstract class PanelUI extends SimplePanelUI {
     static void show(@NotNull Player player, @NotNull PanelUI ui) {
         player.setScoreboard(ui.scoreboard);

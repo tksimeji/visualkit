@@ -12,6 +12,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.Map;
 
+@Deprecated(since = "1.0.0", forRemoval = true)
 public interface IChestUI extends IContainerUI<Inventory> {
     /**
      * Defines the size of the chest.

@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+@Deprecated(since = "1.0.0", forRemoval = true)
 public final class HeadElement extends VisualkitElement {
     private static final Map<String, UUID> UUID_CACHE = new HashMap<>();
 

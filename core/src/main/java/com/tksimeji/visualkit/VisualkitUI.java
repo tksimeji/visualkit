@@ -7,6 +7,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
+@Deprecated(since = "1.0.0", forRemoval = true)
 public abstract class VisualkitUI implements IVisualkitUI {
     private final @NotNull Map<String, Object> xmplMap = new HashMap<>();
 
