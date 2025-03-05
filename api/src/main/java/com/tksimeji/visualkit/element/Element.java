@@ -8,10 +8,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.net.URL;
-import java.util.Collection;
 import java.util.UUID;
 
-public interface Element {
+public interface Element<T> {
     static @NotNull ItemElement item(final @NotNull ItemType type) {
         throw new NotImplementedException("The API module cannot be called at runtime.");
     }
@@ -40,15 +39,11 @@ public interface Element {
         throw new NotImplementedException("The API module cannot be called at runtime.");
     }
 
-    static @NotNull TradeElement trade(@NotNull ItemStack result) {
+    static @NotNull TradeElement trade(@NotNull ItemStack result, @NotNull ItemStack ingredient) {
         throw new NotImplementedException("The API module cannot be called at runtime.");
     }
 
-    static @NotNull TradeElement trade(@NotNull ItemStack result, @Nullable Collection<ItemStack> ingredients) {
-        throw new NotImplementedException("The API module cannot be called at runtime.");
-    }
-
-    static @NotNull TradeElement trade(@NotNull ItemStack result, @NotNull ItemStack... ingredients) {
+    static @NotNull TradeElement trade(@NotNull ItemStack result, @NotNull ItemStack ingredient1, @Nullable ItemStack ingredient2) {
         throw new NotImplementedException("The API module cannot be called at runtime.");
     }
 }

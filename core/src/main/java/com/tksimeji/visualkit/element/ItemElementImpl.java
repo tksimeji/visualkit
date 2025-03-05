@@ -1,31 +1,35 @@
 package com.tksimeji.visualkit.element;
 
+import com.google.common.base.Preconditions;
+import com.tksimeji.visualkit.Visualkit;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextDecoration;
+import org.bukkit.NamespacedKey;
 import org.bukkit.Sound;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.ItemFlag;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ItemType;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Range;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 class ItemElementImpl implements ItemElement {
-    private @NotNull ItemType type;
+    private @NotNull ItemStack itemStack;
 
-    private @NotNull Component title = Component.empty();
-
+    private @Nullable Component title;
     private @NotNull List<Component> lore = List.of();
-
-    private int amount = 1;
-
-    private int customModelData;
-
-    private @Nullable Key itemModel;
-
-    private boolean aura;
 
     private @Nullable Sound sound;
     private float soundVolume = 1.0F;
@@ -34,44 +38,84 @@ class ItemElementImpl implements ItemElement {
     private @Nullable Handler handler;
 
     public ItemElementImpl(final @NotNull ItemType type) {
-        this.type = type;
+        this(type.createItemStack());
+    }
+
+    public ItemElementImpl(final @NotNull ItemStack itemStack) {
+        this.itemStack = itemStack;
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        itemMeta.addItemFlags(ItemFlag.values());
+        Visualkit.adapter().fun_adp3uc(itemStack, itemMeta, Visualkit.plugin());
+        itemStack.setItemMeta(itemMeta);
     }
 
     @Override
     public @NotNull ItemType type() {
-        return type;
+        return itemStack.getType().asItemType();
     }
 
     @Override
     public @NotNull ItemElement type(final @NotNull ItemType type) {
-        this.type = type;
+        Preconditions.checkArgument(type != null, "Item type cannot be null.");
+        itemStack = itemStack.withType(type.createItemStack().getType());
         return this;
     }
 
     @Override
     public @NotNull Component title() {
-        return title;
+        if (!itemStack.hasItemMeta()) {
+            return Component.empty();
+        }
+
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        return Optional.ofNullable(itemMeta.displayName()).orElse(Component.empty());
     }
 
     @Override
     public @NotNull ItemElement title(final @Nullable ComponentLike title) {
-        this.title = Optional.ofNullable(title).map(ComponentLike::asComponent).orElse(Component.empty());
+        if (!itemStack.hasItemMeta()) {
+            return this;
+        }
+
+        this.title = title != null ? title.asComponent() : null;
+
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        itemMeta.displayName((title != null ? this.title : Component.empty()).colorIfAbsent(NamedTextColor.WHITE).decorationIfAbsent(TextDecoration.ITALIC, TextDecoration.State.FALSE));
+        itemMeta.setHideTooltip(this.title == null && this.lore.isEmpty());
+
+        itemStack.setItemMeta(itemMeta);
         return this;
     }
 
     @Override
     public @NotNull ItemElement title(final @Nullable String title) {
-        return title(Optional.ofNullable(title).map(Component::text).orElse(null));
+        return title(title != null ? Component.text(title) : null);
     }
 
     @Override
     public @NotNull List<Component> lore() {
-        return lore.stream().toList();
+        if (!itemStack.hasItemMeta()) {
+            return List.of();
+        }
+
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        return Optional.ofNullable(itemMeta.lore()).orElse(List.of());
     }
 
     @Override
     public @NotNull ItemElement lore(final @NotNull Collection<ComponentLike> components) {
+        Preconditions.checkArgument(components != null, "Components cannot be null.");
+        if (!itemStack.hasItemMeta()) {
+            return this;
+        }
+
         this.lore = components.stream().map(ComponentLike::asComponent).toList();
+
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        itemMeta.lore(components.stream().map(ComponentLike::asComponent).toList());
+        itemMeta.setHideTooltip(this.title == null && this.lore.isEmpty());
+
+        itemStack.setItemMeta(itemMeta);
         return this;
     }
 
@@ -87,45 +131,65 @@ class ItemElementImpl implements ItemElement {
 
     @Override
     public @Range(from = 1, to = Integer.MAX_VALUE) int amount() {
-        return amount;
+        return itemStack.getAmount();
     }
 
     @Override
     public @NotNull ItemElement amount(final @Range(from = 1, to = Integer.MAX_VALUE) int amount) {
-        this.amount = amount;
+        Preconditions.checkArgument(0 < amount, "Amount cannot be less then or equal to 0.");
+        itemStack.setAmount(amount);
         return this;
     }
 
     @Override
     public int customModelData() {
-        return customModelData;
+        if (!itemStack.hasItemMeta() || itemStack.getItemMeta().hasCustomModelData()) {
+            return -1;
+        }
+
+        return itemStack.getItemMeta().getCustomModelData();
     }
 
     @Override
     public @NotNull ItemElement customModelData(final int customModelData) {
-        this.customModelData = customModelData;
+        if (!itemStack.hasItemMeta()) {
+            return this;
+        }
+
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        itemMeta.setCustomModelData(0 <= customModelData ? customModelData : null);
         return this;
     }
 
     @Override
     public @Nullable Key itemModel() {
-        return itemModel;
+        return itemStack.hasItemMeta() ? itemStack.getItemMeta().getItemModel() : null;
     }
 
     @Override
     public @NotNull ItemElement itemModel(final @Nullable Key itemModel) {
-        this.itemModel = itemModel;
+        if (!itemStack.hasItemMeta()) {
+            return this;
+        }
+
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        itemMeta.setItemModel(itemModel != null ? new NamespacedKey(itemModel.namespace(), itemModel.value()) : null);
         return this;
     }
 
     @Override
     public boolean aura() {
-        return aura;
+        return itemStack.hasItemMeta() && itemStack.getItemMeta().hasEnchants();
     }
 
     @Override
     public @NotNull ItemElement aura(final boolean aura) {
-        this.aura = aura;
+        if (!itemStack.hasItemMeta()) {
+            return this;
+        }
+
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        itemMeta.addEnchant(Enchantment.INFINITY, 1, false);
         return this;
     }
 
@@ -151,6 +215,9 @@ class ItemElementImpl implements ItemElement {
 
     @Override
     public @NotNull ItemElement sound(final @Nullable Sound sound, final @Range(from = 0, to = Integer.MAX_VALUE) float volume, final @Range(from = 0, to = 2) float pitch) {
+        Preconditions.checkArgument(0 <= volume, "Volume cannot be less than 0.");
+        Preconditions.checkArgument(0 <= pitch && pitch <= 2, "Pitch cannot be less than 0 or greater than 2.");
+
         this.sound = sound;
         soundVolume = volume;
         soundPitch = pitch;
@@ -172,5 +239,11 @@ class ItemElementImpl implements ItemElement {
     public @NotNull ItemElement handler(final @Nullable Handler2 handler) {
         this.handler = handler;
         return this;
+    }
+
+    @ApiStatus.Internal
+    @Override
+    public @NotNull ItemStack create() {
+        return itemStack.clone();
     }
 }

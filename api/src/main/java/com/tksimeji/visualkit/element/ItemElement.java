@@ -4,6 +4,7 @@ import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
 import org.bukkit.Sound;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ItemType;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -13,7 +14,7 @@ import org.jetbrains.annotations.Range;
 import java.util.Collection;
 import java.util.List;
 
-public interface ItemElement extends Element {
+public interface ItemElement extends Element<ItemStack> {
     @NotNull ItemType type();
 
     @Contract("_ -> this")

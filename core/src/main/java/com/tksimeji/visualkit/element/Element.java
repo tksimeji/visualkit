@@ -4,24 +4,22 @@ import com.google.common.base.Preconditions;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ItemType;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.net.URL;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
 import java.util.UUID;
 
-public interface Element {
+public interface Element<T> {
     static @NotNull ItemElement item(final @NotNull ItemType type) {
         Preconditions.checkArgument(type != null, "Item type cannot be null.");
-        return new ItemElementImpl(type);
+        return new ItemElementImpl(type.createItemStack());
     }
 
     static @NotNull ItemElement item(final @NotNull ItemStack itemStack) {
         Preconditions.checkArgument(itemStack != null, "Item stack cannot be null.");
-        return new ItemStackElementImpl(itemStack);
+        return new ItemElementImpl(itemStack);
     }
 
     static @NotNull PlayerHeadElement playerHead() {
@@ -44,22 +42,16 @@ public interface Element {
         return playerHead().url(url);
     }
 
-    static @NotNull TradeElement trade(@NotNull ItemStack result) {
-        return trade(result, List.of());
+    static @NotNull TradeElement trade(@NotNull ItemStack result, @NotNull ItemStack ingredient) {
+        return trade(result, ingredient, null);
     }
 
-    static @NotNull TradeElement trade(@NotNull ItemStack result, @Nullable Collection<ItemStack> ingredients) {
+    static @NotNull TradeElement trade(@NotNull ItemStack result, @NotNull ItemStack ingredient1, @Nullable ItemStack ingredient2) {
         Preconditions.checkArgument(result != null, "Trade result cannot be null.");
-        TradeElement element = new TradeElementImpl(result);
-
-        if (ingredients != null) {
-            return element.ingredients(ingredients);
-        } else {
-            return element;
-        }
+        Preconditions.checkArgument(ingredient1 != null, "Ingredient-1 cannot be null.");
+        return new TradeElementImpl(result, ingredient1, ingredient2);
     }
 
-    static @NotNull TradeElement trade(@NotNull ItemStack result, @NotNull ItemStack... ingredients) {
-        return trade(result, Arrays.stream(ingredients).toList());
-    }
+    @ApiStatus.Internal
+    @NotNull T create();
 }
