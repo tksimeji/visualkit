@@ -9,6 +9,7 @@ import com.tksimeji.visualkit.policy.SlotPolicy;
 import com.tksimeji.visualkit.util.AsmUtility;
 import com.tksimeji.visualkit.util.KillableHashMap;
 import com.tksimeji.visualkit.util.ReflectionUtility;
+import org.apache.commons.lang3.NotImplementedException;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -18,9 +19,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.lang.reflect.Parameter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -32,7 +31,7 @@ public abstract class ChestUI extends ContainerUI<Inventory> implements IChestUI
     protected final @NotNull Map<Integer, IVisualkitElement<?>> elements = new KillableHashMap<>();
     protected final @NotNull Map<Integer, SlotPolicy> policies = new HashMap<>();
     protected final @NotNull Set<Method> handlers = ReflectionUtility.getMethods(getClass()).stream()
-            .filter(method -> method.isAnnotationPresent(Handler.class) &&
+            .filter(method -> method.isAnnotationPresent(com.tksimeji.visualkit.event.Handler.class) &&
                     (List.of(Void.TYPE, Boolean.class, boolean.class).contains(method.getReturnType())))
             .collect(Collectors.toSet());
 
@@ -142,57 +141,7 @@ public abstract class ChestUI extends ContainerUI<Inventory> implements IChestUI
 
     @Override
     public final boolean onClick(int slot, @NotNull Action action, @NotNull Mouse mouse, @Nullable ItemStack item) {
-        getElementMap().entrySet().stream()
-                .filter(entry -> entry.getKey() == slot)
-                .forEach(entry -> {
-                    IVisualkitElement<?> element = entry.getValue();
-                    Optional.ofNullable(element.handler()).ifPresent(handler -> {
-                        if (handler instanceof IVisualkitElement.Handler1 h1) {
-                            h1.onClick(slot, action, mouse);
-                        } else if (handler instanceof IVisualkitElement.Handler2 h2) {
-                            h2.onClick();
-                        }
-                    });
-                    Optional.ofNullable(element.sound()).ifPresent(sound -> player.playSound(player, sound, element.volume(), element.pitch()));
-                });
-
-        return handlers.stream()
-                .filter(handler -> {
-                    Handler annotation = handler.getAnnotation(Handler.class);
-                    Set<Integer> slots = AsmUtility.of(annotation);
-
-                    return (slots.isEmpty() || slots.stream().anyMatch(s -> s == slot)) &&
-                            Arrays.stream(annotation.action()).toList().contains(action) &&
-                            Arrays.stream(annotation.mouse()).toList().contains(mouse);
-                }).allMatch(handler -> {
-                    Parameter[] parameters = handler.getParameters();
-                    Object[] args = new Object[parameters.length];
-
-                    for (int i = 0; i < args.length; i ++) {
-                        Parameter parameter = parameters[i];
-                        Class<?> type = parameter.getType();
-
-                        if (Integer.class.isAssignableFrom(type) || int.class.isAssignableFrom(type)) {
-                            args[i] = slot;
-                        } else if (Action.class.isAssignableFrom(type)) {
-                            args[i] = action;
-                        } else if (Mouse.class.isAssignableFrom(type)) {
-                            args[i] = mouse;
-                        } else if (ItemStack.class.isAssignableFrom(type)) {
-                            args[i] = item;
-                        } else {
-                            args[i] = null;
-                        }
-                    }
-
-                    try {
-                        handler.setAccessible(true);
-                        Object result = handler.invoke(this, args);
-                        return result == null || ((boolean) result);
-                    } catch (InvocationTargetException | IllegalAccessException e) {
-                        throw new RuntimeException(e);
-                    }
-                });
+        throw new NotImplementedException();
     }
 
     @Override

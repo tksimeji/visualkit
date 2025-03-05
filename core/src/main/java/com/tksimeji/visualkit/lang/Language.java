@@ -7,10 +7,13 @@ import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
+@ApiStatus.ScheduledForRemoval(inVersion = "1.0.0")
+@Deprecated(forRemoval = true)
 public class Language extends HashMap<NamespacedKey, Component> {
     private static final @NotNull Map<Plugin, MinecraftLocale> locales = new HashMap<>();
 

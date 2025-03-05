@@ -17,16 +17,19 @@ public @interface ChestGui {
 
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.FIELD)
-    @interface Element {
-        int[] value() default {};
-        int indexFrom() default -1;
-        int indexTo() default -1;
+    @interface Player {
     }
 
     @Retention(RetentionPolicy.RUNTIME)
-    @Target(ElementType.METHOD)
-    @interface Handler {
+    @Target(ElementType.FIELD)
+    @interface Element {
         int[] value() default {};
+        IndexGroup[] groups() default {};
+    }
+
+    @interface IndexGroup {
+        int[] indexes() default {};
+        int[] expectIndexes() default {};
         int indexFrom() default -1;
         int indexTo() default -1;
     }

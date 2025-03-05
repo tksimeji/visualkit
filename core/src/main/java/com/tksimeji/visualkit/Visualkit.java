@@ -1,45 +1,58 @@
 package com.tksimeji.visualkit;
 
+import com.google.common.base.Preconditions;
 import com.tksimeji.visualkit.adapter.Adapter;
 import com.tksimeji.visualkit.adapter.V1_21_1;
 import com.tksimeji.visualkit.adapter.V1_21_3;
+import com.tksimeji.visualkit.controller.GuiController;
 import com.tksimeji.visualkit.listener.InventoryListener;
 import com.tksimeji.visualkit.listener.PlayerListener;
 import com.tksimeji.visualkit.listener.PluginListener;
 import com.tksimeji.visualkit.listener.ServerListener;
+import com.tksimeji.visualkit.type.ChestGuiType;
+import com.tksimeji.visualkit.type.GuiType;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
+import org.apache.commons.lang3.NotImplementedException;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Listener;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.lang.annotation.Annotation;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public final class Visualkit extends JavaPlugin {
     private static Visualkit instance;
 
+    private static final @NotNull Set<GuiType<?, ?>> GUI_TYPES = new HashSet<>();
+
+    private static final @NotNull Set<GuiController> controllers = new HashSet<>();
+
+    private static final @NotNull Set<Adapter> adapters = Set.of(V1_21_1.INSTANCE, V1_21_3.INSTANCE);
+
     static final @NotNull Set<IVisualkitUI> sessions = new HashSet<>();
 
-    static final @NotNull Set<Adapter> adapters = Set.of(V1_21_1.INSTANCE, V1_21_3.INSTANCE);
-
+    @ApiStatus.Internal
     public static @NotNull Visualkit plugin() {
         return instance;
     }
 
-    public static @NotNull String version() {
-        return plugin().getPluginMeta().getVersion();
-    }
-
+    @ApiStatus.Internal
     public static @NotNull ComponentLogger logger() {
         return plugin().getComponentLogger();
     }
 
+    @ApiStatus.Internal
     public static @Nullable Adapter adapter() {
         return adapters.stream()
                 .filter(adapter -> Arrays.stream(adapter.supports()).anyMatch(support -> support.equals(Bukkit.getMinecraftVersion())))
@@ -47,37 +60,103 @@ public final class Visualkit extends JavaPlugin {
                 .orElse(null);
     }
 
-    public static @NotNull List<IVisualkitUI> getSessions() {
-        return new ArrayList<>(sessions);
-    }
-
-    public static <T extends IVisualkitUI> @NotNull List<T> getSessions(@NotNull Class<T> clazz) {
-        return getSessions().stream()
-                .filter(s -> clazz.isAssignableFrom(s.getClass()))
-                .map(s -> (T) s)
+    public static @NotNull GuiController create(final @NotNull Object gui) {
+        List<GuiType<?, ?>> types = GUI_TYPES.stream()
+                .filter(type -> gui.getClass().isAnnotationPresent(type.getAnnotationClass()))
                 .toList();
+
+        Preconditions.checkArgument(!types.isEmpty(), "No valid annotations found in '" + gui.getClass().getName() + "'.");
+        Preconditions.checkState(types.size() == 1, "Multiple valid annotations have been applied, and therefore, the gui type cannot be determined. Please specify the preferred annotation in Visualkit.create(Object, Class<? extends Annotation>).");
+
+        return create(gui, types.getFirst().getAnnotationClass());
     }
 
+    public static <A extends Annotation> @NotNull GuiController create(final @NotNull Object gui, final @NotNull Class<A> annotation) {
+        Preconditions.checkArgument(gui.getClass().isAnnotationPresent(annotation), String.format("'%s' is not annotated with '%s'.", gui.getClass().getName(), annotation.getName()));
+
+        GuiType<A, ?> type = getGuiType(annotation);
+        Preconditions.checkArgument(type != null, "No gui type found to handle '" + annotation.getName() + "'.");
+
+        GuiController controller = type.createController(gui, gui.getClass().getAnnotation(annotation));
+        controllers.add(controller);
+        return controller;
+    }
+
+    public static @NotNull Set<Object> getGuis() {
+        return controllers.stream().map(GuiController::getGui).collect(Collectors.toSet());
+    }
+
+    public static @NotNull Set<Object> getGuis(final @NotNull GuiType<?, ?> type) {
+        return getGuiControllers(type).stream().map(GuiController::getGui).collect(Collectors.toSet());
+    }
+
+    public static @Nullable GuiController getGuiController(final @NotNull Object gui) {
+        return controllers.stream().filter(controller -> controller.getGui() == gui).findFirst().orElse(null);
+    }
+
+    public static @NotNull GuiController getGuiControllerOrThrow(final @NotNull Object gui) {
+        GuiController controller = getGuiController(gui);
+        if (controller == null) {
+            throw new NullPointerException();
+        }
+        return controller;
+    }
+
+    public static @NotNull Set<GuiController> getGuiControllers(final @NotNull GuiType<?, ?> type) {
+        return controllers.stream().filter(controller -> controller.getClass() == type.getControllerClass()).collect(Collectors.toSet());
+    }
+
+    public static @NotNull Set<GuiController> getGuiControllers() {
+        return new HashSet<>(controllers);
+    }
+
+    public static <A extends Annotation> @Nullable GuiType<A, ?> getGuiType(final @NotNull Class<A> annotation) {
+        return GUI_TYPES.stream()
+                .filter(type -> type.getAnnotationClass() == annotation)
+                .map(type -> (GuiType<A, ?>) type)
+                .findFirst()
+                .orElse(null);
+    }
+
+    public static @NotNull Set<GuiType<?, ?>> getGuiTypes() {
+        return new HashSet<>(GUI_TYPES);
+    }
+
+    public static void registerGuiType(final @NotNull GuiType<?, ?> type, final @NotNull Plugin plugin) {
+        Preconditions.checkState(getGuiType(type.getAnnotationClass()) == null, "A gui type that specifies '" + type.getAnnotationClass().getName() + "' as an annotation is already registered.");
+
+        if (type instanceof Listener) {
+            plugin().getServer().getPluginManager().registerEvents((Listener) type, plugin);
+        }
+
+        GUI_TYPES.add(type);
+    }
+
+    @ApiStatus.ScheduledForRemoval(inVersion = "1.0.0")
+    @Deprecated(forRemoval = true)
+    public static <T extends IVisualkitUI> @NotNull List<T> getSessions(@NotNull Class<T> clazz) {
+        throw new NotImplementedException();
+    }
+
+    @ApiStatus.ScheduledForRemoval(inVersion = "1.0.0")
+    @Deprecated(forRemoval = true)
     public static <T extends IVisualkitUI> @Nullable T getSession(@NotNull Class<T> clazz, @Nullable Player player) {
-        return getSessions(clazz).stream().filter(s -> switch (s) {
-            case ContainerUI<?> i -> i.getPlayer() == player;
-            case PanelUI i -> i.getPlayer() == player;
-            case SharedPanelUI i -> i.isAudience(player);
-            case null, default -> false;
-        }).findFirst().orElse(null);
+        throw new NotImplementedException();
     }
 
     @Override
     public void onEnable() {
         instance = this;
 
-        Bukkit.getPluginManager().registerEvents(new InventoryListener(), this);
-        Bukkit.getPluginManager().registerEvents(new PlayerListener(), this);
-        Bukkit.getPluginManager().registerEvents(new PluginListener(), this);
-        Bukkit.getPluginManager().registerEvents(new ServerListener(), this);
+        getServer().getPluginManager().registerEvents(new InventoryListener(), this);
+        getServer().getPluginManager().registerEvents(new PlayerListener(), this);
+        getServer().getPluginManager().registerEvents(new PluginListener(), this);
+        getServer().getPluginManager().registerEvents(new ServerListener(), this);
+
+        registerGuiType(new ChestGuiType(), this);
 
         logger().info(Component.text("       __    ").color(TextColor.color(255, 86, 217)));
-        logger().info(Component.text("___  _|  | __").color(TextColor.color(255, 124, 255)).append(Component.text("    Visualkit - " + version()).color(NamedTextColor.WHITE)));
+        logger().info(Component.text("___  _|  | __").color(TextColor.color(255, 124, 255)).append(Component.text("    Visualkit - " + getPluginMeta().getVersion()).color(NamedTextColor.WHITE)));
         logger().info(Component.text("\\  \\/ /  |/ /").color(TextColor.color(248, 142, 255)));
         logger().info(Component.text(" \\   /|    < ").color(TextColor.color(225, 142, 255)).append(Component.text("    Help poor children in Uganda!").color(NamedTextColor.GRAY)));
         logger().info(Component.text("  \\_/ |__|_ \\").color(TextColor.color(194, 124, 255)).append(Component.text("    ").append(Component.text("https://iccf-holland.org/").color(NamedTextColor.BLUE).decorate(TextDecoration.UNDERLINED).clickEvent(ClickEvent.openUrl("https://iccf-holland.org/")))));

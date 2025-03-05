@@ -6,6 +6,7 @@ import com.google.gson.JsonParser;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -16,6 +17,8 @@ import java.util.*;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
+@ApiStatus.ScheduledForRemoval(inVersion = "1.0.0")
+@Deprecated(forRemoval = true)
 public final class Languages {
     static final @NotNull Set<Language> instances = new HashSet<>();
 

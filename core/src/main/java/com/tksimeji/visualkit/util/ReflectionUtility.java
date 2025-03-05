@@ -9,11 +9,11 @@ import java.util.HashSet;
 import java.util.Set;
 
 public final class ReflectionUtility {
-    public static @NotNull Set<Class<?>> getClassTree(@NotNull Class<?> clazz) {
+    public static @NotNull Set<Class<?>> getClassTree(final @NotNull Class<?> aClass) {
         Set<Class<?>> tree = new HashSet<>();
-        tree.add(clazz);
+        tree.add(aClass);
 
-        Class<?> superclass = clazz.getSuperclass();
+        Class<?> superclass = aClass.getSuperclass();
 
         while (superclass != null) {
             tree.add(superclass);
@@ -23,15 +23,15 @@ public final class ReflectionUtility {
         return tree;
     }
 
-    public static @NotNull Set<Field> getFields(@NotNull Class<?> clazz) {
+    public static @NotNull Set<Field> getFields(final @NotNull Class<?> aClass) {
         Set<Field> fields = new HashSet<>();
-        getClassTree(clazz).forEach(c -> fields.addAll(Arrays.asList(c.getDeclaredFields())));
+        getClassTree(aClass).forEach(clazz -> fields.addAll(Arrays.asList(clazz.getDeclaredFields())));
         return fields;
     }
 
-    public static @NotNull Set<Method> getMethods(@NotNull Class<?> clazz) {
+    public static @NotNull Set<Method> getMethods(final @NotNull Class<?> aClass) {
         Set<Method> methods = new HashSet<>();
-        getClassTree(clazz).forEach(c -> methods.addAll(Arrays.asList(c.getDeclaredMethods())));
+        getClassTree(aClass).forEach(clazz -> methods.addAll(Arrays.asList(clazz.getDeclaredMethods())));
         return methods;
     }
 }
