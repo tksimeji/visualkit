@@ -5,9 +5,7 @@ import com.tksimeji.visualkit.adapter.Adapter;
 import com.tksimeji.visualkit.adapter.V1_21_1;
 import com.tksimeji.visualkit.adapter.V1_21_3;
 import com.tksimeji.visualkit.controller.GuiController;
-import com.tksimeji.visualkit.listener.InventoryListener;
-import com.tksimeji.visualkit.listener.PlayerListener;
-import com.tksimeji.visualkit.listener.PluginListener;
+import com.tksimeji.visualkit.listener.ChestGuiListener;
 import com.tksimeji.visualkit.listener.ServerListener;
 import com.tksimeji.visualkit.type.ChestGuiType;
 import com.tksimeji.visualkit.type.GuiType;
@@ -20,7 +18,6 @@ import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import org.apache.commons.lang3.NotImplementedException;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.ApiStatus;
@@ -77,9 +74,7 @@ public final class Visualkit extends JavaPlugin {
         GuiType<A, ?> type = getGuiType(annotation);
         Preconditions.checkArgument(type != null, "No gui type found to handle '" + annotation.getName() + "'.");
 
-        GuiController controller = type.createController(gui, gui.getClass().getAnnotation(annotation));
-        controllers.add(controller);
-        return controller;
+        return type.createController(gui, gui.getClass().getAnnotation(annotation));
     }
 
     public static @NotNull Set<Object> getGuis() {
@@ -102,12 +97,23 @@ public final class Visualkit extends JavaPlugin {
         return controller;
     }
 
-    public static @NotNull Set<GuiController> getGuiControllers(final @NotNull GuiType<?, ?> type) {
-        return controllers.stream().filter(controller -> controller.getClass() == type.getControllerClass()).collect(Collectors.toSet());
+    public static <C extends GuiController> @NotNull Set<C> getGuiControllers(final @NotNull GuiType<?, C> type) {
+        return controllers.stream()
+                .filter(controller -> type.getControllerClass().isAssignableFrom(controller.getClass()))
+                .map(controller -> (C) controller)
+                .collect(Collectors.toSet());
     }
 
     public static @NotNull Set<GuiController> getGuiControllers() {
         return new HashSet<>(controllers);
+    }
+
+    public static void addGuiController(final @NotNull GuiController controller) {
+        controllers.add(controller);
+    }
+
+    public static void removeGuiController(final @NotNull GuiController controller) {
+        controllers.remove(controller);
     }
 
     public static <A extends Annotation> @Nullable GuiType<A, ?> getGuiType(final @NotNull Class<A> annotation) {
@@ -124,11 +130,6 @@ public final class Visualkit extends JavaPlugin {
 
     public static void registerGuiType(final @NotNull GuiType<?, ?> type, final @NotNull Plugin plugin) {
         Preconditions.checkState(getGuiType(type.getAnnotationClass()) == null, "A gui type that specifies '" + type.getAnnotationClass().getName() + "' as an annotation is already registered.");
-
-        if (type instanceof Listener) {
-            plugin().getServer().getPluginManager().registerEvents((Listener) type, plugin);
-        }
-
         GUI_TYPES.add(type);
     }
 
@@ -148,12 +149,10 @@ public final class Visualkit extends JavaPlugin {
     public void onEnable() {
         instance = this;
 
-        getServer().getPluginManager().registerEvents(new InventoryListener(), this);
-        getServer().getPluginManager().registerEvents(new PlayerListener(), this);
-        getServer().getPluginManager().registerEvents(new PluginListener(), this);
+        getServer().getPluginManager().registerEvents(new ChestGuiListener(), this);
         getServer().getPluginManager().registerEvents(new ServerListener(), this);
 
-        registerGuiType(new ChestGuiType(), this);
+        registerGuiType(ChestGuiType.instance(), this);
 
         logger().info(Component.text("       __    ").color(TextColor.color(255, 86, 217)));
         logger().info(Component.text("___  _|  | __").color(TextColor.color(255, 124, 255)).append(Component.text("    Visualkit - " + getPluginMeta().getVersion()).color(NamedTextColor.WHITE)));

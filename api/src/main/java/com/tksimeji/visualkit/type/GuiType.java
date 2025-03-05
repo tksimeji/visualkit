@@ -10,5 +10,5 @@ public interface GuiType<A extends Annotation, C extends GuiController> {
 
     @NotNull Class<C> getControllerClass();
 
-    @NotNull C createController(final @NotNull Object object, final @NotNull A annotation);
+    @NotNull C createController(final @NotNull Object gui, final @NotNull A annotation);
 }

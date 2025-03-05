@@ -43,6 +43,10 @@ public final class Visualkit {
         throw new NotImplementedException("The API module cannot be called at runtime.");
     }
 
+    public static void removeGuiController(final @NotNull GuiController controller) {
+        throw new NotImplementedException("The API module cannot be called at runtime.");
+    }
+
     public static <A extends Annotation> @Nullable GuiType<A, ?> getGuiType(final @NotNull Class<A> annotation) {
         throw new NotImplementedException("The API module cannot be called at runtime.");
     }

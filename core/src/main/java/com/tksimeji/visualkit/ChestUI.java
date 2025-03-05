@@ -4,6 +4,7 @@ import com.tksimeji.visualkit.api.*;
 import com.tksimeji.visualkit.element.IVisualkitElement;
 import com.tksimeji.visualkit.element.ItemStackElement;
 import com.tksimeji.visualkit.element.VisualkitElement;
+import com.tksimeji.visualkit.event.GuiHandler;
 import com.tksimeji.visualkit.policy.PolicyTarget;
 import com.tksimeji.visualkit.policy.SlotPolicy;
 import com.tksimeji.visualkit.util.AsmUtility;
@@ -31,7 +32,7 @@ public abstract class ChestUI extends ContainerUI<Inventory> implements IChestUI
     protected final @NotNull Map<Integer, IVisualkitElement<?>> elements = new KillableHashMap<>();
     protected final @NotNull Map<Integer, SlotPolicy> policies = new HashMap<>();
     protected final @NotNull Set<Method> handlers = ReflectionUtility.getMethods(getClass()).stream()
-            .filter(method -> method.isAnnotationPresent(com.tksimeji.visualkit.event.Handler.class) &&
+            .filter(method -> method.isAnnotationPresent(GuiHandler.class) &&
                     (List.of(Void.TYPE, Boolean.class, boolean.class).contains(method.getReturnType())))
             .collect(Collectors.toSet());
 
@@ -139,7 +140,6 @@ public abstract class ChestUI extends ContainerUI<Inventory> implements IChestUI
         return inventory;
     }
 
-    @Override
     public final boolean onClick(int slot, @NotNull Action action, @NotNull Mouse mouse, @Nullable ItemStack item) {
         throw new NotImplementedException();
     }

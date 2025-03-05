@@ -15,10 +15,12 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.*;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 
+@ApiStatus.ScheduledForRemoval(inVersion = "1.0.0")
 public final class InventoryListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onInventoryClick(@NotNull InventoryClickEvent event) {

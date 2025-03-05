@@ -23,7 +23,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 class ItemElementImpl implements ItemElement {
     private @NotNull ItemStack itemStack;
@@ -47,6 +46,9 @@ class ItemElementImpl implements ItemElement {
         itemMeta.addItemFlags(ItemFlag.values());
         Visualkit.adapter().fun_adp3uc(itemStack, itemMeta, Visualkit.plugin());
         itemStack.setItemMeta(itemMeta);
+
+        title(title);
+        lore(lore);
     }
 
     @Override
@@ -103,16 +105,24 @@ class ItemElementImpl implements ItemElement {
     }
 
     @Override
-    public @NotNull ItemElement lore(final @NotNull Collection<ComponentLike> components) {
+    public @NotNull ItemElement lore(final @NotNull Collection<Component> components) {
+        return lore(components.stream().map(component -> (ComponentLike) component).toList());
+    }
+
+    @Override
+    public @NotNull ItemElement lore(final @NotNull List<ComponentLike> components) {
         Preconditions.checkArgument(components != null, "Components cannot be null.");
+
         if (!itemStack.hasItemMeta()) {
             return this;
         }
 
-        this.lore = components.stream().map(ComponentLike::asComponent).toList();
+        lore = components.stream()
+                .map(component -> component.asComponent().colorIfAbsent(NamedTextColor.GRAY).decorationIfAbsent(TextDecoration.ITALIC, TextDecoration.State.FALSE))
+                .toList();
 
         ItemMeta itemMeta = itemStack.getItemMeta();
-        itemMeta.lore(components.stream().map(ComponentLike::asComponent).toList());
+        itemMeta.lore(lore);
         itemMeta.setHideTooltip(this.title == null && this.lore.isEmpty());
 
         itemStack.setItemMeta(itemMeta);
@@ -126,7 +136,7 @@ class ItemElementImpl implements ItemElement {
 
     @Override
     public @NotNull ItemElement lore(final @NotNull String... strings) {
-        return lore(Arrays.stream(strings).map(Component::text).collect(Collectors.toList()));
+        return lore(Arrays.stream(strings).map(string -> (ComponentLike) Component.text(string)).toList());
     }
 
     @Override
@@ -237,6 +247,18 @@ class ItemElementImpl implements ItemElement {
 
     @Override
     public @NotNull ItemElement handler(final @Nullable Handler2 handler) {
+        this.handler = handler;
+        return this;
+    }
+
+    @Override
+    public @NotNull ItemElement handler(final @Nullable Handler3 handler) {
+        this.handler = handler;
+        return this;
+    }
+
+    @Override
+    public @NotNull ItemElement handler(final @Nullable Handler4 handler) {
         this.handler = handler;
         return this;
     }

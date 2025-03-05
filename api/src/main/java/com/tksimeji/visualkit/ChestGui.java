@@ -8,11 +8,14 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 public @interface ChestGui {
-    Size size() default Size.SIZE_54;
-
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.FIELD)
     @interface Title {
+    }
+
+    @Retention(RetentionPolicy.RUNTIME)
+    @Target(ElementType.FIELD)
+    @interface Size {
     }
 
     @Retention(RetentionPolicy.RUNTIME)
@@ -34,7 +37,7 @@ public @interface ChestGui {
         int indexTo() default -1;
     }
 
-    enum Size {
+    enum ChestSize {
         SIZE_9(9),
         SIZE_18(18),
         SIZE_27(27),
@@ -44,7 +47,7 @@ public @interface ChestGui {
 
         private final int integer;
 
-        Size(int integer) {
+        ChestSize(int integer) {
             this.integer = integer;
         }
 
