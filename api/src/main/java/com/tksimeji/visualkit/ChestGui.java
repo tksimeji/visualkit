@@ -10,17 +10,17 @@ import java.lang.annotation.Target;
 public @interface ChestGui {
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.FIELD)
+    @interface Player {
+    }
+
+    @Retention(RetentionPolicy.RUNTIME)
+    @Target(ElementType.FIELD)
     @interface Title {
     }
 
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.FIELD)
     @interface Size {
-    }
-
-    @Retention(RetentionPolicy.RUNTIME)
-    @Target(ElementType.FIELD)
-    @interface Player {
     }
 
     @Retention(RetentionPolicy.RUNTIME)

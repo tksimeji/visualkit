@@ -12,9 +12,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.stream.IntStream;
@@ -52,8 +50,6 @@ public final class ChestGuiControllerImpl extends InventoryGuiControllerImpl imp
 
     private final @NotNull Inventory inventory;
 
-    private final @NotNull Map<Integer, ItemElement> elementMap = new HashMap<>();
-
     public ChestGuiControllerImpl(final @NotNull Object gui) {
         super(gui);
 
@@ -80,27 +76,6 @@ public final class ChestGuiControllerImpl extends InventoryGuiControllerImpl imp
     }
 
     @Override
-    public @NotNull ItemElement getElement(final int index) {
-        return elementMap.get(index);
-    }
-
-    @Override
-    public @NotNull Map<Integer, ItemElement> getElements() {
-        return new HashMap<>(elementMap);
-    }
-
-    @Override
-    public void setElement(final int index, final @Nullable ItemElement element) {
-        ItemStack old = inventory.getItem(index);
-        if ((element == null && old == null) || (element != null && element.create() == old)) {
-            return;
-        }
-
-        elementMap.put(index, element);
-        inventory.setItem(index, element != null ? element.create() : null);
-    }
-
-    @Override
     public @NotNull Inventory getInventory() {
         return inventory;
     }
@@ -114,12 +89,5 @@ public final class ChestGuiControllerImpl extends InventoryGuiControllerImpl imp
     public void close() {
         callEvent(new ChestGuiEvents.CloseEvent(gui));
         super.close();
-    }
-
-    @Override
-    public void tick() {
-        for (Map.Entry<Integer, ItemElement> entry : elementMap.entrySet()) {
-            setElement(entry.getKey(), entry.getValue());
-        }
     }
 }

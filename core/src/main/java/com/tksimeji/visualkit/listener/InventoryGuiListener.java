@@ -3,8 +3,7 @@ package com.tksimeji.visualkit.listener;
 import com.tksimeji.visualkit.Action;
 import com.tksimeji.visualkit.Mouse;
 import com.tksimeji.visualkit.Visualkit;
-import com.tksimeji.visualkit.controller.ChestGuiController;
-import com.tksimeji.visualkit.type.ChestGuiType;
+import com.tksimeji.visualkit.controller.InventoryGuiController;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -16,10 +15,10 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public final class ChestGuiListener implements Listener {
+public final class InventoryGuiListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onInventoryClick(final @NotNull InventoryClickEvent event) {
-        ChestGuiController controller = getController(event.getInventory());
+        InventoryGuiController controller = getController(event.getInventory());
 
         if (controller == null) {
             return;
@@ -32,7 +31,7 @@ public final class ChestGuiListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onInventoryClose(final @NotNull InventoryCloseEvent event) {
-        ChestGuiController controller = getController(event.getInventory());
+        InventoryGuiController controller = getController(event.getInventory());
 
         if (controller == null) {
             return;
@@ -42,10 +41,11 @@ public final class ChestGuiListener implements Listener {
     }
 
     @ApiStatus.Internal
-    private @Nullable ChestGuiController getController(final @Nullable Inventory inventory) {
-        return Visualkit.getGuiControllers(ChestGuiType.instance())
+    private @Nullable InventoryGuiController getController(final @Nullable Inventory inventory) {
+        return Visualkit.getGuiControllers()
                 .stream()
-                .filter(aController -> aController.getInventory() == inventory)
+                .filter(controller -> (controller instanceof InventoryGuiController inventoryGuiController) && inventoryGuiController.getInventory() == inventory)
+                .map(controller -> (InventoryGuiController) controller)
                 .findFirst()
                 .orElse(null);
     }

@@ -5,8 +5,10 @@ import com.tksimeji.visualkit.adapter.Adapter;
 import com.tksimeji.visualkit.adapter.V1_21_1;
 import com.tksimeji.visualkit.adapter.V1_21_3;
 import com.tksimeji.visualkit.controller.GuiController;
-import com.tksimeji.visualkit.listener.ChestGuiListener;
+import com.tksimeji.visualkit.listener.AnvilGuiListener;
+import com.tksimeji.visualkit.listener.InventoryGuiListener;
 import com.tksimeji.visualkit.listener.ServerListener;
+import com.tksimeji.visualkit.type.AnvilGuiType;
 import com.tksimeji.visualkit.type.ChestGuiType;
 import com.tksimeji.visualkit.type.GuiType;
 import net.kyori.adventure.text.Component;
@@ -149,9 +151,11 @@ public final class Visualkit extends JavaPlugin {
     public void onEnable() {
         instance = this;
 
-        getServer().getPluginManager().registerEvents(new ChestGuiListener(), this);
+        getServer().getPluginManager().registerEvents(new AnvilGuiListener(), this);
+        getServer().getPluginManager().registerEvents(new InventoryGuiListener(), this);
         getServer().getPluginManager().registerEvents(new ServerListener(), this);
 
+        registerGuiType(AnvilGuiType.instance(), this);
         registerGuiType(ChestGuiType.instance(), this);
 
         logger().info(Component.text("       __    ").color(TextColor.color(255, 86, 217)));

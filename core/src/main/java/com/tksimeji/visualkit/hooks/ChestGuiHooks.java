@@ -11,6 +11,13 @@ import java.util.Map;
 
 public interface ChestGuiHooks extends IChestGuiHooks {
     @Override
+    default @NotNull Player usePlayer() {
+        ChestGuiController controller = (ChestGuiController) Visualkit.getGuiController(this);
+        assert controller != null;
+        return controller.getPlayer();
+    }
+
+    @Override
     default @Nullable ItemElement useGetElement(final int index) {
         ChestGuiController controller = (ChestGuiController) Visualkit.getGuiController(this);
         assert controller != null;
@@ -36,13 +43,6 @@ public interface ChestGuiHooks extends IChestGuiHooks {
         ChestGuiController controller = (ChestGuiController) Visualkit.getGuiController(this);
         assert controller != null;
         controller.setElement(index, null);
-    }
-
-    @Override
-    default @NotNull Player usePlayer() {
-        ChestGuiController controller = (ChestGuiController) Visualkit.getGuiController(this);
-        assert controller != null;
-        return controller.getPlayer();
     }
 
     @Override

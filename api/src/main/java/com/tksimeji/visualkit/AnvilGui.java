@@ -8,6 +8,13 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 public @interface AnvilGui {
+    boolean overwriteResultSlot() default true;
+
+    @Retention(RetentionPolicy.RUNTIME)
+    @Target(ElementType.FIELD)
+    @interface Player {
+    }
+
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.FIELD)
     @interface Title {
@@ -15,16 +22,16 @@ public @interface AnvilGui {
 
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.FIELD)
-    @interface Textbox {
+    @interface FirstElement {
     }
 
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.FIELD)
-    @interface Button {
+    @interface SecondElement {
     }
 
     @Retention(RetentionPolicy.RUNTIME)
-    @Target(ElementType.METHOD)
-    @interface Handler {
+    @Target(ElementType.FIELD)
+    @interface ResultElement {
     }
 }

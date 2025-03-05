@@ -1,0 +1,23 @@
+package com.tksimeji.visualkit.controller;
+
+import com.tksimeji.visualkit.element.ItemElement;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+public sealed interface AnvilGuiController extends InventoryGuiController permits AnvilGuiControllerImpl {
+    @NotNull String getText();
+
+    @Nullable ItemElement getFirstElement();
+
+    void setFirstElement(final @Nullable ItemElement element);
+
+    @Nullable ItemElement getSecondElement();
+
+    void setSecondElement(final @Nullable ItemElement element);
+
+    @Nullable ItemElement getResultElement();
+
+    void setResultElement(final @Nullable ItemElement element);
+
+    boolean isOverwriteResultSlot();
+}

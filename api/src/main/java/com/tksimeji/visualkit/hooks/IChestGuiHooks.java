@@ -7,7 +7,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 
-interface IChestGuiHooks {
+interface IChestGuiHooks extends Hooks {
+    @NotNull Player usePlayer();
+
     @Nullable ItemElement useGetElement(final int index);
 
     @NotNull Map<Integer, ItemElement> useGetElements();
@@ -15,8 +17,6 @@ interface IChestGuiHooks {
     void useSetElement(final int index, final @NotNull ItemElement element);
 
     void useClearElement(final int index);
-
-    @NotNull Player usePlayer();
 
     void useClose();
 }

@@ -2,40 +2,36 @@ package com.tksimeji.visualkit.hooks;
 
 import com.tksimeji.visualkit.element.ItemElement;
 import org.apache.commons.lang3.NotImplementedException;
-import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Map;
-
-public interface ChestGuiHooks extends Hooks, IChestGuiHooks {
+public interface AnvilGuiHooks extends IAnvilGuiHooks {
     @Override
-    default @NotNull Player usePlayer() {
+    default @Nullable ItemElement useGetFirstElement() {
         throw new NotImplementedException("The API module cannot be called at runtime.");
     }
 
     @Override
-    default @Nullable ItemElement useGetElement(final int index) {
+    default void useSetFirstElement(@Nullable ItemElement element) {
         throw new NotImplementedException("The API module cannot be called at runtime.");
     }
 
     @Override
-    default @NotNull Map<Integer, ItemElement> useGetElements() {
+    default @Nullable ItemElement useGetSecondElement() {
         throw new NotImplementedException("The API module cannot be called at runtime.");
     }
 
     @Override
-    default void useSetElement(final int index, final @NotNull ItemElement element) {
+    default void useSetSecondElement(@Nullable ItemElement element) {
         throw new NotImplementedException("The API module cannot be called at runtime.");
     }
 
     @Override
-    default void useClearElement(final int index) {
+    default @Nullable ItemElement useGetResultElement() {
         throw new NotImplementedException("The API module cannot be called at runtime.");
     }
 
     @Override
-    default void useClose() {
+    default void useSetResultElement(@Nullable ItemElement element) {
         throw new NotImplementedException("The API module cannot be called at runtime.");
     }
 }
