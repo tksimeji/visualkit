@@ -63,7 +63,6 @@ subprojects {
 dependencies {
     implementation(project(":api"))
     implementation(project(":core"))
-    implementation(project(":v1_21_3"))
 }
 
 publishing {
