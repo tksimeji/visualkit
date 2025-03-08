@@ -3,7 +3,8 @@ package com.tksimeji.visualkit.listener;
 import com.tksimeji.visualkit.Action;
 import com.tksimeji.visualkit.Mouse;
 import com.tksimeji.visualkit.Visualkit;
-import com.tksimeji.visualkit.controller.InventoryGuiController;
+import com.tksimeji.visualkit.controller.ContainerGuiController;
+import com.tksimeji.visualkit.controller.ItemContainerGuiController;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -15,37 +16,35 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public final class InventoryGuiListener implements Listener {
+public final class ContainerGuiListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onInventoryClick(final @NotNull InventoryClickEvent event) {
-        InventoryGuiController controller = getController(event.getInventory());
+        ContainerGuiController<?> controller = getController(event.getInventory());
 
-        if (controller == null) {
+        if (!(controller instanceof ItemContainerGuiController<?> itemContainerGuiController)) {
             return;
         }
 
         Action action = event.getClick() == ClickType.DOUBLE_CLICK ? Action.DOUBLE_CLICK : event.isShiftClick() ? Action.SHIFT_CLICK : Action.SINGLE_CLICK;
         Mouse mouse = event.getClick().isLeftClick() ? Mouse.LEFT : Mouse.RIGHT;
-        event.setCancelled(controller.click(event.getSlot(), action, mouse));
+        event.setCancelled(itemContainerGuiController.click(event.getSlot(), action, mouse));
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onInventoryClose(final @NotNull InventoryCloseEvent event) {
-        InventoryGuiController controller = getController(event.getInventory());
+        ContainerGuiController<?> controller = getController(event.getInventory());
 
-        if (controller == null) {
-            return;
+        if (controller != null) {
+            controller.close();
         }
-
-        controller.close();
     }
 
     @ApiStatus.Internal
-    private @Nullable InventoryGuiController getController(final @Nullable Inventory inventory) {
+    private @Nullable ContainerGuiController<?> getController(final @Nullable Inventory inventory) {
         return Visualkit.getGuiControllers()
                 .stream()
-                .filter(controller -> (controller instanceof InventoryGuiController inventoryGuiController) && inventoryGuiController.getInventory() == inventory)
-                .map(controller -> (InventoryGuiController) controller)
+                .filter(controller -> (controller instanceof ContainerGuiController<?> containerGuiController) && containerGuiController.getInventory() == inventory)
+                .map(controller -> (ContainerGuiController<?>) controller)
                 .findFirst()
                 .orElse(null);
     }

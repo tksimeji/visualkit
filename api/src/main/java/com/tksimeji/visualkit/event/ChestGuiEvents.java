@@ -12,7 +12,7 @@ public final class ChestGuiEvents {
     private ChestGuiEvents() {
     }
 
-    public static final class ClickEvent extends AbstractClickEvent implements Cancellable {
+    public static final class ClickEvent extends AbstractItemElementEvent implements Cancellable {
         private static final HandlerList HANDLER_LIST = new HandlerList();
 
         public ClickEvent(final @NotNull Object gui, final int index, final @Nullable ItemElement element, final @NotNull Action action, final @NotNull Mouse mouse) {

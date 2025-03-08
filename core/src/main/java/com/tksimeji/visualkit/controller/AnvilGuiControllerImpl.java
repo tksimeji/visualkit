@@ -4,6 +4,7 @@ import com.tksimeji.visualkit.Action;
 import com.tksimeji.visualkit.AnvilGui;
 import com.tksimeji.visualkit.Mouse;
 import com.tksimeji.visualkit.Visualkit;
+import com.tksimeji.visualkit.controller.impl.ItemContainerGuiControllerImpl;
 import com.tksimeji.visualkit.element.ItemElement;
 import com.tksimeji.visualkit.event.AnvilGuiEvents;
 import com.tksimeji.visualkit.event.GuiEvent;
@@ -18,7 +19,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
-public final class AnvilGuiControllerImpl extends InventoryGuiControllerImpl implements AnvilGuiController {
+public final class AnvilGuiControllerImpl extends ItemContainerGuiControllerImpl<AnvilInventory> implements AnvilGuiController {
     private final @NotNull Player player;
 
     private @NotNull AnvilInventory inventory;
@@ -44,9 +45,12 @@ public final class AnvilGuiControllerImpl extends InventoryGuiControllerImpl imp
 
             Optional.ofNullable(getDeclaration(gui, AnvilGui.ResultElement.class, ItemElement.class))
                     .ifPresent(resultElement -> setResultElement(resultElement.getLeft()));
-
-            callEvent(new AnvilGuiEvents.InitEvent(gui));
         });
+    }
+
+    @Override
+    public void init() {
+        callEvent(new AnvilGuiEvents.InitEvent(gui));
     }
 
     @Override

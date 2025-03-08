@@ -4,6 +4,7 @@ import com.tksimeji.visualkit.Action;
 import com.tksimeji.visualkit.ChestGui;
 import com.tksimeji.visualkit.Mouse;
 import com.tksimeji.visualkit.Visualkit;
+import com.tksimeji.visualkit.controller.impl.ItemContainerGuiControllerImpl;
 import com.tksimeji.visualkit.element.ItemElement;
 import com.tksimeji.visualkit.event.ChestGuiEvents;
 import net.kyori.adventure.text.Component;
@@ -17,7 +18,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 import java.util.stream.IntStream;
 
-public final class ChestGuiControllerImpl extends InventoryGuiControllerImpl implements ChestGuiController {
+public final class ChestGuiControllerImpl extends ItemContainerGuiControllerImpl<Inventory> implements ChestGuiController {
     private static @NotNull Set<Integer> parseAnnotation(final @NotNull ChestGui.Element annotation) {
         return parseAnnotation(annotation.value(), annotation.groups());
     }
@@ -61,12 +62,15 @@ public final class ChestGuiControllerImpl extends InventoryGuiControllerImpl imp
 
         Bukkit.getScheduler().runTask(Visualkit.plugin(), () -> player.openInventory(inventory));
 
-        for (Pair<ItemElement, ChestGui.Element> pair : getDeclarations(gui, ChestGui.Element.class, ItemElement.class)) {
-            for (int index : parseAnnotation(pair.getRight())) {
-                setElement(index, pair.getLeft());
+        for (Pair<ItemElement, ChestGui.Element> declaration : getDeclarations(gui, ChestGui.Element.class, ItemElement.class)) {
+            for (int index : parseAnnotation(declaration.getRight())) {
+                setElement(index, declaration.getLeft());
             }
         }
+    }
 
+    @Override
+    public void init() {
         callEvent(new ChestGuiEvents.InitEvent(gui));
     }
 

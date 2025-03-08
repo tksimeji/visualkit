@@ -12,7 +12,7 @@ public final class AnvilGuiEvents {
     private AnvilGuiEvents() {
     }
 
-    public static final class ClickEvent extends AbstractClickEvent {
+    public static final class ClickEvent extends AbstractItemElementEvent {
         private static final @NotNull HandlerList HANDLER_LIST = new HandlerList();
 
         public ClickEvent(final @NotNull Object gui, final int index, final @Nullable ItemElement element, final @NotNull Action action, final @NotNull Mouse mouse) {

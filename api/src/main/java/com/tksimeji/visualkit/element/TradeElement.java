@@ -30,6 +30,26 @@ public interface TradeElement extends Element<MerchantRecipe> {
     @Contract("_ -> this")
     @NotNull TradeElement maxUses(final @Range(from = 0, to = Integer.MAX_VALUE) int maxUses);
 
+    boolean canSelect();
+
+    @Contract("_ -> this")
+    @NotNull TradeElement canSelect(final boolean canSelect);
+
+    boolean canPurchase();
+
+    @Contract("_ -> this")
+    @NotNull TradeElement canPurchase(final boolean canUse);
+
+    @Nullable SelectHandler selectHandler();
+
+    @Contract("_ -> this")
+    @NotNull TradeElement selectHandler(final @NotNull SelectHandler handler);
+
+    @Nullable PurchaseHandler purchaseHandler();
+
+    @Contract("_ -> this")
+    @NotNull TradeElement purchaseHandler(final @NotNull PurchaseHandler handler);
+
     class Ingredients implements Iterable<ItemStack> {
         private final @NotNull ItemStack ingredient1;
         private final @Nullable ItemStack ingredient2;
@@ -66,5 +86,13 @@ public interface TradeElement extends Element<MerchantRecipe> {
 
             return collection.iterator();
         }
+    }
+
+    interface SelectHandler {
+        void onSelect();
+    }
+
+    interface PurchaseHandler {
+        void onPurchase();
     }
 }

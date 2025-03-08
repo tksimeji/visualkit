@@ -4,13 +4,17 @@ import com.google.common.base.Preconditions;
 import com.tksimeji.visualkit.adapter.Adapter;
 import com.tksimeji.visualkit.adapter.V1_21_1;
 import com.tksimeji.visualkit.adapter.V1_21_3;
+import com.tksimeji.visualkit.test.TestCommand;
 import com.tksimeji.visualkit.controller.GuiController;
 import com.tksimeji.visualkit.listener.AnvilGuiListener;
-import com.tksimeji.visualkit.listener.InventoryGuiListener;
+import com.tksimeji.visualkit.listener.ContainerGuiListener;
+import com.tksimeji.visualkit.listener.MerchantGuiListener;
 import com.tksimeji.visualkit.listener.ServerListener;
 import com.tksimeji.visualkit.type.AnvilGuiType;
 import com.tksimeji.visualkit.type.ChestGuiType;
 import com.tksimeji.visualkit.type.GuiType;
+import com.tksimeji.visualkit.type.MerchantGuiType;
+import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -76,7 +80,9 @@ public final class Visualkit extends JavaPlugin {
         GuiType<A, ?> type = getGuiType(annotation);
         Preconditions.checkArgument(type != null, "No gui type found to handle '" + annotation.getName() + "'.");
 
-        return type.createController(gui, gui.getClass().getAnnotation(annotation));
+        GuiController controller = type.createController(gui, gui.getClass().getAnnotation(annotation));
+        controllers.add(controller);
+        return controller;
     }
 
     public static @NotNull Set<Object> getGuis() {
@@ -108,10 +114,6 @@ public final class Visualkit extends JavaPlugin {
 
     public static @NotNull Set<GuiController> getGuiControllers() {
         return new HashSet<>(controllers);
-    }
-
-    public static void addGuiController(final @NotNull GuiController controller) {
-        controllers.add(controller);
     }
 
     public static void removeGuiController(final @NotNull GuiController controller) {
@@ -152,11 +154,21 @@ public final class Visualkit extends JavaPlugin {
         instance = this;
 
         getServer().getPluginManager().registerEvents(new AnvilGuiListener(), this);
-        getServer().getPluginManager().registerEvents(new InventoryGuiListener(), this);
+        getServer().getPluginManager().registerEvents(new ContainerGuiListener(), this);
+        getServer().getPluginManager().registerEvents(new MerchantGuiListener(), this);
         getServer().getPluginManager().registerEvents(new ServerListener(), this);
 
         registerGuiType(AnvilGuiType.instance(), this);
         registerGuiType(ChestGuiType.instance(), this);
+        registerGuiType(MerchantGuiType.instance(), this);
+
+        // <---- test code
+
+        getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS, commands -> {
+            commands.registrar().register(new TestCommand().create().build());
+        });
+
+        // ---->
 
         logger().info(Component.text("       __    ").color(TextColor.color(255, 86, 217)));
         logger().info(Component.text("___  _|  | __").color(TextColor.color(255, 124, 255)).append(Component.text("    Visualkit - " + getPluginMeta().getVersion()).color(NamedTextColor.WHITE)));

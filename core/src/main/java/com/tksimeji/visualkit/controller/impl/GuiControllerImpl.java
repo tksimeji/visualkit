@@ -26,8 +26,6 @@ public abstract class GuiControllerImpl implements GuiController {
     public GuiControllerImpl(final @NotNull Object gui) {
         this.gui = gui;
 
-        Visualkit.addGuiController(this);
-
         ReflectionUtility.getMethods(gui.getClass()).stream()
                 .filter(method -> method.isAnnotationPresent(GuiHandler.class) &&
                         method.getParameters().length == 1 &&

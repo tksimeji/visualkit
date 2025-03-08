@@ -1,10 +1,11 @@
 package com.tksimeji.visualkit.controller;
 
 import com.tksimeji.visualkit.element.ItemElement;
+import org.bukkit.inventory.AnvilInventory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public sealed interface AnvilGuiController extends InventoryGuiController permits AnvilGuiControllerImpl {
+public sealed interface AnvilGuiController extends ItemContainerGuiController<AnvilInventory> permits AnvilGuiControllerImpl {
     @NotNull String getText();
 
     @Nullable ItemElement getFirstElement();

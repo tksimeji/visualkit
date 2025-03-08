@@ -4,14 +4,14 @@ import com.tksimeji.visualkit.Action;
 import com.tksimeji.visualkit.Mouse;
 import com.tksimeji.visualkit.Visualkit;
 import com.tksimeji.visualkit.controller.GuiController;
-import com.tksimeji.visualkit.controller.InventoryGuiController;
+import com.tksimeji.visualkit.controller.ContainerGuiController;
 import com.tksimeji.visualkit.element.ItemElement;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-abstract class AbstractClickEvent extends AbstractGuiEvent implements Cancellable, GuiEvent {
+abstract class AbstractItemElementEvent extends AbstractGuiEvent implements Cancellable, GuiEvent {
     private final int index;
 
     private final @Nullable ItemElement element;
@@ -21,7 +21,7 @@ abstract class AbstractClickEvent extends AbstractGuiEvent implements Cancellabl
 
     private boolean cancelled = true;
 
-    public AbstractClickEvent(final @NotNull Object gui, final int index, final @Nullable ItemElement element, final @NotNull Action action, final @NotNull Mouse mouse) {
+    public AbstractItemElementEvent(final @NotNull Object gui, final int index, final @Nullable ItemElement element, final @NotNull Action action, final @NotNull Mouse mouse) {
         super(gui);
 
         this.index = index;
@@ -36,8 +36,8 @@ abstract class AbstractClickEvent extends AbstractGuiEvent implements Cancellabl
         if (element.sound() != null) {
             GuiController controller = Visualkit.getGuiController(gui);
 
-            if (controller instanceof InventoryGuiController inventoryGuiController) {
-                Player player = inventoryGuiController.getPlayer();
+            if (controller instanceof ContainerGuiController containerGuiController) {
+                Player player = containerGuiController.getPlayer();
                 player.playSound(player, element.sound(), element.soundVolume(), element.soundPitch());
             }
         }

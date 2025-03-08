@@ -5,36 +5,36 @@ import org.apache.commons.lang3.NotImplementedException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public interface MorchantGuiHooks extends Hooks {
+import java.util.List;
+
+public interface MerchantGuiHooks extends IMerchantGuiHooks {
+    @Override
     default @Nullable TradeElement useGetElement(final int index) {
         throw new NotImplementedException("The API module cannot be called at runtime.");
     }
 
+    @Override
+    default @NotNull List<TradeElement> useGetElements() {
+        throw new NotImplementedException("The API module cannot be called at runtime.");
+    }
+
+    @Override
     default void useSetElement(final int index, final @NotNull TradeElement element) {
         throw new NotImplementedException("The API module cannot be called at runtime.");
     }
 
+    @Override
     default void useAddElement(final @NotNull TradeElement element) {
         throw new NotImplementedException("The API module cannot be called at runtime.");
     }
 
+    @Override
     default void useRemoveElement(final int index) {
         throw new NotImplementedException("The API module cannot be called at runtime.");
     }
 
-    default void useRemoveElements() {
-        throw new NotImplementedException("The API module cannot be called at runtime.");
-    }
-
-    default int useSize() {
-        throw new NotImplementedException("The API module cannot be called at runtime.");
-    }
-
-    default boolean useIsEmpty() {
-        throw new NotImplementedException("The API module cannot be called at runtime.");
-    }
-
-    default boolean useIsNotEmpty() {
+    @Override
+    default void useInsertElement(final int index, final @NotNull TradeElement element) {
         throw new NotImplementedException("The API module cannot be called at runtime.");
     }
 }
