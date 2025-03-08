@@ -5,6 +5,9 @@ import com.tksimeji.visualkit.controller.MerchantGuiController;
 import com.tksimeji.visualkit.controller.MerchantGuiControllerImpl;
 import org.jetbrains.annotations.NotNull;
 
+import javax.inject.Singleton;
+
+@Singleton
 public final class MerchantGuiType implements GuiType<MerchantGui, MerchantGuiController> {
     private static final @NotNull MerchantGuiType instance = new MerchantGuiType();
 
@@ -23,7 +26,7 @@ public final class MerchantGuiType implements GuiType<MerchantGui, MerchantGuiCo
     }
 
     @Override
-    public @NotNull MerchantGuiController createController(@NotNull Object gui, @NotNull MerchantGui annotation) {
+    public @NotNull MerchantGuiController createController(final @NotNull Object gui, final @NotNull MerchantGui annotation) {
         return new MerchantGuiControllerImpl(gui);
     }
 }

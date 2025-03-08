@@ -1,13 +1,12 @@
 package com.tksimeji.visualkit.controller.impl;
 
-import com.tksimeji.visualkit.Visualkit;
 import com.tksimeji.visualkit.controller.GuiController;
-import com.tksimeji.visualkit.event.GuiHandler;
-import com.tksimeji.visualkit.event.GuiEvent;
-import com.tksimeji.visualkit.util.ReflectionUtility;
+import com.tksimeji.visualkit.event.Handler;
+import com.tksimeji.visualkit.event.Event;
+import com.tksimeji.visualkit.event.VisualkitEvent;
+import com.tksimeji.visualkit.util.Classes;
 import org.apache.commons.lang3.tuple.Pair;
 import org.bukkit.event.Cancellable;
-import org.bukkit.event.Event;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -26,11 +25,11 @@ public abstract class GuiControllerImpl implements GuiController {
     public GuiControllerImpl(final @NotNull Object gui) {
         this.gui = gui;
 
-        ReflectionUtility.getMethods(gui.getClass()).stream()
-                .filter(method -> method.isAnnotationPresent(GuiHandler.class) &&
+        Classes.getMethods(gui.getClass()).stream()
+                .filter(method -> method.isAnnotationPresent(Handler.class) &&
                         method.getParameters().length == 1 &&
                         Event.class.isAssignableFrom(method.getParameterTypes()[0]))
-                .sorted(Comparator.comparingInt(method -> method.getAnnotation(GuiHandler.class).priority()))
+                .sorted(Comparator.comparingInt(method -> method.getAnnotation(Handler.class).priority()))
                 .forEach(handlers::add);
     }
 
@@ -40,11 +39,11 @@ public abstract class GuiControllerImpl implements GuiController {
     }
 
     @Override
-    public boolean callEvent(final @NotNull GuiEvent event) {
-        List<Method> handlers = this.handlers.stream().filter(handler -> event.getClass().isAssignableFrom(handler.getParameterTypes()[0])).toList();
+    public boolean callEvent(final @NotNull Event event) {
+        List<Method> handlers = this.handlers.stream().filter(handler -> handler.getParameterTypes()[0].isAssignableFrom(event.getClass())).toList();
 
         for (Method handler : handlers) {
-            if (event instanceof Cancellable && ((Cancellable) event).isCancelled() && handler.getAnnotation(GuiHandler.class).ignoreCancelled()) {
+            if (event instanceof Cancellable && ((Cancellable) event).isCancelled() && handler.getAnnotation(Handler.class).ignoreCancelled()) {
                 continue;
             }
 
@@ -56,6 +55,8 @@ public abstract class GuiControllerImpl implements GuiController {
                 throw new RuntimeException(e);
             }
         }
+
+        new VisualkitEvent(event).callEvent();
 
         return event instanceof Cancellable && ((Cancellable) event).isCancelled();
     }
@@ -82,7 +83,7 @@ public abstract class GuiControllerImpl implements GuiController {
 
     @ApiStatus.Internal
     protected final <A extends Annotation, T> @NotNull Set<Pair<T, A>> getDeclarations(final @NotNull Object gui, final @NotNull Class<A> annotation, final @NotNull Class<T> aClass) {
-        return ReflectionUtility.getFields(gui.getClass()).stream()
+        return Classes.getFields(gui.getClass()).stream()
                 .filter(field -> field.isAnnotationPresent(annotation) && aClass.isAssignableFrom(field.getType()))
                 .peek(field -> field.setAccessible(true))
                 .map(field -> {

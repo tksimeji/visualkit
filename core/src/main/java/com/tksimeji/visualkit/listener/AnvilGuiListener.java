@@ -2,7 +2,7 @@ package com.tksimeji.visualkit.listener;
 
 import com.tksimeji.visualkit.Visualkit;
 import com.tksimeji.visualkit.element.Element;
-import com.tksimeji.visualkit.event.AnvilGuiEvents;
+import com.tksimeji.visualkit.event.anvil.AnvilGuiTextChangeEventImpl;
 import com.tksimeji.visualkit.type.AnvilGuiType;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
@@ -28,7 +28,7 @@ public final class AnvilGuiListener implements Listener {
                         String text = PlainTextComponentSerializer.plainText().serialize(component);
 
                         if (! controller.getText().equals(text)) {
-                            controller.callEvent(new AnvilGuiEvents.TextChangeEvent(controller.getGui(), text));
+                            controller.callEvent(new AnvilGuiTextChangeEventImpl(controller.getGui(), text));
                         }
                     }
 

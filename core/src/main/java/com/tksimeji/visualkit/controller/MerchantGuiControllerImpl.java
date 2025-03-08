@@ -5,7 +5,10 @@ import com.tksimeji.visualkit.Visualkit;
 import com.tksimeji.visualkit.controller.impl.ContainerGuiControllerImpl;
 import com.tksimeji.visualkit.element.TradeElement;
 import com.tksimeji.visualkit.element.TradeElementImpl;
-import com.tksimeji.visualkit.event.MerchantGuiEvents;
+import com.tksimeji.visualkit.event.merchant.MerchantGuiCloseEventImpl;
+import com.tksimeji.visualkit.event.merchant.MerchantGuiInitEventImpl;
+import com.tksimeji.visualkit.event.merchant.MerchantGuiPurchaseEventImpl;
+import com.tksimeji.visualkit.event.merchant.MerchantGuiSelectEventImpl;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
 import org.apache.commons.lang3.tuple.Pair;
@@ -18,7 +21,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
-public class MerchantGuiControllerImpl extends ContainerGuiControllerImpl<MerchantInventory> implements MerchantGuiController {
+public final class MerchantGuiControllerImpl extends ContainerGuiControllerImpl<MerchantInventory> implements MerchantGuiController {
     private final @NotNull List<TradeElement> elements = new ArrayList<>();
 
     private final @NotNull Player player;
@@ -60,7 +63,7 @@ public class MerchantGuiControllerImpl extends ContainerGuiControllerImpl<Mercha
 
     @Override
     public void init() {
-        callEvent(new MerchantGuiEvents.InitEvent(gui));
+        callEvent(new MerchantGuiInitEventImpl(gui));
     }
 
     @Override
@@ -122,7 +125,7 @@ public class MerchantGuiControllerImpl extends ContainerGuiControllerImpl<Mercha
             return;
         }
 
-        callEvent(new MerchantGuiEvents.CloseEvent(gui));
+        callEvent(new MerchantGuiCloseEventImpl(gui));
 
         elements.stream()
                 .filter(element -> element instanceof TradeElementImpl)
@@ -136,7 +139,7 @@ public class MerchantGuiControllerImpl extends ContainerGuiControllerImpl<Mercha
             return true;
         }
 
-        return callEvent(new MerchantGuiEvents.SelectEvent(gui, index, element));
+        return callEvent(new MerchantGuiSelectEventImpl(gui, index, element));
     }
 
     @Override
@@ -145,7 +148,7 @@ public class MerchantGuiControllerImpl extends ContainerGuiControllerImpl<Mercha
             return true;
         }
 
-        return callEvent(new MerchantGuiEvents.PurchaseEvent(gui, index, element));
+        return callEvent(new MerchantGuiPurchaseEventImpl(gui, index, element));
     }
 
     @Override

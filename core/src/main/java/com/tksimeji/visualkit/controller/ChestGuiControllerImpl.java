@@ -6,7 +6,9 @@ import com.tksimeji.visualkit.Mouse;
 import com.tksimeji.visualkit.Visualkit;
 import com.tksimeji.visualkit.controller.impl.ItemContainerGuiControllerImpl;
 import com.tksimeji.visualkit.element.ItemElement;
-import com.tksimeji.visualkit.event.ChestGuiEvents;
+import com.tksimeji.visualkit.event.chest.ChestGuiClickEventImpl;
+import com.tksimeji.visualkit.event.chest.ChestGuiCloseEventImpl;
+import com.tksimeji.visualkit.event.chest.ChestGuiInitEventImpl;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
 import org.apache.commons.lang3.tuple.Pair;
@@ -71,7 +73,7 @@ public final class ChestGuiControllerImpl extends ItemContainerGuiControllerImpl
 
     @Override
     public void init() {
-        callEvent(new ChestGuiEvents.InitEvent(gui));
+        callEvent(new ChestGuiInitEventImpl(gui));
     }
 
     @Override
@@ -86,12 +88,12 @@ public final class ChestGuiControllerImpl extends ItemContainerGuiControllerImpl
 
     @Override
     public boolean click(final int index, final @NotNull Action action, final @NotNull Mouse mouse) {
-        return callEvent(new ChestGuiEvents.ClickEvent(gui, index, getElement(index), action, mouse));
+        return callEvent(new ChestGuiClickEventImpl(gui, index, getElement(index), action, mouse));
     }
 
     @Override
     public void close() {
-        callEvent(new ChestGuiEvents.CloseEvent(gui));
+        callEvent(new ChestGuiCloseEventImpl(gui));
         super.close();
     }
 }

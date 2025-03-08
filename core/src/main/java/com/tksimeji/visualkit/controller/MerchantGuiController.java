@@ -8,7 +8,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public interface MerchantGuiController extends ContainerGuiController<MerchantInventory> {
+public sealed interface MerchantGuiController extends ContainerGuiController<MerchantInventory> permits MerchantGuiControllerImpl {
     @Nullable TradeElement getElement(final int index);
 
     @NotNull List<TradeElement> getElements();

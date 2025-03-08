@@ -7,7 +7,7 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-public @interface GuiHandler {
+public @interface Handler {
     int priority() default -1;
     boolean ignoreCancelled() default false;
 }

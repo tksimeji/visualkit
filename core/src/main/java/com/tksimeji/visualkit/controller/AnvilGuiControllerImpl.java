@@ -7,7 +7,10 @@ import com.tksimeji.visualkit.Visualkit;
 import com.tksimeji.visualkit.controller.impl.ItemContainerGuiControllerImpl;
 import com.tksimeji.visualkit.element.ItemElement;
 import com.tksimeji.visualkit.event.AnvilGuiEvents;
-import com.tksimeji.visualkit.event.GuiEvent;
+import com.tksimeji.visualkit.event.Event;
+import com.tksimeji.visualkit.event.anvil.AnvilGuiClickEventImpl;
+import com.tksimeji.visualkit.event.anvil.AnvilGuiCloseEventImpl;
+import com.tksimeji.visualkit.event.anvil.AnvilGuiInitEventImpl;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
 import org.bukkit.Bukkit;
@@ -50,7 +53,7 @@ public final class AnvilGuiControllerImpl extends ItemContainerGuiControllerImpl
 
     @Override
     public void init() {
-        callEvent(new AnvilGuiEvents.InitEvent(gui));
+        callEvent(new AnvilGuiInitEventImpl(gui));
     }
 
     @Override
@@ -115,18 +118,18 @@ public final class AnvilGuiControllerImpl extends ItemContainerGuiControllerImpl
 
     @Override
     public boolean click(int index, @NotNull Action action, @NotNull Mouse mouse) {
-        return callEvent(new AnvilGuiEvents.ClickEvent(gui, index, getElement(index), action, mouse));
+        return callEvent(new AnvilGuiClickEventImpl(gui, index, getElement(index), action, mouse));
     }
 
     @Override
     public void close() {
-        callEvent(new AnvilGuiEvents.CloseEvent(gui, text));
+        callEvent(new AnvilGuiCloseEventImpl(gui, text));
         inventory.clear();
         super.close();
     }
 
     @Override
-    public boolean callEvent(@NotNull GuiEvent event) {
+    public boolean callEvent(@NotNull Event event) {
         if (event instanceof AnvilGuiEvents.TextChangeEvent textChangeEvent) {
             text = textChangeEvent.getText();
         }

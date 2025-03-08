@@ -29,7 +29,7 @@ public final class AnvilGuiType implements GuiType<AnvilGui, AnvilGuiController>
     }
 
     @Override
-    public @NotNull AnvilGuiController createController(@NotNull Object gui, @NotNull AnvilGui annotation) {
+    public @NotNull AnvilGuiController createController(final @NotNull Object gui, final @NotNull AnvilGui annotation) {
         return new AnvilGuiControllerImpl(gui, annotation);
     }
 }

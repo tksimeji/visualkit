@@ -1,6 +1,6 @@
 package com.tksimeji.visualkit.controller;
 
-import com.tksimeji.visualkit.event.GuiEvent;
+import com.tksimeji.visualkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 
 public interface GuiController {
@@ -9,5 +9,5 @@ public interface GuiController {
 
     @NotNull Object getGui();
 
-    boolean callEvent(final @NotNull GuiEvent event);
+    boolean callEvent(final @NotNull Event event);
 }

@@ -1,12 +1,11 @@
 package com.tksimeji.visualkit.event;
 
-import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 
-abstract class AbstractGuiEvent extends Event implements GuiEvent {
+public abstract class EventImpl implements Event {
     private final @NotNull Object gui;
 
-    public AbstractGuiEvent(final @NotNull Object gui) {
+    public EventImpl(final @NotNull Object gui) {
         this.gui = gui;
     }
 
