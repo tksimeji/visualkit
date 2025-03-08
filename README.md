@@ -10,6 +10,11 @@ The Minecraft GUI framework
 
 Visualkit is a free, open-source GUI framework for [Paper](https://papermc.io/software/paper) server.
 
+> [!NOTE]
+> Visualkit is currently moving away from the traditional class inheritance API to a more modern and faster annotation and method chaining API.
+> When the new API is released, the traditional API will remain compatible but will be deprecated. 
+> New API development branch: https://github.com/tksimeji/visualkit/tree/develop/1.0.0
+
 Maximum respect to [Bram Moolenaar](https://github.com/brammool), the developer of [Vim](https://www.vim.org/).
 
 I also sympathized with his philanthropic side, so I decided to add the same text as the Vim startup screen to the
