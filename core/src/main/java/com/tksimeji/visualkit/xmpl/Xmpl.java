@@ -2,7 +2,7 @@ package com.tksimeji.visualkit.xmpl;
 
 import com.tksimeji.visualkit.Killable;
 import com.tksimeji.visualkit.Tickable;
-import com.tksimeji.visualkit.util.ComponentUtility;
+import com.tksimeji.visualkit.util.Components;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
 import net.kyori.adventure.text.TextReplacementConfig;
@@ -25,7 +25,7 @@ public final class Xmpl implements ComponentLike, Killable, Tickable {
     }
 
     public static @NotNull Xmpl empty() {
-        return new Xmpl(ComponentUtility.empty());
+        return new Xmpl(Components.empty());
     }
 
     private final @NotNull Component source;
@@ -38,7 +38,7 @@ public final class Xmpl implements ComponentLike, Killable, Tickable {
     }
 
     public Xmpl(@NotNull Component source, @Nullable XmplTarget target) {
-        this.source = ComponentUtility.empty().append(source);
+        this.source = Components.empty().append(source);
         this.target = target;
         instances.add(this);
     }

@@ -1,7 +1,7 @@
 package com.tksimeji.visualkit;
 
 import com.tksimeji.visualkit.xmpl.Xmpl;
-import com.tksimeji.visualkit.util.ComponentUtility;
+import com.tksimeji.visualkit.util.Components;
 import com.tksimeji.visualkit.util.KillableArrayList;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
@@ -47,20 +47,20 @@ import java.util.UUID;
     public final void setLine(int index, @NotNull Component line) {
         if (lines.size() <= index) {
             for (int i = size(); i <= index; i ++) {
-                lines.add(new Xmpl(ComponentUtility.spaces(blanks ++), this));
+                lines.add(new Xmpl(Components.spaces(blanks ++), this));
             }
         }
 
         int blanks = this.blanks;
 
-        TextComponent.Builder builder = Component.text().append(ComponentUtility.content(line).isBlank() ? ComponentUtility.spaces(blanks ++) : line);
+        TextComponent.Builder builder = Component.text().append(Components.plainText(line).isBlank() ? Components.spaces(blanks ++) : line);
 
-        while (lines.stream().anyMatch(l -> ComponentUtility.equals(ComponentUtility.empty().append(builder.asComponent()), l.getSource()))) {
+        while (lines.stream().anyMatch(l -> Components.equals(Components.empty().append(builder.asComponent()), l.getSource()))) {
             builder.appendSpace();
         }
 
-        if (ComponentUtility.serialize(ComponentUtility.empty().append(builder.build())).replaceAll("&.\\s*$", "")
-                .equals(ComponentUtility.serialize(lines.get(index).getSource()).replaceAll("&.\\s*$", ""))) {
+        if (Components.serialize(Components.empty().append(builder.build())).replaceAll("&.\\s*$", "")
+                .equals(Components.serialize(lines.get(index).getSource()).replaceAll("&.\\s*$", ""))) {
             return;
         }
 
@@ -138,7 +138,7 @@ import java.util.UUID;
     public final void tick() {
         super.tick();
 
-        if (! ComponentUtility.equals(objective.displayName(), title.asComponent())) {
+        if (! Components.equals(objective.displayName(), title.asComponent())) {
             objective.displayName(title.asComponent());
         }
 
@@ -151,7 +151,7 @@ import java.util.UUID;
 
             Xmpl line = lines.get(i);
 
-            if (! ComponentUtility.equals(score.customName(), line.asComponent())) {
+            if (! Components.equals(score.customName(), line.asComponent())) {
                 score.customName(line.asComponent());
             }
         }

@@ -5,6 +5,7 @@ import com.tksimeji.visualkit.Killable;
 import java.util.ArrayList;
 import java.util.Optional;
 
+@Deprecated(forRemoval = true)
 public class KillableArrayList<E extends Killable> extends ArrayList<E> {
     @Override
     public E set(int index, E element) {

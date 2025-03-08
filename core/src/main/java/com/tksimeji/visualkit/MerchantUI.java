@@ -4,7 +4,7 @@ import com.tksimeji.visualkit.api.Action;
 import com.tksimeji.visualkit.api.Handler;
 import com.tksimeji.visualkit.api.Trade;
 import com.tksimeji.visualkit.trade.VisualkitTrade;
-import com.tksimeji.visualkit.util.ReflectionUtility;
+import com.tksimeji.visualkit.util.Classes;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.*;
@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 
     private final @NotNull List<VisualkitTrade> trades = new ArrayList<>();
 
-    private final @NotNull Set<Method> handlers = ReflectionUtility.getMethods(getClass()).stream()
+    private final @NotNull Set<Method> handlers = Classes.getMethods(getClass()).stream()
             .filter(method -> method.isAnnotationPresent(Handler.class) &&
                     (method.getReturnType() == Void.class || method.getReturnType() == Boolean.class || method.getReturnType() == boolean.class))
             .collect(Collectors.toSet());
@@ -199,7 +199,7 @@ import java.util.stream.Collectors;
     public final void tick() {
         Map<Integer, VisualkitTrade> queue = new HashMap<>();
 
-        ReflectionUtility.getFields(getClass()).stream()
+        Classes.getFields(getClass()).stream()
                 .filter(field -> ! crawledFields.contains(field) &&
                         field.isAnnotationPresent(Trade.class) &&
                         VisualkitTrade.class.isAssignableFrom(field.getType()))

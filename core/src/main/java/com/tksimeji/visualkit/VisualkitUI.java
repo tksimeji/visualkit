@@ -1,6 +1,6 @@
 package com.tksimeji.visualkit;
 
-import com.tksimeji.visualkit.util.ReflectionUtility;
+import com.tksimeji.visualkit.util.Classes;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -18,7 +18,7 @@ import java.util.Map;
 
     @Override
     public final @NotNull Map<String, Object> getXmplMap() {
-        ReflectionUtility.getFields(getClass()).stream()
+        Classes.getFields(getClass()).stream()
                 .peek(field -> field.setAccessible(true))
                 .forEach(field -> {
                     try {

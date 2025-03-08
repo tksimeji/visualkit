@@ -1,7 +1,7 @@
 package com.tksimeji.visualkit.element;
 
 import com.tksimeji.visualkit.Visualkit;
-import com.tksimeji.visualkit.util.ComponentUtility;
+import com.tksimeji.visualkit.util.Components;
 import com.tksimeji.visualkit.xmpl.XmplTarget;
 import com.tksimeji.visualkit.xmpl.Xmpl;
 import net.kyori.adventure.text.Component;
@@ -109,7 +109,7 @@ public class VisualkitElement implements IVisualkitElement<VisualkitElement> {
 
     @Override
     public @NotNull Component title() {
-        return Optional.ofNullable(title.asComponent()).orElse(ComponentUtility.empty());
+        return Optional.ofNullable(title.asComponent()).orElse(Components.empty());
     }
 
 

@@ -10,10 +10,7 @@ import com.tksimeji.visualkit.listener.AnvilGuiListener;
 import com.tksimeji.visualkit.listener.ContainerGuiListener;
 import com.tksimeji.visualkit.listener.MerchantGuiListener;
 import com.tksimeji.visualkit.listener.ServerListener;
-import com.tksimeji.visualkit.type.AnvilGuiType;
-import com.tksimeji.visualkit.type.ChestGuiType;
-import com.tksimeji.visualkit.type.GuiType;
-import com.tksimeji.visualkit.type.MerchantGuiType;
+import com.tksimeji.visualkit.type.*;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
@@ -82,6 +79,7 @@ public final class Visualkit extends JavaPlugin {
 
         GuiController controller = type.createController(gui, gui.getClass().getAnnotation(annotation));
         controllers.add(controller);
+        controller.init();
         return controller;
     }
 
@@ -161,6 +159,7 @@ public final class Visualkit extends JavaPlugin {
         registerGuiType(AnvilGuiType.instance(), this);
         registerGuiType(ChestGuiType.instance(), this);
         registerGuiType(MerchantGuiType.instance(), this);
+        registerGuiType(ScoreboardGuiType.instance(), this);
 
         // <---- test code
 

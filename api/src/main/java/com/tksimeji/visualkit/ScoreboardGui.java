@@ -16,5 +16,6 @@ public @interface ScoreboardGui {
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.FIELD)
     @interface Line {
+        int index() default -1;
     }
 }

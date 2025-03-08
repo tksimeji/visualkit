@@ -4,12 +4,12 @@ import com.tksimeji.visualkit.api.*;
 import com.tksimeji.visualkit.element.IVisualkitElement;
 import com.tksimeji.visualkit.element.ItemStackElement;
 import com.tksimeji.visualkit.element.VisualkitElement;
-import com.tksimeji.visualkit.event.GuiHandler;
+import com.tksimeji.visualkit.event.Handler;
 import com.tksimeji.visualkit.policy.PolicyTarget;
 import com.tksimeji.visualkit.policy.SlotPolicy;
 import com.tksimeji.visualkit.util.AsmUtility;
 import com.tksimeji.visualkit.util.KillableHashMap;
-import com.tksimeji.visualkit.util.ReflectionUtility;
+import com.tksimeji.visualkit.util.Classes;
 import org.apache.commons.lang3.NotImplementedException;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -31,8 +31,8 @@ public abstract class ChestUI extends ContainerUI<Inventory> implements IChestUI
 
     protected final @NotNull Map<Integer, IVisualkitElement<?>> elements = new KillableHashMap<>();
     protected final @NotNull Map<Integer, SlotPolicy> policies = new HashMap<>();
-    protected final @NotNull Set<Method> handlers = ReflectionUtility.getMethods(getClass()).stream()
-            .filter(method -> method.isAnnotationPresent(GuiHandler.class) &&
+    protected final @NotNull Set<Method> handlers = Classes.getMethods(getClass()).stream()
+            .filter(method -> method.isAnnotationPresent(Handler.class) &&
                     (List.of(Void.TYPE, Boolean.class, boolean.class).contains(method.getReturnType())))
             .collect(Collectors.toSet());
 
@@ -155,7 +155,7 @@ public abstract class ChestUI extends ContainerUI<Inventory> implements IChestUI
 
         getElementMap().forEach(this::setElement);
 
-        ReflectionUtility.getFields(getClass()).stream()
+        Classes.getFields(getClass()).stream()
                 .filter(field -> ! crawledFields.contains(field) &&
                         field.isAnnotationPresent(Element.class) &&
                         (IVisualkitElement.class.isAssignableFrom(field.getType()) || ItemStack.class.isAssignableFrom(field.getType())))
@@ -182,7 +182,7 @@ public abstract class ChestUI extends ContainerUI<Inventory> implements IChestUI
                     }
                 });
 
-        ReflectionUtility.getFields(getClass()).stream()
+        Classes.getFields(getClass()).stream()
                 .filter(field -> ! crawledFields.contains(field) &&
                         field.isAnnotationPresent(Policy.class) &&
                         field.getType() == SlotPolicy.class)

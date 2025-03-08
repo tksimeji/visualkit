@@ -2,7 +2,7 @@ package com.tksimeji.visualkit;
 
 import com.tksimeji.visualkit.api.Action;
 import com.tksimeji.visualkit.api.Mouse;
-import com.tksimeji.visualkit.util.ComponentUtility;
+import com.tksimeji.visualkit.util.Components;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
@@ -43,7 +43,7 @@ public abstract class AnvilUI extends ContainerUI<AnvilInventory> implements IAn
     public @NotNull ItemStack getDummyItem() {
         ItemStack dummy = new ItemStack(dummy(), 1);
         ItemMeta meta = dummy.getItemMeta();
-        meta.displayName(ComponentUtility.empty().append(Component.text(Optional.ofNullable(placeholder()).orElse(""))));
+        meta.displayName(Components.empty().append(Component.text(Optional.ofNullable(placeholder()).orElse(""))));
         dummy.setItemMeta(meta);
         return dummy;
     }

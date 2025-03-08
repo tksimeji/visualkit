@@ -5,6 +5,7 @@ import com.tksimeji.visualkit.Killable;
 import java.util.HashMap;
 import java.util.Optional;
 
+@Deprecated(forRemoval = true)
 public class KillableHashMap<K, V extends Killable> extends HashMap<K, V> {
     @Override
     public V remove(Object key) {

@@ -8,7 +8,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-public final class ReflectionUtility {
+public final class Classes {
     public static @NotNull Set<Class<?>> getClassTree(final @NotNull Class<?> aClass) {
         Set<Class<?>> tree = new HashSet<>();
         tree.add(aClass);
