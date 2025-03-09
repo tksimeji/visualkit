@@ -6,7 +6,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-interface IMerchantGuiHooks extends Hooks {
+interface IMerchantGuiHooks extends ContainerGuiHooks {
     @Nullable TradeElement useGetElement(final int index);
 
     @NotNull List<TradeElement> useGetElements();

@@ -5,7 +5,7 @@ import net.kyori.adventure.text.ComponentLike;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-interface IScoreboardGuiHooks {
+interface IScoreboardGuiHooks extends Hooks {
     @NotNull Component useGetTitle();
 
     void useSetTitle(final @NotNull ComponentLike title);

@@ -4,12 +4,18 @@ import com.tksimeji.visualkit.Visualkit;
 import com.tksimeji.visualkit.controller.GuiController;
 import com.tksimeji.visualkit.controller.MerchantGuiController;
 import com.tksimeji.visualkit.element.TradeElement;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
 public interface MerchantGuiHooks extends IMerchantGuiHooks {
+    @Override
+    default @NotNull Player usePlayer() {
+        return controller().getPlayer();
+    }
+
     @Override
     default @Nullable TradeElement useGetElement(final int index) {
         return controller().getElement(index);
@@ -38,6 +44,11 @@ public interface MerchantGuiHooks extends IMerchantGuiHooks {
     @Override
     default void useInsertElement(final int index, final @NotNull TradeElement element) {
         controller().insertElement(index, element);
+    }
+
+    @Override
+    default void useClose() {
+        controller().close();
     }
 
     private @NotNull MerchantGuiController controller() {

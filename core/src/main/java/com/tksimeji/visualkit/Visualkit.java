@@ -57,7 +57,7 @@ public final class Visualkit extends JavaPlugin {
                 .orElse(null);
     }
 
-    public static @NotNull GuiController create(final @NotNull Object gui) {
+    public static <T> @NotNull T create(final @NotNull T gui) {
         List<GuiType<?, ?>> types = GUI_TYPES.stream()
                 .filter(type -> gui.getClass().isAnnotationPresent(type.getAnnotationClass()))
                 .toList();
@@ -68,7 +68,7 @@ public final class Visualkit extends JavaPlugin {
         return create(gui, types.getFirst().getAnnotationClass());
     }
 
-    public static <A extends Annotation> @NotNull GuiController create(final @NotNull Object gui, final @NotNull Class<A> annotation) {
+    public static <A extends Annotation, T> @NotNull T create(final @NotNull T gui, final @NotNull Class<A> annotation) {
         Preconditions.checkArgument(gui.getClass().isAnnotationPresent(annotation), String.format("'%s' is not annotated with '%s'.", gui.getClass().getName(), annotation.getName()));
 
         GuiType<A, ?> type = getGuiType(annotation);
@@ -77,7 +77,7 @@ public final class Visualkit extends JavaPlugin {
         GuiController controller = type.createController(gui, gui.getClass().getAnnotation(annotation));
         controllers.add(controller);
         controller.init();
-        return controller;
+        return gui;
     }
 
     public static @NotNull Set<Object> getGuis() {

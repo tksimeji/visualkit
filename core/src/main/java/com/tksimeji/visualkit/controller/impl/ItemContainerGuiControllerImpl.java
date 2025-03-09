@@ -116,6 +116,7 @@ public abstract class ItemContainerGuiControllerImpl<I extends Inventory> extend
         }
     }
 
+    @ApiStatus.Internal
     protected @NotNull Set<Integer> parseIndexGroup(final @NotNull IndexGroup indexGroup, final boolean player) {
         return parseIndexGroup(indexGroup).stream().map(index -> player ? index + getInventory().getSize() : index).collect(Collectors.toSet());
     }

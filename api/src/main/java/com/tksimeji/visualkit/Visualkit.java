@@ -11,11 +11,11 @@ import java.lang.annotation.Annotation;
 import java.util.Set;
 
 public final class Visualkit {
-    public static @NotNull GuiController create(final @NotNull Object gui) {
+    public static <T> @NotNull T create(final @NotNull T gui) {
         throw new NotImplementedException("The API module cannot be called at runtime.");
     }
 
-    public static @NotNull GuiController create(final @NotNull Object gui, final @NotNull Class<? extends Annotation> annotation) {
+    public static <T> @NotNull T create(final @NotNull T gui, final @NotNull Class<? extends Annotation> annotation) {
         throw new NotImplementedException("The API module cannot be called at runtime.");
     }
 

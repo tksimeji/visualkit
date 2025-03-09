@@ -10,7 +10,6 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.bukkit.event.Cancellable;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
@@ -20,6 +19,30 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public abstract class GuiControllerImpl implements GuiController {
+    public static @NotNull Set<Integer> parseIndexGroup(final @NotNull IndexGroup indexGroup) {
+        HashSet<Integer> indexes = new HashSet<>(Arrays.stream(indexGroup.indexes()).boxed().toList());
+
+        if (indexGroup.indexFrom() >= 0 && indexGroup.indexFrom() <= indexGroup.indexTo()) {
+            indexes.addAll(IntStream.rangeClosed(indexGroup.indexFrom(), indexGroup.indexTo()).boxed().toList());
+        }
+
+        for (int expectIndex : indexGroup.expectIndexes()) {
+            indexes.remove(expectIndex);
+        }
+
+        return indexes;
+    }
+
+    public static @NotNull Set<Integer> parseIndexGroup(final int[] value, final @NotNull IndexGroup[] indexGroups) {
+        Set<Integer> indexes = new HashSet<>(Arrays.stream(value).boxed().toList());
+
+        for (IndexGroup indexGroup : indexGroups) {
+            indexes.addAll(parseIndexGroup(indexGroup));
+        }
+
+        return indexes;
+    }
+
     protected final @NotNull Object gui;
 
     protected final @NotNull Set<Method> handlers = new LinkedHashSet<>();
@@ -85,8 +108,16 @@ public abstract class GuiControllerImpl implements GuiController {
     @ApiStatus.Internal
     protected final <A extends Annotation, T> @NotNull Set<Pair<T, A>> getDeclarations(final @NotNull Object gui, final @NotNull Class<A> annotation, final @NotNull Class<T> aClass) {
         return Classes.getFields(gui.getClass()).stream()
-                .filter(field -> field.isAnnotationPresent(annotation) && aClass.isAssignableFrom(field.getType()))
+                .filter(field -> field.isAnnotationPresent(annotation))
                 .peek(field -> field.setAccessible(true))
+                .filter(field -> {
+                    try {
+                        Object value = field.get(gui);
+                        return value != null && aClass.isAssignableFrom(value.getClass());
+                    } catch (IllegalAccessException e) {
+                        throw new RuntimeException(e);
+                    }
+                })
                 .map(field -> {
                     try {
                         return Pair.of((T) field.get(gui), field.getAnnotation(annotation));
@@ -95,31 +126,5 @@ public abstract class GuiControllerImpl implements GuiController {
                     }
                 })
                 .collect(Collectors.toSet());
-    }
-
-    @ApiStatus.Internal
-    protected @NotNull Set<Integer> parseIndexGroup(final @NotNull IndexGroup indexGroup) {
-        HashSet<Integer> indexes = new HashSet<>(Arrays.stream(indexGroup.indexes()).boxed().toList());
-
-        if (indexGroup.indexFrom() >= 0 && indexGroup.indexFrom() <= indexGroup.indexTo()) {
-            indexes.addAll(IntStream.rangeClosed(indexGroup.indexFrom(), indexGroup.indexTo()).boxed().toList());
-        }
-
-        for (int expectIndex : indexGroup.expectIndexes()) {
-            indexes.remove(expectIndex);
-        }
-
-        return indexes;
-    }
-
-    @ApiStatus.Internal
-    protected @NotNull Set<Integer> parseIndexGroup(final int[] value, final @NotNull IndexGroup[] indexGroups) {
-        Set<Integer> indexes = new HashSet<>(Arrays.stream(value).boxed().toList());
-
-        for (IndexGroup indexGroup : indexGroups) {
-            indexes.addAll(parseIndexGroup(indexGroup));
-        }
-
-        return indexes;
     }
 }
