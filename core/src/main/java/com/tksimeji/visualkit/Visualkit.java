@@ -31,7 +31,7 @@ public final class Visualkit extends JavaPlugin {
 
     private static final @NotNull Set<GuiController> controllers = new HashSet<>();
 
-    private static final @NotNull Set<Adapter> adapters = Set.of(V1_21_1.INSTANCE, V1_21_3.INSTANCE);
+    private static final @NotNull LinkedHashSet<Adapter> adapters = new LinkedHashSet<>();
 
     @ApiStatus.Internal
     public static @NotNull Visualkit plugin() {
@@ -45,10 +45,7 @@ public final class Visualkit extends JavaPlugin {
 
     @ApiStatus.Internal
     public static @Nullable Adapter adapter() {
-        return adapters.stream()
-                .filter(adapter -> Arrays.stream(adapter.supports()).anyMatch(support -> support.equals(Bukkit.getMinecraftVersion())))
-                .findFirst()
-                .orElse(null);
+        return getAdapter(Bukkit.getMinecraftVersion());
     }
 
     public static <T> @NotNull T create(final @NotNull T gui) {
@@ -126,6 +123,21 @@ public final class Visualkit extends JavaPlugin {
         GUI_TYPES.add(type);
     }
 
+    public static @Nullable Adapter getAdapter(final @NotNull String minecraftVersion) {
+        return adapters.stream()
+                .filter(adapter -> Arrays.asList(adapter.supports()).contains(minecraftVersion))
+                .findFirst()
+                .orElse(null);
+    }
+
+    public static @NotNull Set<Adapter> getAdapters() {
+        return new HashSet<>(adapters);
+    }
+
+    public static void registerAdapter(final @NotNull Adapter adapter) {
+        adapters.addFirst(adapter);
+    }
+
     @Override
     public void onEnable() {
         instance = this;
@@ -140,6 +152,9 @@ public final class Visualkit extends JavaPlugin {
         registerGuiType(ChestGuiType.instance(), this);
         registerGuiType(MerchantGuiType.instance(), this);
         registerGuiType(ScoreboardGuiType.instance(), this);
+
+        registerAdapter(V1_21_1.INSTANCE);
+        registerAdapter(V1_21_3.INSTANCE);
 
         logger().info(Component.text("       __    ").color(TextColor.color(255, 86, 217)));
         logger().info(Component.text("___  _|  | __").color(TextColor.color(255, 124, 255)).append(Component.text("    Visualkit - " + getPluginMeta().getVersion()).color(NamedTextColor.WHITE)));

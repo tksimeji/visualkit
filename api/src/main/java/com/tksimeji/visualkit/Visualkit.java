@@ -1,5 +1,6 @@
 package com.tksimeji.visualkit;
 
+import com.tksimeji.visualkit.adapter.Adapter;
 import com.tksimeji.visualkit.controller.GuiController;
 import com.tksimeji.visualkit.type.GuiType;
 import org.apache.commons.lang3.NotImplementedException;
@@ -56,6 +57,18 @@ public final class Visualkit {
     }
 
     public static void registerGuiType(final @NotNull GuiType<?, ?> type, final @NotNull Plugin plugin) {
+        throw new NotImplementedException("The API module cannot be called at runtime.");
+    }
+
+    public static @Nullable Adapter getAdapter(final @NotNull String minecraftVersion) {
+        throw new NotImplementedException("The API module cannot be called at runtime.");
+    }
+
+    public static @NotNull Set<Adapter> getAdapters() {
+        throw new NotImplementedException("The API module cannot be called at runtime.");
+    }
+
+    public static void registerAdapter(final @NotNull Adapter adapter) {
         throw new NotImplementedException("The API module cannot be called at runtime.");
     }
 }
