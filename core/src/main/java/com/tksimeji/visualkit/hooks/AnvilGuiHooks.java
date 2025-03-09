@@ -69,6 +69,11 @@ public interface AnvilGuiHooks extends IAnvilGuiHooks {
         controller().setPlayerDefaultPolicy(playerDefaultPolicy);
     }
 
+    @Override
+    default boolean useIsEmpty() {
+        return useGetFirstElement() == null && useGetSecondElement() == null && useGetResultElement() == null;
+    }
+
     default void useClose() {
         controller().close();
     }

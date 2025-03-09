@@ -68,6 +68,11 @@ public interface ChestGuiHooks extends IChestGuiHooks {
     }
 
     @Override
+    default boolean useIsEmpty() {
+        return useGetElements().isEmpty();
+    }
+
+    @Override
     default void useClose() {
         controller().close();
     }

@@ -4,7 +4,6 @@ import com.google.common.base.Preconditions;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ItemType;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -52,6 +51,5 @@ public interface Element<T> {
         return new TradeElementImpl(result, ingredient1, ingredient2);
     }
 
-    @ApiStatus.Internal
     @NotNull T create();
 }

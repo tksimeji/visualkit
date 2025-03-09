@@ -15,4 +15,6 @@ public interface ItemContainerGuiHooks extends ContainerGuiHooks {
     @NotNull ItemSlotPolicy useGetPlayerDefaultPolicy();
 
     void useSetPlayerDefaultPolicy(final @NotNull ItemSlotPolicy playerDefaultPolicy);
+
+    boolean useIsEmpty();
 }

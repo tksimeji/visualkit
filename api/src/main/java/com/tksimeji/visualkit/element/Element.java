@@ -46,4 +46,6 @@ public interface Element<T> {
     static @NotNull TradeElement trade(@NotNull ItemStack result, @NotNull ItemStack ingredient1, @Nullable ItemStack ingredient2) {
         throw new NotImplementedException("The API module cannot be called at runtime.");
     }
+
+    @NotNull T create();
 }
