@@ -27,7 +27,7 @@ public final class AnvilGuiListener implements Listener {
                         Component component = itemMeta.hasDisplayName() ? itemMeta.displayName() : Component.empty();
                         String text = PlainTextComponentSerializer.plainText().serialize(component);
 
-                        if (! controller.getText().equals(text)) {
+                        if (!controller.getText().equals(text)) {
                             controller.callEvent(new AnvilGuiTextChangeEventImpl(controller.getGui(), text));
                         }
                     }

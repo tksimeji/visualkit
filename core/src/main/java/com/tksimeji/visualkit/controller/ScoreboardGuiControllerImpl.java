@@ -60,7 +60,7 @@ public final class ScoreboardGuiControllerImpl extends GuiControllerImpl impleme
 
     @Override
     public void removePlayer(final @NotNull Player player) {
-        if (! isPlayer(player)) {
+        if (!isPlayer(player)) {
             return;
         }
 
