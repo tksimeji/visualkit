@@ -5,19 +5,15 @@ import com.tksimeji.visualkit.adapter.Adapter;
 import com.tksimeji.visualkit.adapter.V1_21_1;
 import com.tksimeji.visualkit.adapter.V1_21_3;
 import com.tksimeji.visualkit.listener.*;
-import com.tksimeji.visualkit.test.TestCommand;
 import com.tksimeji.visualkit.controller.GuiController;
 import com.tksimeji.visualkit.type.*;
-import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
-import org.apache.commons.lang3.NotImplementedException;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.ApiStatus;
@@ -36,8 +32,6 @@ public final class Visualkit extends JavaPlugin {
     private static final @NotNull Set<GuiController> controllers = new HashSet<>();
 
     private static final @NotNull Set<Adapter> adapters = Set.of(V1_21_1.INSTANCE, V1_21_3.INSTANCE);
-
-    static final @NotNull Set<IVisualkitUI> sessions = new HashSet<>();
 
     @ApiStatus.Internal
     public static @NotNull Visualkit plugin() {
@@ -132,18 +126,6 @@ public final class Visualkit extends JavaPlugin {
         GUI_TYPES.add(type);
     }
 
-    @ApiStatus.ScheduledForRemoval(inVersion = "1.0.0")
-    @Deprecated(forRemoval = true)
-    public static <T extends IVisualkitUI> @NotNull List<T> getSessions(@NotNull Class<T> clazz) {
-        throw new NotImplementedException();
-    }
-
-    @ApiStatus.ScheduledForRemoval(inVersion = "1.0.0")
-    @Deprecated(forRemoval = true)
-    public static <T extends IVisualkitUI> @Nullable T getSession(@NotNull Class<T> clazz, @Nullable Player player) {
-        throw new NotImplementedException();
-    }
-
     @Override
     public void onEnable() {
         instance = this;
@@ -158,14 +140,6 @@ public final class Visualkit extends JavaPlugin {
         registerGuiType(ChestGuiType.instance(), this);
         registerGuiType(MerchantGuiType.instance(), this);
         registerGuiType(ScoreboardGuiType.instance(), this);
-
-        // <---- test code
-
-        getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS, commands -> {
-            commands.registrar().register(new TestCommand().create().build());
-        });
-
-        // ---->
 
         logger().info(Component.text("       __    ").color(TextColor.color(255, 86, 217)));
         logger().info(Component.text("___  _|  | __").color(TextColor.color(255, 124, 255)).append(Component.text("    Visualkit - " + getPluginMeta().getVersion()).color(NamedTextColor.WHITE)));

@@ -52,6 +52,8 @@ public final class ScoreboardGuiControllerImpl extends GuiControllerImpl impleme
             return;
         }
 
+        Optional.ofNullable(ScoreboardGuiController.get(player)).ifPresent(old -> old.removePlayer(player));
+
         players.add(player);
         player.setScoreboard(scoreboard);
     }

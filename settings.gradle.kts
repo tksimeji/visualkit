@@ -1,5 +1,7 @@
 rootProject.name = "visualkit"
-include("api")
-include("core")
-include("v1_21_1")
-include("v1_21_3")
+include(
+    ":api",
+    ":core",
+    ":v1_21_1",
+    ":v1_21_3"
+)

@@ -1,15 +1,15 @@
 import cl.franciscosolis.sonatypecentralupload.SonatypeCentralUploadTask
 
-group = "com.tksimeji"
-version = "0.5.2"
-
 plugins {
     java
+    kotlin("jvm") version "2.1.0"
     `maven-publish`
     id("cl.franciscosolis.sonatype-central-upload") version "1.0.2"
     id("com.github.johnrengelman.shadow") version "7.+"
-    kotlin("jvm") version "2.1.0"
 }
+
+group = "com.tksimeji"
+version = "1.0.0-beta.1"
 
 allprojects {
     apply {
@@ -21,11 +21,10 @@ allprojects {
 
     java {
         val javaVersion = JavaVersion.toVersion(targetJavaVersion)
+
         sourceCompatibility = javaVersion
         targetCompatibility = javaVersion
-        if (JavaVersion.current() < javaVersion) {
-            toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
-        }
+        toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
 
         withSourcesJar()
         withJavadocJar()
@@ -34,7 +33,7 @@ allprojects {
     repositories {
         mavenCentral()
         maven("https://repo.papermc.io/repository/maven-public/") {
-            name = "papermc-repo"
+            name = "papermc"
         }
         maven("https://oss.sonatype.org/content/groups/public/") {
             name = "sonatype"
@@ -95,9 +94,7 @@ publishing {
 }
 
 tasks.named<Jar>("jar") {
-    subprojects.forEach { subprojects ->
-        from(subprojects.sourceSets.main.get().output)
-    }
+    from(project(":api").sourceSets.main.get().output)
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 

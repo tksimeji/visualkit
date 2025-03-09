@@ -1,4 +1,4 @@
-name: Visualkit
+name: visualkit
 version: '${version}'
 main: com.tksimeji.visualkit.Visualkit
 api-version: '1.21'
