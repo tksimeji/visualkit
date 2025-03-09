@@ -1,8 +1,9 @@
 package com.tksimeji.visualkit.element;
 
-import com.tksimeji.visualkit.Action;
-import com.tksimeji.visualkit.Mouse;
+import com.tksimeji.visualkit.event.ItemContainerClickEvent;
+import com.tksimeji.visualkit.policy.ItemSlotPolicy;
 import net.kyori.adventure.key.Key;
+import net.kyori.adventure.key.Keyed;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
 import org.bukkit.Sound;
@@ -57,12 +58,17 @@ public interface ItemElement extends Element<ItemStack> {
     @Nullable Key itemModel();
 
     @Contract("_ -> this")
-    @NotNull ItemElement itemModel(@Nullable Key itemModel);
+    @NotNull ItemElement itemModel(@Nullable Keyed itemModel);
 
     boolean aura();
 
     @Contract("_ -> this")
     @NotNull ItemElement aura(final boolean aura);
+
+    @Nullable ItemSlotPolicy policy();
+
+    @Contract("_ -> this")
+    @NotNull ItemElement policy(final @Nullable ItemSlotPolicy policy);
 
     @Nullable Sound sound();
 
@@ -84,12 +90,6 @@ public interface ItemElement extends Element<ItemStack> {
     @Contract("_ -> this")
     @NotNull ItemElement handler(final @Nullable Handler2 handler);
 
-    @Contract("_ -> this")
-    @NotNull ItemElement handler(final @Nullable Handler3 handler);
-
-    @Contract("_ -> this")
-    @NotNull ItemElement handler(final @Nullable Handler4 handler);
-
     interface Handler {
     }
 
@@ -98,14 +98,6 @@ public interface ItemElement extends Element<ItemStack> {
     }
 
     interface Handler2 extends Handler {
-        void onClick(@NotNull ItemElement element);
-    }
-
-    interface Handler3 extends Handler {
-        void onClick(int index, @NotNull Action action, @NotNull Mouse mouse);
-    }
-
-    interface Handler4 extends Handler {
-        void onClick(int index, @NotNull Action action, @NotNull Mouse mouse, @NotNull ItemElement element);
+        void onClick(@NotNull ItemContainerClickEvent event);
     }
 }

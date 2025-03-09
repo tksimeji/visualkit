@@ -4,12 +4,9 @@ import com.google.common.base.Preconditions;
 import com.tksimeji.visualkit.adapter.Adapter;
 import com.tksimeji.visualkit.adapter.V1_21_1;
 import com.tksimeji.visualkit.adapter.V1_21_3;
+import com.tksimeji.visualkit.listener.*;
 import com.tksimeji.visualkit.test.TestCommand;
 import com.tksimeji.visualkit.controller.GuiController;
-import com.tksimeji.visualkit.listener.AnvilGuiListener;
-import com.tksimeji.visualkit.listener.ContainerGuiListener;
-import com.tksimeji.visualkit.listener.MerchantGuiListener;
-import com.tksimeji.visualkit.listener.ServerListener;
 import com.tksimeji.visualkit.type.*;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import net.kyori.adventure.text.Component;
@@ -153,6 +150,7 @@ public final class Visualkit extends JavaPlugin {
 
         getServer().getPluginManager().registerEvents(new AnvilGuiListener(), this);
         getServer().getPluginManager().registerEvents(new ContainerGuiListener(), this);
+        getServer().getPluginManager().registerEvents(new ItemContainerGuiListener(), this);
         getServer().getPluginManager().registerEvents(new MerchantGuiListener(), this);
         getServer().getPluginManager().registerEvents(new ServerListener(), this);
 

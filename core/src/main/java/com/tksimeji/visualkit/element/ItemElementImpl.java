@@ -2,7 +2,10 @@ package com.tksimeji.visualkit.element;
 
 import com.google.common.base.Preconditions;
 import com.tksimeji.visualkit.Visualkit;
+import com.tksimeji.visualkit.policy.ItemSlotPolicy;
+import com.tksimeji.visualkit.policy.Policy;
 import net.kyori.adventure.key.Key;
+import net.kyori.adventure.key.Keyed;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -30,22 +33,33 @@ class ItemElementImpl implements ItemElement {
     private @Nullable Component title;
     private @NotNull List<Component> lore = List.of();
 
+    private @Nullable ItemSlotPolicy policy;
+
     private @Nullable Sound sound;
     private float soundVolume = 1.0F;
     private float soundPitch = 1.0F;
 
     private @Nullable Handler handler;
 
-    public ItemElementImpl(final @NotNull ItemType type) {
-        this(type.createItemStack());
-    }
+    private final boolean itemStackMode;
 
-    public ItemElementImpl(final @NotNull ItemStack itemStack) {
-        this.itemStack = itemStack;
+    public ItemElementImpl(final @NotNull ItemType type) {
+        this(type.createItemStack(), false);
         ItemMeta itemMeta = itemStack.getItemMeta();
         itemMeta.addItemFlags(ItemFlag.values());
         Visualkit.adapter().fun_adp3uc(itemStack, itemMeta, Visualkit.plugin());
         itemStack.setItemMeta(itemMeta);
+    }
+
+    public ItemElementImpl(final @NotNull ItemStack itemStack) {
+        this(itemStack, true);
+    }
+
+    private ItemElementImpl(final @NotNull ItemStack itemStack, final boolean itemStackMode) {
+        this.itemStack = itemStack;
+        this.itemStackMode = itemStackMode;
+
+        ItemMeta itemMeta = itemStack.getItemMeta();
 
         title(itemMeta.displayName());
         lore(itemMeta.hasLore() ? itemMeta.lore() : List.of());
@@ -84,7 +98,7 @@ class ItemElementImpl implements ItemElement {
 
         ItemMeta itemMeta = itemStack.getItemMeta();
         itemMeta.displayName((title != null ? this.title : Component.empty()).colorIfAbsent(NamedTextColor.WHITE).decorationIfAbsent(TextDecoration.ITALIC, TextDecoration.State.FALSE));
-        itemMeta.setHideTooltip(this.title == null && this.lore.isEmpty());
+        itemMeta.setHideTooltip(!itemStackMode && this.title == null && this.lore.isEmpty());
 
         itemStack.setItemMeta(itemMeta);
         return this;
@@ -124,7 +138,7 @@ class ItemElementImpl implements ItemElement {
 
         ItemMeta itemMeta = itemStack.getItemMeta();
         itemMeta.lore(lore);
-        itemMeta.setHideTooltip(this.title == null && this.lore.isEmpty());
+        itemMeta.setHideTooltip(!itemStackMode && this.title == null && this.lore.isEmpty());
 
         itemStack.setItemMeta(itemMeta);
         return this;
@@ -178,13 +192,15 @@ class ItemElementImpl implements ItemElement {
     }
 
     @Override
-    public @NotNull ItemElement itemModel(final @Nullable Key itemModel) {
+    public @NotNull ItemElement itemModel(final @Nullable Keyed itemModel) {
         if (!itemStack.hasItemMeta()) {
             return this;
         }
 
+        Key key = itemModel != null ? itemModel.key() : null;
+
         ItemMeta itemMeta = itemStack.getItemMeta();
-        itemMeta.setItemModel(itemModel != null ? new NamespacedKey(itemModel.namespace(), itemModel.value()) : null);
+        itemMeta.setItemModel(key != null ? new NamespacedKey(key.namespace(), key.value()) : null);
         return this;
     }
 
@@ -208,6 +224,17 @@ class ItemElementImpl implements ItemElement {
         }
 
         itemStack.setItemMeta(itemMeta);
+        return this;
+    }
+
+    @Override
+    public @Nullable ItemSlotPolicy policy() {
+        return policy;
+    }
+
+    @Override
+    public @NotNull ItemElement policy(final @Nullable ItemSlotPolicy policy) {
+        this.policy = policy;
         return this;
     }
 
@@ -255,18 +282,6 @@ class ItemElementImpl implements ItemElement {
 
     @Override
     public @NotNull ItemElement handler(final @Nullable Handler2 handler) {
-        this.handler = handler;
-        return this;
-    }
-
-    @Override
-    public @NotNull ItemElement handler(final @Nullable Handler3 handler) {
-        this.handler = handler;
-        return this;
-    }
-
-    @Override
-    public @NotNull ItemElement handler(final @Nullable Handler4 handler) {
         this.handler = handler;
         return this;
     }

@@ -30,11 +30,22 @@ public @interface ChestGui {
         IndexGroup[] groups() default {};
     }
 
-    @interface IndexGroup {
-        int[] indexes() default {};
-        int[] expectIndexes() default {};
-        int indexFrom() default -1;
-        int indexTo() default -1;
+    @Retention(RetentionPolicy.RUNTIME)
+    @Target(ElementType.FIELD)
+    @interface Policy {
+        int[] value() default {};
+        boolean player() default false;
+        IndexGroup[] groups() default {};
+    }
+
+    @Retention(RetentionPolicy.RUNTIME)
+    @Target(ElementType.FIELD)
+    @interface DefaultPolicy {
+    }
+
+    @Retention(RetentionPolicy.RUNTIME)
+    @Target(ElementType.FIELD)
+    @interface PlayerDefaultPolicy {
     }
 
     enum ChestSize {

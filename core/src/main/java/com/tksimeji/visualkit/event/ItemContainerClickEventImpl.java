@@ -6,7 +6,7 @@ import com.tksimeji.visualkit.element.ItemElement;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public abstract class ItemContainerClickEventImpl extends CancellableEventImpl implements ItemContainerClickEvent {
+public abstract class ItemContainerClickEventImpl extends EventImpl implements ItemContainerClickEvent {
     protected final @Nullable ItemElement element;
 
     protected final int index;
@@ -15,12 +15,20 @@ public abstract class ItemContainerClickEventImpl extends CancellableEventImpl i
     protected final @NotNull Mouse mouse;
 
     public ItemContainerClickEventImpl(final @NotNull Object gui, final int index, final @Nullable ItemElement element, final @NotNull Action action, final @NotNull Mouse mouse) {
-        super(gui, true);
+        super(gui);
 
         this.index = index;
         this.element = element;
         this.action = action;
         this.mouse = mouse;
+
+        ItemElement.Handler handler = element != null ? element.handler() : null;
+
+        if (handler instanceof ItemElement.Handler1 handler1) {
+            handler1.onClick();
+        } else if (handler instanceof ItemElement.Handler2 handler2) {
+            handler2.onClick(this);
+        }
     }
 
     @Override

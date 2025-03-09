@@ -11,16 +11,19 @@ import com.tksimeji.visualkit.event.Event;
 import com.tksimeji.visualkit.event.anvil.AnvilGuiClickEventImpl;
 import com.tksimeji.visualkit.event.anvil.AnvilGuiCloseEventImpl;
 import com.tksimeji.visualkit.event.anvil.AnvilGuiInitEventImpl;
+import com.tksimeji.visualkit.policy.ItemSlotPolicy;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
+import org.apache.commons.lang3.tuple.Pair;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.AnvilInventory;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Optional;
+import java.util.Set;
 
 public final class AnvilGuiControllerImpl extends ItemContainerGuiControllerImpl<AnvilInventory> implements AnvilGuiController {
     private final @NotNull Player player;
@@ -40,14 +43,31 @@ public final class AnvilGuiControllerImpl extends ItemContainerGuiControllerImpl
         Bukkit.getScheduler().runTask(Visualkit.plugin(), () -> {
             inventory = Visualkit.adapter().fun_u32qi0(player, getDeclarationOrDefault(gui, AnvilGui.Title.class, ComponentLike.class, Component.empty()).getLeft().asComponent());
 
-            Optional.ofNullable(getDeclaration(gui, AnvilGui.FirstElement.class, ItemElement.class))
-                    .ifPresent(firstElement -> setFirstElement(firstElement.getLeft()));
+            getDeclaration(gui, AnvilGui.DefaultPolicy.class, ItemSlotPolicy.class).ifPresent(declaration -> {
+                setDefaultPolicy(declaration.getLeft());
+            });
 
-            Optional.ofNullable(getDeclaration(gui, AnvilGui.SecondElement.class, ItemElement.class))
-                    .ifPresent(secondElement -> setSecondElement(secondElement.getLeft()));
+            getDeclaration(gui, AnvilGui.PlayerDefaultPolicy.class, ItemSlotPolicy.class).ifPresent(declaration -> {
+                setPlayerDefaultPolicy(declaration.getLeft());
+            });
 
-            Optional.ofNullable(getDeclaration(gui, AnvilGui.ResultElement.class, ItemElement.class))
-                    .ifPresent(resultElement -> setResultElement(resultElement.getLeft()));
+            getDeclaration(gui, AnvilGui.FirstElement.class, ItemElement.class).ifPresent(declaration -> {
+                setFirstElement(declaration.getLeft());
+            });
+
+            getDeclaration(gui, AnvilGui.SecondElement.class, ItemElement.class).ifPresent(declaration -> {
+                setSecondElement(declaration.getLeft());
+            });
+
+            getDeclaration(gui, AnvilGui.ResultElement.class, ItemElement.class).ifPresent(declaration -> {
+                setResultElement(declaration.getLeft());
+            });
+
+            for (Pair<ItemSlotPolicy, AnvilGui.Policy> declaration : getDeclarations(gui, AnvilGui.Policy.class, ItemSlotPolicy.class)) {
+                for (int index : parseAnnotation(declaration.getRight())) {
+                    setPolicy(index, declaration.getLeft());
+                }
+            }
         });
     }
 
@@ -117,8 +137,8 @@ public final class AnvilGuiControllerImpl extends ItemContainerGuiControllerImpl
     }
 
     @Override
-    public boolean click(int index, @NotNull Action action, @NotNull Mouse mouse) {
-        return callEvent(new AnvilGuiClickEventImpl(gui, index, getElement(index), action, mouse));
+    public void click(int index, @NotNull Action action, @NotNull Mouse mouse) {
+        callEvent(new AnvilGuiClickEventImpl(gui, index, getElement(index), action, mouse));
     }
 
     @Override
@@ -135,5 +155,10 @@ public final class AnvilGuiControllerImpl extends ItemContainerGuiControllerImpl
         }
 
         return super.callEvent(event);
+    }
+
+    @ApiStatus.Internal
+    private @NotNull Set<Integer> parseAnnotation(final @NotNull AnvilGui.Policy annotation) {
+        return parseIndexGroup(annotation.value(), annotation.groups(), annotation.player());
     }
 }

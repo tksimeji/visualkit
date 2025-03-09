@@ -6,7 +6,7 @@ import com.tksimeji.visualkit.element.ItemElement;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-interface ItemContainerClickEvent extends CancellableEvent {
+public interface ItemContainerClickEvent extends Event {
     int getIndex();
 
     @Nullable ItemElement getElement();

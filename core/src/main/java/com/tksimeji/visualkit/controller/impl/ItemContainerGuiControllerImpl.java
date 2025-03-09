@@ -1,20 +1,35 @@
 package com.tksimeji.visualkit.controller.impl;
 
+import com.tksimeji.visualkit.IndexGroup;
 import com.tksimeji.visualkit.controller.ItemContainerGuiController;
 import com.tksimeji.visualkit.element.ItemElement;
+import com.tksimeji.visualkit.policy.ItemSlotPolicy;
+import com.tksimeji.visualkit.policy.Policy;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public abstract class ItemContainerGuiControllerImpl<I extends Inventory> extends ContainerGuiControllerImpl<I> implements ItemContainerGuiController<I> {
     private final @NotNull Map<Integer, ItemElement> elements = new HashMap<>();
 
+    private final @NotNull Map<Integer, ItemSlotPolicy> policies = new HashMap<>();
+
+    private @NotNull ItemSlotPolicy defaultPolicy;
+    private @NotNull ItemSlotPolicy playerDefaultPolicy;
+
     public ItemContainerGuiControllerImpl(final @NotNull Object gui) {
+        this(gui, Policy.itemSlot(), Policy.itemSlot());
+    }
+
+    public ItemContainerGuiControllerImpl(final @NotNull Object gui, final @NotNull ItemSlotPolicy defaultPolicy, final @NotNull ItemSlotPolicy playerDefaultPolicy) {
         super(gui);
+        this.defaultPolicy = defaultPolicy;
+        this.playerDefaultPolicy = playerDefaultPolicy;
     }
 
     @Override
@@ -30,7 +45,7 @@ public abstract class ItemContainerGuiControllerImpl<I extends Inventory> extend
     @Override
     public void setElement(final int index, final @Nullable ItemElement element) {
         ItemStack old = getInventory().getItem(index);
-        if ((element == null && old == null) || (element != null && element.create().equals(old))) {
+        if (!isValidIndex(index) || (element == null && old == null) || (element != null && element.create().equals(old))) {
             return;
         }
 
@@ -39,9 +54,74 @@ public abstract class ItemContainerGuiControllerImpl<I extends Inventory> extend
     }
 
     @Override
+    public @NotNull ItemSlotPolicy getPolicy(final int index) {
+        ItemElement element = getElement(index);
+
+        if (element != null) {
+            ItemSlotPolicy elementPolicy = element.policy();
+
+            if (elementPolicy != null) {
+                return elementPolicy;
+            }
+        }
+
+        return Optional.ofNullable(policies.get(index)).orElse(index < 0 || isValidIndex(index) ? defaultPolicy : playerDefaultPolicy);
+    }
+
+    @Override
+    public @NotNull Map<Integer, ItemSlotPolicy> getPolicies() {
+        return new HashMap<>(policies.entrySet().stream()
+                .collect(Collectors.toMap(Map.Entry::getKey, entry -> getPolicy(entry.getKey()))));
+    }
+
+    @Override
+    public void setPolicy(final int index, final @NotNull ItemSlotPolicy policy) {
+        policies.put(index, policy);
+    }
+
+    @Override
+    public @NotNull ItemSlotPolicy getDefaultPolicy() {
+        return defaultPolicy;
+    }
+
+    @Override
+    public void setDefaultPolicy(final @NotNull ItemSlotPolicy defaultPolicy) {
+        this.defaultPolicy = defaultPolicy;
+    }
+
+    @Override
+    public @NotNull ItemSlotPolicy getPlayerDefaultPolicy() {
+        return playerDefaultPolicy;
+    }
+
+    @Override
+    public void setPlayerDefaultPolicy(final @NotNull ItemSlotPolicy playerDefaultPolicy) {
+        this.playerDefaultPolicy = playerDefaultPolicy;
+    }
+
+    @Override
+    public int getSize() {
+        return getInventory().getSize();
+    }
+
+    @Override
+    public boolean isValidIndex(final int index) {
+        return index >= 0 && index < getSize();
+    }
+
+    @Override
     public void tick() {
         for (Map.Entry<Integer, ItemElement> entry : getElements().entrySet()) {
             setElement(entry.getKey(), entry.getValue());
         }
+    }
+
+    protected @NotNull Set<Integer> parseIndexGroup(final @NotNull IndexGroup indexGroup, final boolean player) {
+        return parseIndexGroup(indexGroup).stream().map(index -> player ? index + getInventory().getSize() : index).collect(Collectors.toSet());
+    }
+
+    @ApiStatus.Internal
+    protected @NotNull Set<Integer> parseIndexGroup(final int[] value, final @NotNull IndexGroup[] indexGroups, final boolean player) {
+        return parseIndexGroup(value, indexGroups).stream().map(index -> player ? index + getInventory().getSize() : index).collect(Collectors.toSet());
     }
 }

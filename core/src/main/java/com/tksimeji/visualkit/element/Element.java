@@ -19,7 +19,7 @@ public interface Element<T> {
 
     static @NotNull ItemElement item(final @NotNull ItemStack itemStack) {
         Preconditions.checkArgument(itemStack != null, "Item stack cannot be null.");
-        return new ItemElementImpl(itemStack);
+        return new ItemElementImpl(itemStack.clone());
     }
 
     static @NotNull PlayerHeadElement playerHead() {
