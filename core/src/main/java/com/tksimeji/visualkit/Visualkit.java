@@ -6,6 +6,7 @@ import com.tksimeji.visualkit.adapter.V1_21_1;
 import com.tksimeji.visualkit.adapter.V1_21_3;
 import com.tksimeji.visualkit.listener.*;
 import com.tksimeji.visualkit.controller.GuiController;
+import com.tksimeji.visualkit.markupextension.MarkupExtensionParser;
 import com.tksimeji.visualkit.type.*;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
@@ -33,6 +34,8 @@ public final class Visualkit extends JavaPlugin {
 
     private static final @NotNull LinkedHashSet<Adapter> adapters = new LinkedHashSet<>();
 
+    private static final @NotNull MarkupExtensionParser markupExtensionParse = MarkupExtensionParser.create();
+
     @ApiStatus.Internal
     public static @NotNull Visualkit plugin() {
         return instance;
@@ -46,6 +49,11 @@ public final class Visualkit extends JavaPlugin {
     @ApiStatus.Internal
     public static @Nullable Adapter adapter() {
         return getAdapter(Bukkit.getMinecraftVersion());
+    }
+
+    @ApiStatus.Internal
+    public static @NotNull MarkupExtensionParser markupExtensionParser() {
+        return markupExtensionParse;
     }
 
     public static <T> @NotNull T create(final @NotNull T gui) {

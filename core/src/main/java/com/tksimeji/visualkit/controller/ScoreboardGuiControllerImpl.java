@@ -96,12 +96,12 @@ public final class ScoreboardGuiControllerImpl extends GuiControllerImpl impleme
     @Override
     public void setLine(final int index, final @NotNull ComponentLike line) {
         if (index >=  lines.size()) {
-            for (int i = lines.size(); i <= index; i ++) {
-                lines.add(Components.spaces(spaces ++));
+            for (int i = lines.size(); i <= index; i++) {
+                lines.add(Components.spaces(spaces++));
             }
         }
 
-        lines.set(index, Components.plainText(line).isBlank() ? Components.spaces(spaces ++) : line.asComponent());
+        lines.set(index, Components.plainText(line).isBlank() ? Components.spaces(spaces++) : line.asComponent());
         update();
     }
 
@@ -139,7 +139,7 @@ public final class ScoreboardGuiControllerImpl extends GuiControllerImpl impleme
 
     @Override
     public void clearLines() {
-        for (int i = 0; i < lines.size(); i ++) {
+        for (int i = 0; i < lines.size(); i++) {
             clearLine(i);
         }
     }

@@ -155,7 +155,7 @@ public final class ItemContainerGuiListener implements Listener {
 
             int remaining = itemStack.getAmount();
 
-            for (int i = 0; i < controller.getSize(); i ++) {
+            for (int i = 0; i < controller.getSize(); i++) {
                 if (remaining <= 0) {
                     break;
                 }
