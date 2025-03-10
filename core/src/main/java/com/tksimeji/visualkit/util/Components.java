@@ -38,7 +38,7 @@ public final class Components {
                 .replaceText(builder -> builder.match(markupExtensionPattern)
                 .replacement((result, componentBuilder) -> {
                     try {
-                        return componentBuilder.content(Visualkit.markupExtensionParser().parse(result.group(1)).evaluateDeep(ctx).toString());
+                        return componentBuilder.content(Visualkit.getMarkupExtensionParser().parse(result.group(1)).evaluateDeep(ctx).toString());
                     } catch (MarkupExtensionException e) {
                         return Component.text(e.getMessage()).color(NamedTextColor.RED);
                     }

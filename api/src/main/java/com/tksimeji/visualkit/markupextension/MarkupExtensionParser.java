@@ -1,9 +1,10 @@
 package com.tksimeji.visualkit.markupextension;
 
+import org.apache.commons.lang3.NotImplementedException;
 import org.jetbrains.annotations.NotNull;
 
 public interface MarkupExtensionParser extends IMarkupExtensionParser {
     static @NotNull MarkupExtensionParser create() {
-        return new MarkupExtensionParserImpl();
+        throw new NotImplementedException("The API module cannot be called at runtime.");
     }
 }

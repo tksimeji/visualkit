@@ -3,9 +3,11 @@ package com.tksimeji.visualkit.markupextension.ast;
 import com.tksimeji.visualkit.markupextension.context.Context;
 import org.jetbrains.annotations.NotNull;
 
-public interface AstNode<T> {
+public interface AstNode<T> extends IAstNode<T> {
+    @Override
     @NotNull T evaluate(final @NotNull Context<?> ctx);
 
+    @Override
     default @NotNull Object evaluateDeep(final @NotNull Context<?> ctx) {
         if (this instanceof PrimitiveNode<?> primitiveNode) {
             return primitiveNode.getValue();

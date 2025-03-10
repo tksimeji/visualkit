@@ -1,7 +1,6 @@
 package com.tksimeji.visualkit.markupextension.ast;
 
 import com.tksimeji.visualkit.markupextension.context.Context;
-import com.tksimeji.visualkit.markupextension.context.SimpleContext;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
@@ -17,6 +16,6 @@ public final class MemberAccessNode implements AstNode<Object> {
 
     @Override
     public @NotNull Object evaluate(final @NotNull Context<?> ctx) {
-        return Optional.ofNullable(new SimpleContext<>(node.evaluate(ctx)).getMember(member)).orElse("null");
+        return Optional.ofNullable(Context.context(node.evaluate(ctx)).getMember(member)).orElse("null");
     }
 }

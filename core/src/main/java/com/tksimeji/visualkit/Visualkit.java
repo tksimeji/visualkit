@@ -36,7 +36,7 @@ public final class Visualkit extends JavaPlugin {
 
     private static final @NotNull LinkedHashSet<Adapter> adapters = new LinkedHashSet<>();
 
-    private static final @NotNull MarkupExtensionParser markupExtensionParse = MarkupExtensionParser.create();
+    private static @NotNull MarkupExtensionParser markupExtensionParse = MarkupExtensionParser.create();
 
     @ApiStatus.Internal
     public static @NotNull Visualkit plugin() {
@@ -51,11 +51,6 @@ public final class Visualkit extends JavaPlugin {
     @ApiStatus.Internal
     public static @Nullable Adapter adapter() {
         return getAdapter(Bukkit.getMinecraftVersion());
-    }
-
-    @ApiStatus.Internal
-    public static @NotNull MarkupExtensionParser markupExtensionParser() {
-        return markupExtensionParse;
     }
 
     public static <T> @NotNull T create(final @NotNull T gui) {
@@ -146,6 +141,14 @@ public final class Visualkit extends JavaPlugin {
 
     public static void registerAdapter(final @NotNull Adapter adapter) {
         adapters.addFirst(adapter);
+    }
+
+    public static @NotNull MarkupExtensionParser getMarkupExtensionParser() {
+        return markupExtensionParse;
+    }
+
+    public static void setMarkupExtensionParser(final @NotNull MarkupExtensionParser markupExtensionParser) {
+        Visualkit.markupExtensionParse = markupExtensionParser;
     }
 
     @Override

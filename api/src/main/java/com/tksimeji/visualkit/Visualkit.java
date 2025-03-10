@@ -2,6 +2,7 @@ package com.tksimeji.visualkit;
 
 import com.tksimeji.visualkit.adapter.Adapter;
 import com.tksimeji.visualkit.controller.GuiController;
+import com.tksimeji.visualkit.markupextension.MarkupExtensionParser;
 import com.tksimeji.visualkit.type.GuiType;
 import org.apache.commons.lang3.NotImplementedException;
 import org.bukkit.plugin.Plugin;
@@ -69,6 +70,14 @@ public final class Visualkit {
     }
 
     public static void registerAdapter(final @NotNull Adapter adapter) {
+        throw new NotImplementedException("The API module cannot be called at runtime.");
+    }
+
+    public static @NotNull MarkupExtensionParser getMarkupExtensionParser() {
+        throw new NotImplementedException("The API module cannot be called at runtime.");
+    }
+
+    public static void setMarkupExtensionParser(final @NotNull MarkupExtensionParser markupExtensionParser) {
         throw new NotImplementedException("The API module cannot be called at runtime.");
     }
 }

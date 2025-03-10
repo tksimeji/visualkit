@@ -12,7 +12,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-public class SimpleContext<T> implements Context<T> {
+class ContextImpl<T> implements Context<T> {
     private static final @NotNull Map<Class<?>, Class<?>> wrapperClassMap = Map.of(
             boolean.class, Boolean.class,
             byte.class, Byte.class,
@@ -38,7 +38,7 @@ public class SimpleContext<T> implements Context<T> {
 
     private final @NotNull T object;
 
-    public SimpleContext(final @NotNull T object) {
+    public ContextImpl(final @NotNull T object) {
         this.object = object;
     }
 
