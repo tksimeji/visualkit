@@ -6,10 +6,10 @@ import org.jetbrains.annotations.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SimpleMutableContext extends SimpleContext implements MutableContext {
+public class SimpleMutableContext<T> extends SimpleContext<T> implements MutableContext<T> {
     private final @NotNull Map<String, Object> states = new HashMap<>();
 
-    public SimpleMutableContext(final @NotNull Object object) {
+    public SimpleMutableContext(final @NotNull T object) {
         super(object);
     }
 

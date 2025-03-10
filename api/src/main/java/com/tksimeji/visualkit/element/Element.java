@@ -48,4 +48,6 @@ public interface Element<T> {
     }
 
     @NotNull T create();
+
+    @NotNull Element<?> createCopy();
 }

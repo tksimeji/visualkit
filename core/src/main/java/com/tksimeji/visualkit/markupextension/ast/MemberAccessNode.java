@@ -16,7 +16,7 @@ public final class MemberAccessNode implements AstNode<Object> {
     }
 
     @Override
-    public @NotNull Object evaluate(final @NotNull Context context) {
-        return Optional.ofNullable(new SimpleContext(node.evaluate(context)).getMember(member)).orElse("null");
+    public @NotNull Object evaluate(final @NotNull Context<?> ctx) {
+        return Optional.ofNullable(new SimpleContext<>(node.evaluate(ctx)).getMember(member)).orElse("null");
     }
 }

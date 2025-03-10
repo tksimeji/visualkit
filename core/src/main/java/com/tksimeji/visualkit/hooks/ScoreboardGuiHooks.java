@@ -64,6 +64,11 @@ public interface ScoreboardGuiHooks extends IScoreboardGuiHooks {
         return controller().getSize();
     }
 
+    @Override
+    default void useState(final @NotNull String key, final @Nullable Object value) {
+        controller().setState(key, value);
+    }
+
     private @NotNull ScoreboardGuiController controller() {
         GuiController controller = Visualkit.getGuiController(this);
 

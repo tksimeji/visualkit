@@ -12,7 +12,7 @@ public final class AndOperator implements BinaryOperator<BooleanNode> {
     }
 
     @Override
-    public @NotNull BooleanNode evaluate(final @NotNull Context context, final @NotNull Object left, final @NotNull Object right) {
+    public @NotNull BooleanNode evaluate(final @NotNull Context<?> ctx, final @NotNull Object left, final @NotNull Object right) {
         if (!(left instanceof Boolean leftBoolean) || !(right instanceof Boolean rightBoolean)) {
             throw new MarkupExtensionException(String.format("Invalid operand combination: %s && %s", left.getClass().getName(), right.getClass().getName()));
         }

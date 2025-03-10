@@ -16,7 +16,7 @@ public final class StringNode implements PrimitiveNode<String> {
     }
 
     @Override
-    public @NotNull String evaluate(@NotNull Context context) {
+    public @NotNull String evaluate(@NotNull Context<?> ctx) {
         return value;
     }
 

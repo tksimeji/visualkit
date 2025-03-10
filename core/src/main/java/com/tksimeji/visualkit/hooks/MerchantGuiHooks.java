@@ -51,6 +51,11 @@ public interface MerchantGuiHooks extends IMerchantGuiHooks {
         controller().close();
     }
 
+    @Override
+    default void useState(final @NotNull String key, final @Nullable Object value) {
+        controller().setState(key, value);
+    }
+
     private @NotNull MerchantGuiController controller() {
         GuiController controller = Visualkit.getGuiController(this);
 

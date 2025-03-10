@@ -88,6 +88,9 @@ public interface TradeElement extends Element<MerchantRecipe> {
         }
     }
 
+    @Override
+    @NotNull TradeElement createCopy();
+
     interface SelectHandler {
         void onSelect();
     }

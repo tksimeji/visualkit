@@ -12,7 +12,7 @@ public final class NotOperator implements UnaryOperator<BooleanNode> {
     }
 
     @Override
-    public @NotNull BooleanNode evaluate(final @NotNull Context context, final @NotNull Object operand) {
+    public @NotNull BooleanNode evaluate(final @NotNull Context<?> ctx, final @NotNull Object operand) {
         if (!(operand instanceof Boolean booleanOperand)) {
             throw new MarkupExtensionException("Invalid operand: !" + operand.getClass().getName());
         }

@@ -1,22 +1,21 @@
 package com.tksimeji.visualkit.util;
 
+import com.tksimeji.visualkit.Visualkit;
+import com.tksimeji.visualkit.markupextension.MarkupExtensionException;
+import com.tksimeji.visualkit.markupextension.context.Context;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
-import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public final class Components {
-    public static @NotNull Component empty() {
-        TextComponent.Builder empty = Component.text().color(NamedTextColor.WHITE);
-        Arrays.stream(TextDecoration.values()).forEach(decoration -> empty.decoration(decoration, false));
-        return empty.build();
-    }
+    private static final @NotNull Pattern markupExtensionPattern = Pattern.compile("\\{([^}]*)}");
 
     public static @NotNull Component spaces(final int length) {
         return Component.text(" ".repeat(Math.max(0, length)));
@@ -28,5 +27,31 @@ public final class Components {
 
     public static @NotNull String legacyComponent(final @NotNull ComponentLike component) {
         return LegacyComponentSerializer.legacySection().serialize(component.asComponent());
+    }
+
+    public static @NotNull Component markupExtension(final @NotNull ComponentLike component, final @NotNull Context<?> ctx) {
+        if (!hasMarkupExtension(component)) {
+            return component.asComponent();
+        }
+
+        return component.asComponent()
+                .replaceText(builder -> builder.match(markupExtensionPattern)
+                .replacement((result, componentBuilder) -> {
+                    try {
+                        return componentBuilder.content(Visualkit.markupExtensionParser().parse(result.group(1)).evaluateDeep(ctx).toString());
+                    } catch (MarkupExtensionException e) {
+                        return Component.text(e.getMessage()).color(NamedTextColor.RED);
+                    }
+                }));
+    }
+
+    public static boolean hasMarkupExtension(final @Nullable ComponentLike component) {
+        if (component == null) {
+            return false;
+        }
+
+        String text = plainText(component);
+        Matcher matcher = markupExtensionPattern.matcher(text);
+        return matcher.find();
     }
 }

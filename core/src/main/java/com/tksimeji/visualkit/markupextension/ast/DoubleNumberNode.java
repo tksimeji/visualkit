@@ -20,7 +20,7 @@ public final class DoubleNumberNode implements NumberNode<Double> {
     }
 
     @Override
-    public @NotNull Double evaluate(final @NotNull Context context) {
+    public @NotNull Double evaluate(final @NotNull Context<?> ctx) {
         return value;
     }
 

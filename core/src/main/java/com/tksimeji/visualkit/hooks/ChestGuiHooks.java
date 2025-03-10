@@ -77,6 +77,11 @@ public interface ChestGuiHooks extends IChestGuiHooks {
         controller().close();
     }
 
+    @Override
+    default void useState(final @NotNull String key, final @Nullable Object value) {
+        controller().setState(key, value);
+    }
+
     private @NotNull ChestGuiController controller() {
         GuiController controller = Visualkit.getGuiController(this);
 

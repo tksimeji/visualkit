@@ -15,7 +15,7 @@ public final class UnaryOpNode implements AstNode<AstNode<?>> {
     }
 
     @Override
-    public @NotNull AstNode<?> evaluate(@NotNull Context context) {
-        return operator.evaluate(context, operand.evaluate(context));
+    public @NotNull AstNode<?> evaluate(@NotNull Context<?> ctx) {
+        return operator.evaluate(ctx, operand.evaluate(ctx));
     }
 }

@@ -16,7 +16,7 @@ public final class BinaryOpNode implements AstNode<AstNode<?>> {
     }
 
     @Override
-    public @NotNull AstNode<?> evaluate(@NotNull Context context) {
-        return operator.evaluate(context, left.evaluateDeep(context), right.evaluateDeep(context));
+    public @NotNull AstNode<?> evaluate(@NotNull Context<?> ctx) {
+        return operator.evaluate(ctx, left.evaluateDeep(ctx), right.evaluateDeep(ctx));
     }
 }

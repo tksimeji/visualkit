@@ -20,7 +20,7 @@ public final class BooleanNode implements PrimitiveNode<Boolean> {
     }
 
     @Override
-    public @NotNull Boolean evaluate(final @NotNull Context context) {
+    public @NotNull Boolean evaluate(final @NotNull Context<?> ctx) {
         return value;
     }
 }

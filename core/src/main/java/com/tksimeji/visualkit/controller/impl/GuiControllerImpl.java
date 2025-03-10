@@ -5,11 +5,14 @@ import com.tksimeji.visualkit.controller.GuiController;
 import com.tksimeji.visualkit.event.Handler;
 import com.tksimeji.visualkit.event.Event;
 import com.tksimeji.visualkit.event.VisualkitEvent;
+import com.tksimeji.visualkit.markupextension.context.Context;
+import com.tksimeji.visualkit.markupextension.context.MutableContext;
 import com.tksimeji.visualkit.util.Classes;
 import org.apache.commons.lang3.tuple.Pair;
 import org.bukkit.event.Cancellable;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
@@ -45,10 +48,13 @@ public abstract class GuiControllerImpl implements GuiController {
 
     protected final @NotNull Object gui;
 
+    protected final @NotNull MutableContext<?> markupExtensionContext;
+
     protected final @NotNull Set<Method> handlers = new LinkedHashSet<>();
 
     public GuiControllerImpl(final @NotNull Object gui) {
         this.gui = gui;
+        markupExtensionContext = Context.mutable(gui);
 
         Classes.getMethods(gui.getClass()).stream()
                 .filter(method -> method.isAnnotationPresent(Handler.class) &&
@@ -61,6 +67,11 @@ public abstract class GuiControllerImpl implements GuiController {
     @Override
     public @NotNull Object getGui() {
         return gui;
+    }
+
+    @Override
+    public void setState(final @NotNull String name, final @Nullable Object value) {
+        markupExtensionContext.setState(name, value);
     }
 
     @Override

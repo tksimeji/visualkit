@@ -13,7 +13,7 @@ public final class IdentifierNode implements AstNode<Object> {
     }
 
     @Override
-    public @NotNull Object evaluate(final @NotNull Context context) {
-        return Optional.ofNullable(context.getState(name)).orElse("null");
+    public @NotNull Object evaluate(final @NotNull Context<?> ctx) {
+        return Optional.ofNullable(ctx.getState(name)).orElse("null");
     }
 }

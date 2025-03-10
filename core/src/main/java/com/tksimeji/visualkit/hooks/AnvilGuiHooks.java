@@ -78,6 +78,11 @@ public interface AnvilGuiHooks extends IAnvilGuiHooks {
         controller().close();
     }
 
+    @Override
+    default void useState(final @NotNull String key, final @Nullable Object value) {
+        controller().setState(key, value);
+    }
+
     private @NotNull AnvilGuiController controller() {
         GuiController controller = Visualkit.getGuiController(this);
 

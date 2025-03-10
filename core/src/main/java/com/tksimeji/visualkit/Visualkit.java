@@ -7,7 +7,9 @@ import com.tksimeji.visualkit.adapter.V1_21_3;
 import com.tksimeji.visualkit.listener.*;
 import com.tksimeji.visualkit.controller.GuiController;
 import com.tksimeji.visualkit.markupextension.MarkupExtensionParser;
+import com.tksimeji.visualkit.test.TestCommand;
 import com.tksimeji.visualkit.type.*;
+import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -163,6 +165,12 @@ public final class Visualkit extends JavaPlugin {
 
         registerAdapter(V1_21_1.INSTANCE);
         registerAdapter(V1_21_3.INSTANCE);
+
+        // <!-- test code
+        getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS, event -> {
+            event.registrar().register(new TestCommand().create().build());
+        });
+        // -->
 
         logger().info(Component.text("       __    ").color(TextColor.color(255, 86, 217)));
         logger().info(Component.text("___  _|  | __").color(TextColor.color(255, 124, 255)).append(Component.text("    Visualkit - " + getPluginMeta().getVersion()).color(NamedTextColor.WHITE)));

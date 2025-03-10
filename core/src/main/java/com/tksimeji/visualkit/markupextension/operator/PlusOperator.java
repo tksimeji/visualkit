@@ -12,7 +12,7 @@ public final class PlusOperator implements BinaryOperator<AstNode<?>> {
     }
 
     @Override
-    public @NotNull AstNode<?> evaluate(final @NotNull Context context, final @NotNull Object left, final @NotNull Object right) {
+    public @NotNull AstNode<?> evaluate(final @NotNull Context<?> ctx, final @NotNull Object left, final @NotNull Object right) {
         if (left instanceof String || right instanceof String) {
             return new StringNode(String.valueOf(left) + right);
         }

@@ -90,6 +90,9 @@ public interface ItemElement extends Element<ItemStack> {
     @Contract("_ -> this")
     @NotNull ItemElement handler(final @Nullable Handler2 handler);
 
+    @Override
+    @NotNull ItemElement createCopy();
+
     interface Handler {
     }
 

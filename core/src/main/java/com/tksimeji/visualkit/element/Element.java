@@ -13,7 +13,7 @@ import java.util.UUID;
 public interface Element<T> {
     static @NotNull ItemElement item(final @NotNull ItemType type) {
         Preconditions.checkArgument(type != null, "Item type cannot be null.");
-        return new ItemElementImpl(type.createItemStack());
+        return new ItemElementImpl(type);
     }
 
     static @NotNull ItemElement item(final @NotNull ItemStack itemStack) {

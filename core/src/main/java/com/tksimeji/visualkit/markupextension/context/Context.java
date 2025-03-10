@@ -3,18 +3,16 @@ package com.tksimeji.visualkit.markupextension.context;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public interface Context {
-    static @NotNull Context context(final @NotNull Object object) {
-        return new SimpleContext(object);
+public interface Context<T> {
+    static <T> @NotNull Context<T> context(final @NotNull T object) {
+        return new SimpleContext<>(object);
     }
 
-    static @NotNull MutableContext mutable(final @NotNull Object object) {
-        return new SimpleMutableContext(object);
+    static <T> @NotNull MutableContext<T> mutable(final @NotNull T object) {
+        return new SimpleMutableContext<>(object);
     }
 
-    static @NotNull Context empty() {
-        return new EmptyContext();
-    }
+    @NotNull T getObject();
 
     @Nullable Object getState(final @NotNull String name);
 

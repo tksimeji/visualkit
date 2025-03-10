@@ -2,8 +2,9 @@ package com.tksimeji.visualkit.element;
 
 import com.google.common.base.Preconditions;
 import com.tksimeji.visualkit.Visualkit;
+import com.tksimeji.visualkit.markupextension.context.Context;
 import com.tksimeji.visualkit.policy.ItemSlotPolicy;
-import com.tksimeji.visualkit.policy.Policy;
+import com.tksimeji.visualkit.util.Components;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
 import net.kyori.adventure.text.Component;
@@ -27,7 +28,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
-class ItemElementImpl implements ItemElement {
+class ItemElementImpl implements ItemElement, MarkupExtensionSupport {
     private @NotNull ItemStack itemStack;
 
     private @Nullable Component title;
@@ -42,6 +43,8 @@ class ItemElementImpl implements ItemElement {
     private @Nullable Handler handler;
 
     private final boolean itemStackMode;
+
+    private @Nullable Context<?> markupExtensionContext;
 
     public ItemElementImpl(final @NotNull ItemType type) {
         this(type.createItemStack(), false);
@@ -85,7 +88,8 @@ class ItemElementImpl implements ItemElement {
         }
 
         ItemMeta itemMeta = itemStack.getItemMeta();
-        return Optional.ofNullable(itemMeta.displayName()).orElse(Component.empty());
+        Component title = Optional.ofNullable(itemMeta.displayName()).orElse(Component.empty());
+        return markupExtensionContext != null && Components.hasMarkupExtension(title) ? Components.markupExtension(title, markupExtensionContext) : title;
     }
 
     @Override
@@ -116,7 +120,8 @@ class ItemElementImpl implements ItemElement {
         }
 
         ItemMeta itemMeta = itemStack.getItemMeta();
-        return Optional.ofNullable(itemMeta.lore()).orElse(List.of());
+        List<Component> lore = Optional.ofNullable(itemMeta.lore()).orElse(List.of());
+        return markupExtensionContext != null && lore.stream().anyMatch(Components::hasMarkupExtension) ? lore.stream().map(component -> Components.markupExtension(component, markupExtensionContext)).toList() : lore;
     }
 
     @Override
@@ -288,7 +293,37 @@ class ItemElementImpl implements ItemElement {
 
     @ApiStatus.Internal
     @Override
+    public @Nullable Context<?> getContext() {
+        return markupExtensionContext;
+    }
+
+    @ApiStatus.Internal
+    @Override
+    public void setContext(@NotNull Context<?> ctx) {
+        markupExtensionContext = ctx;
+    }
+
+    @Override
     public @NotNull ItemStack create() {
-        return itemStack.clone();
+        if (markupExtensionContext == null) {
+            return itemStack.clone();
+        }
+
+        return ((ItemElementImpl) createCopy().title(title()).lore(lore())).itemStack;
+    }
+
+    @Override
+    public @NotNull ItemElement createCopy() {
+        ItemElementImpl copy = new ItemElementImpl(itemStack.clone(), itemStackMode);
+        copy.title = title;
+        copy.lore = lore;
+        copy.policy = policy;
+        copy.sound = sound;
+        copy.soundVolume = soundVolume;
+        copy.soundPitch = soundPitch;
+        copy.handler = handler;
+
+        copy.markupExtensionContext = markupExtensionContext;
+        return copy;
     }
 }

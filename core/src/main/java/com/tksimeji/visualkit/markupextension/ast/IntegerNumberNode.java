@@ -20,7 +20,7 @@ public final class IntegerNumberNode implements NumberNode<Integer> {
     }
 
     @Override
-    public @NotNull Integer evaluate(@NotNull Context context) {
+    public @NotNull Integer evaluate(@NotNull Context<?> ctx) {
         return value;
     }
 

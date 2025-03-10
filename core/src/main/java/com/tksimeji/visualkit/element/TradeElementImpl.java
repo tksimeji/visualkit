@@ -123,7 +123,6 @@ public class TradeElementImpl implements TradeElement {
         return this;
     }
 
-    @ApiStatus.Internal
     @Override
     public @NotNull MerchantRecipe create() {
         MerchantRecipe merchantRecipe = new MerchantRecipe(result, maxUses);
@@ -133,6 +132,16 @@ public class TradeElementImpl implements TradeElement {
         }
 
         return merchantRecipe;
+    }
+
+    @Override
+    public @NotNull TradeElement createCopy() {
+        TradeElementImpl copy = new TradeElementImpl(result, ingredients.getIngredient1(), ingredients.getIngredient2());
+        copy.maxUses = maxUses;
+        copy.selectHandler = selectHandler;
+        copy.purchaseHandler = purchaseHandler;
+        copy.observers.addAll(observers);
+        return copy;
     }
 
     @ApiStatus.Internal
