@@ -88,8 +88,8 @@ public interface ScoreboardGuiHooks extends IScoreboardGuiHooks {
     }
 
     @Override
-    default void hookState(final @NotNull String name, final @Nullable Object value) {
-        controller().setState(name, value);
+    default void hookState(final @NotNull String key, final @Nullable Object value) {
+        controller().setState(key, value);
     }
 
     private @NotNull ScoreboardGuiController controller() {

@@ -84,8 +84,8 @@ public interface ChestGuiHooks extends IChestGuiHooks {
     }
 
     @Override
-    default void hookState(final @NotNull String name, final @Nullable Object value) {
-        controller().setState(name, value);
+    default void hookState(final @NotNull String key, final @Nullable Object value) {
+        controller().setState(key, value);
     }
 
     private @NotNull ChestGuiController controller() {
