@@ -16,6 +16,7 @@ import org.jetbrains.annotations.Range;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
 
 public interface ItemElement extends Element<ItemStack> {
     @NotNull ItemType type();
@@ -89,6 +90,8 @@ public interface ItemElement extends Element<ItemStack> {
 
     @Contract("_ -> this")
     @NotNull ItemElement handler(final @Nullable Handler2 handler);
+
+    @NotNull ItemStack create(final @NotNull Locale locale);
 
     @Override
     @NotNull ItemElement createCopy();

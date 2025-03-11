@@ -46,7 +46,7 @@ public abstract class ItemContainerGuiControllerImpl<I extends Inventory> extend
     @Override
     public void setElement(final int index, final @Nullable ItemElement element) {
         ItemStack old = getInventory().getItem(index);
-        if (!isValidIndex(index) || (element == null && old == null) || (element != null && element.create().equals(old))) {
+        if (!isValidIndex(index) || (element == null && old == null) || (element != null && element.create(getLocale()).equals(old))) {
             return;
         }
 
@@ -57,7 +57,7 @@ public abstract class ItemContainerGuiControllerImpl<I extends Inventory> extend
         }
 
         elements.put(index, aElement);
-        getInventory().setItem(index, element != null ? aElement.create() : null);
+        getInventory().setItem(index, element != null ? aElement.create(getLocale()) : null);
     }
 
     @Override
@@ -109,6 +109,11 @@ public abstract class ItemContainerGuiControllerImpl<I extends Inventory> extend
     @Override
     public int getSize() {
         return getInventory().getSize();
+    }
+
+    @Override
+    public @NotNull Locale getLocale() {
+        return getPlayer().locale();
     }
 
     @Override

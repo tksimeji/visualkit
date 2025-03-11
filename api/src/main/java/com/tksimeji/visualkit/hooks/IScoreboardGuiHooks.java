@@ -3,11 +3,13 @@ package com.tksimeji.visualkit.hooks;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Set;
 
+@ApiStatus.Internal
 interface IScoreboardGuiHooks extends Hooks {
     @NotNull Set<Player> useGetPlayers();
 

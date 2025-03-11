@@ -1,11 +1,13 @@
 package com.tksimeji.visualkit.hooks;
 
 import com.tksimeji.visualkit.element.TradeElement;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
+@ApiStatus.Internal
 interface IMerchantGuiHooks extends ContainerGuiHooks {
     @Nullable TradeElement useGetElement(final int index);
 

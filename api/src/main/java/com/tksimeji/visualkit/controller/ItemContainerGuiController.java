@@ -8,6 +8,7 @@ import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Locale;
 import java.util.Map;
 
 public interface ItemContainerGuiController<I extends Inventory> extends ContainerGuiController<I>, TickableGuiController {
@@ -32,6 +33,8 @@ public interface ItemContainerGuiController<I extends Inventory> extends Contain
     void setPlayerDefaultPolicy(final @NotNull ItemSlotPolicy policy);
 
     int getSize();
+
+    @NotNull Locale getLocale();
 
     boolean isValidIndex(final int index);
 

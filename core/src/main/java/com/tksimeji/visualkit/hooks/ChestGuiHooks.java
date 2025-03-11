@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Locale;
 import java.util.Map;
 
 public interface ChestGuiHooks extends IChestGuiHooks {
@@ -65,6 +66,11 @@ public interface ChestGuiHooks extends IChestGuiHooks {
     @Override
     default void useSetPlayerDefaultPolicy(final @NotNull ItemSlotPolicy playerDefaultPolicy) {
         controller().setPlayerDefaultPolicy(playerDefaultPolicy);
+    }
+
+    @Override
+    default @NotNull Locale useLocale() {
+        return controller().getLocale();
     }
 
     @Override

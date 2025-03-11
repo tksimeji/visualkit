@@ -9,6 +9,8 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Locale;
+
 public interface AnvilGuiHooks extends IAnvilGuiHooks {
     @Override
     default @NotNull Player usePlayer() {
@@ -74,6 +76,12 @@ public interface AnvilGuiHooks extends IAnvilGuiHooks {
         return useGetFirstElement() == null && useGetSecondElement() == null && useGetResultElement() == null;
     }
 
+    @Override
+    default @NotNull Locale useLocale() {
+        return controller().getLocale();
+    }
+
+    @Override
     default void useClose() {
         controller().close();
     }

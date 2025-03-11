@@ -12,6 +12,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
+import net.kyori.adventure.translation.GlobalTranslator;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Sound;
 import org.bukkit.enchantments.Enchantment;
@@ -23,10 +24,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Range;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class ItemElementImpl implements ItemElement, MarkupExtensionSupport {
     private @NotNull ItemStack itemStack;
@@ -308,6 +306,27 @@ public class ItemElementImpl implements ItemElement, MarkupExtensionSupport {
         }
 
         return ((ItemElementImpl) createCopy().title(title()).lore(lore())).itemStack;
+    }
+
+    @Override
+    public @NotNull ItemStack create(final @NotNull Locale locale) {
+        ItemStack itemStack = create();
+        ItemMeta itemMeta = itemStack.getItemMeta();
+
+        if (itemMeta == null) {
+            return itemStack;
+        }
+
+        if (itemMeta.hasDisplayName()) {
+            itemMeta.displayName(GlobalTranslator.render(Objects.requireNonNull(itemMeta.displayName()), locale));
+        }
+
+        if (itemMeta.hasLore()) {
+            itemMeta.lore(Objects.requireNonNull(itemMeta.lore()).stream().map(component -> GlobalTranslator.render(component, locale)).toList());
+        }
+
+        itemStack.setItemMeta(itemMeta);
+        return itemStack;
     }
 
     @Override

@@ -124,7 +124,7 @@ public final class AnvilGuiControllerImpl extends ItemContainerGuiControllerImpl
     @Override
     public void setElement(int index, @Nullable ItemElement element) {
         ItemStack old = getInventory().getItem(index);
-        if ((element == null && old == null) || (element != null && element.create().equals(old))) {
+        if ((element == null && old == null) || (element != null && element.create(getLocale()).equals(old))) {
             return;
         }
 
