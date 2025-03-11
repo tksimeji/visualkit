@@ -18,7 +18,6 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ItemType;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Range;
@@ -28,7 +27,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
-class ItemElementImpl implements ItemElement, MarkupExtensionSupport {
+class ItemElementImpl implements ItemElement {
     private @NotNull ItemStack itemStack;
 
     private @Nullable Component title;
@@ -67,6 +66,16 @@ class ItemElementImpl implements ItemElement, MarkupExtensionSupport {
         title(itemMeta.displayName());
         lore(itemMeta.hasLore() ? itemMeta.lore() : List.of());
         amount(itemStack.getAmount());
+    }
+
+    @Override
+    public @Nullable Context<?> getContext() {
+        return markupExtensionContext;
+    }
+
+    @Override
+    public void setContext(@Nullable Context<?> ctx) {
+        markupExtensionContext = ctx;
     }
 
     @Override
@@ -289,18 +298,6 @@ class ItemElementImpl implements ItemElement, MarkupExtensionSupport {
     public @NotNull ItemElement handler(final @Nullable Handler2 handler) {
         this.handler = handler;
         return this;
-    }
-
-    @ApiStatus.Internal
-    @Override
-    public @Nullable Context<?> getContext() {
-        return markupExtensionContext;
-    }
-
-    @ApiStatus.Internal
-    @Override
-    public void setContext(@NotNull Context<?> ctx) {
-        markupExtensionContext = ctx;
     }
 
     @Override

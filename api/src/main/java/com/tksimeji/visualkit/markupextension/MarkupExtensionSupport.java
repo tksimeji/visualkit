@@ -1,4 +1,4 @@
-package com.tksimeji.visualkit.element;
+package com.tksimeji.visualkit.markupextension;
 
 import com.tksimeji.visualkit.markupextension.context.Context;
 import org.jetbrains.annotations.ApiStatus;

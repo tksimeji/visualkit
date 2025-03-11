@@ -11,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Set;
 
-public sealed interface ScoreboardGuiController extends GuiController permits ScoreboardGuiControllerImpl {
+public sealed interface ScoreboardGuiController extends GuiController, TickableController permits ScoreboardGuiControllerImpl {
     @ApiStatus.Internal
     static @Nullable ScoreboardGuiController get(final @NotNull Player player) {
         return Visualkit.getGuiControllers(ScoreboardGuiType.instance()).stream()

@@ -5,10 +5,33 @@ import com.tksimeji.visualkit.controller.GuiController;
 import com.tksimeji.visualkit.controller.ScoreboardGuiController;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Set;
+
 public interface ScoreboardGuiHooks extends IScoreboardGuiHooks {
+    @Override
+    default @NotNull Set<Player> useGetPlayers() {
+        return controller().getPlayers();
+    }
+
+    @Override
+    default void useAddPlayer(final @NotNull Player player) {
+        controller().addPlayer(player);
+    }
+
+    @Override
+    default void useRemovePlayer(final @NotNull Player player) {
+        controller().removePlayer(player);
+    }
+
+    @Override
+    default boolean useIsPlayer(final @NotNull Player player) {
+        return controller().isPlayer(player);
+    }
+
     @Override
     default @NotNull Component useGetTitle() {
         return controller().getTitle();

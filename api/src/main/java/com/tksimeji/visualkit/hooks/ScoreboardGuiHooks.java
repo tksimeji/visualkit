@@ -3,9 +3,32 @@ package com.tksimeji.visualkit.hooks;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
 import org.apache.commons.lang3.NotImplementedException;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Set;
+
 public interface ScoreboardGuiHooks extends IScoreboardGuiHooks {
+    @Override
+    default @NotNull Set<Player> useGetPlayers() {
+        throw new NotImplementedException("The API module cannot be called at runtime.");
+    }
+
+    @Override
+    default void useAddPlayer(final @NotNull Player player) {
+        throw new NotImplementedException("The API module cannot be called at runtime.");
+    }
+
+    @Override
+    default void useRemovePlayer(final @NotNull Player player) {
+        throw new NotImplementedException("The API module cannot be called at runtime.");
+    }
+
+    @Override
+    default boolean useIsPlayer(final @NotNull Player player) {
+        throw new NotImplementedException("The API module cannot be called at runtime.");
+    }
+
     @Override
     default @NotNull Component useGetTitle() {
         throw new NotImplementedException("The API module cannot be called at runtime.");

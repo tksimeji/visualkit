@@ -1,6 +1,7 @@
 package com.tksimeji.visualkit.element;
 
 import com.tksimeji.visualkit.event.ItemContainerClickEvent;
+import com.tksimeji.visualkit.markupextension.MarkupExtensionSupport;
 import com.tksimeji.visualkit.policy.ItemSlotPolicy;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
@@ -17,7 +18,7 @@ import org.jetbrains.annotations.Range;
 import java.util.Collection;
 import java.util.List;
 
-public interface ItemElement extends Element<ItemStack> {
+public interface ItemElement extends Element<ItemStack>, MarkupExtensionSupport {
     @NotNull ItemType type();
 
     @Contract("_ -> this")

@@ -3,7 +3,7 @@ package com.tksimeji.visualkit.controller.impl;
 import com.tksimeji.visualkit.IndexGroup;
 import com.tksimeji.visualkit.controller.ItemContainerGuiController;
 import com.tksimeji.visualkit.element.ItemElement;
-import com.tksimeji.visualkit.element.MarkupExtensionSupport;
+import com.tksimeji.visualkit.markupextension.MarkupExtensionSupport;
 import com.tksimeji.visualkit.policy.ItemSlotPolicy;
 import com.tksimeji.visualkit.policy.Policy;
 import org.bukkit.inventory.Inventory;
@@ -51,12 +51,12 @@ public abstract class ItemContainerGuiControllerImpl<I extends Inventory> extend
         }
 
         if (element != null) {
-            ((MarkupExtensionSupport) element).setContext(markupExtensionContext);
+            element.setContext(markupExtensionContext);
         } else if (elements.containsKey(index)) {
-            ((MarkupExtensionSupport) elements.get(index)).setContext(null);
+            elements.get(index).setContext(null);
         }
 
-        elements.put(index, element);
+        elements.put(index, element != null ? element.createCopy() : null);
         getInventory().setItem(index, element != null ? element.create() : null);
     }
 

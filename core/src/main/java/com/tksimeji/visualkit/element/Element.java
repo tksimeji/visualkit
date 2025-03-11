@@ -1,6 +1,9 @@
 package com.tksimeji.visualkit.element;
 
 import com.google.common.base.Preconditions;
+import com.tksimeji.visualkit.markupextension.context.Context;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.ComponentLike;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ItemType;
@@ -10,7 +13,23 @@ import org.jetbrains.annotations.Nullable;
 import java.net.URL;
 import java.util.UUID;
 
-public interface Element<T> {
+public interface Element<T> extends IElement<T> {
+    static @NotNull ComponentElement component() {
+        return component(Component.empty());
+    }
+
+    static @NotNull ComponentElement component(final @NotNull ComponentLike component) {
+        return new ComponentElementImpl(component);
+    }
+
+    static @NotNull ComponentElement component(final @NotNull ComponentLike component, final @Nullable Context<?> ctx) {
+        return component(component).context(ctx);
+    }
+
+    static @NotNull ComponentElement component(final @NotNull ComponentLike component, final @Nullable Object object) {
+        return component(component, object != null ? Context.context(object) : null);
+    }
+
     static @NotNull ItemElement item(final @NotNull ItemType type) {
         Preconditions.checkArgument(type != null, "Item type cannot be null.");
         return new ItemElementImpl(type);
@@ -50,6 +69,4 @@ public interface Element<T> {
         Preconditions.checkArgument(ingredient1 != null, "Ingredient-1 cannot be null.");
         return new TradeElementImpl(result, ingredient1, ingredient2);
     }
-
-    @NotNull T create();
 }

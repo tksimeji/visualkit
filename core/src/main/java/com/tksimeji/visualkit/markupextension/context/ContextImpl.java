@@ -67,7 +67,7 @@ class ContextImpl<T> implements Context<T> {
                     .filter(aMethod -> aMethod.getName().equals(name))
                     .filter(aMethod -> aMethod.getParameterTypes().length == args.length)
                     .filter(aMethod -> {
-                        for (int i = 0; i < aMethod.getParameterTypes().length; i ++) {
+                        for (int i = 0; i < aMethod.getParameterTypes().length; i++) {
                             if (!areTypesCompatible(aMethod.getParameterTypes()[i], argTypes.get(i))) {
                                 return false;
                             }
