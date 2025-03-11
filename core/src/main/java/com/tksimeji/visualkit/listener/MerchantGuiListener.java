@@ -1,7 +1,6 @@
 package com.tksimeji.visualkit.listener;
 
 import com.tksimeji.visualkit.controller.MerchantGuiController;
-import com.tksimeji.visualkit.element.TradeElementImpl;
 import io.papermc.paper.event.player.PlayerPurchaseEvent;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -9,8 +8,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.TradeSelectEvent;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Objects;
 
 public final class MerchantGuiListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -21,10 +18,8 @@ public final class MerchantGuiListener implements Listener {
             return;
         }
 
-        controller.getElements().stream()
-                .filter(aElement -> ((TradeElementImpl) aElement).equals(event.getTrade()))
-                .findFirst()
-                .ifPresent(element -> event.setCancelled(controller.purchase(controller.getElements().indexOf(element), element)));
+        int index = controller.getInventory().getMerchant().getRecipes().indexOf(event.getTrade());
+        event.setCancelled(controller.purchase(index));
 
     }
 
@@ -40,6 +35,6 @@ public final class MerchantGuiListener implements Listener {
             return;
         }
 
-        event.setCancelled(controller.select(event.getIndex(), Objects.requireNonNull(controller.getElement(event.getIndex()))));
+        event.setCancelled(controller.select(event.getIndex()));
     }
 }

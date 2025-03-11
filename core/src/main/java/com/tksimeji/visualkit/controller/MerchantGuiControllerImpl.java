@@ -5,32 +5,28 @@ import com.tksimeji.visualkit.Visualkit;
 import com.tksimeji.visualkit.controller.impl.ContainerGuiControllerImpl;
 import com.tksimeji.visualkit.element.TradeElement;
 import com.tksimeji.visualkit.element.TradeElementImpl;
-import com.tksimeji.visualkit.event.merchant.MerchantGuiCloseEventImpl;
-import com.tksimeji.visualkit.event.merchant.MerchantGuiInitEventImpl;
-import com.tksimeji.visualkit.event.merchant.MerchantGuiPurchaseEventImpl;
-import com.tksimeji.visualkit.event.merchant.MerchantGuiSelectEventImpl;
+import com.tksimeji.visualkit.event.merchant.*;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
 import org.apache.commons.lang3.tuple.Pair;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.MenuType;
-import org.bukkit.inventory.Merchant;
-import org.bukkit.inventory.MerchantInventory;
+import org.bukkit.inventory.*;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
 public final class MerchantGuiControllerImpl extends ContainerGuiControllerImpl<MerchantInventory> implements MerchantGuiController {
-    private final @NotNull List<TradeElement> elements = new ArrayList<>();
-
     private final @NotNull Player player;
+
+    private final @NotNull List<TradeElement> elements = new ArrayList<>();
 
     private final @NotNull Merchant merchant = Bukkit.createMerchant();
 
-    private @NotNull MerchantInventory inventory;
+    private @Nullable MerchantInventory inventory;
 
-    private boolean updated;
+    private int update;
 
     public MerchantGuiControllerImpl(final @NotNull Object gui) {
         super(gui);
@@ -38,7 +34,7 @@ public final class MerchantGuiControllerImpl extends ContainerGuiControllerImpl<
         player = getDeclarationOrThrow(gui, MerchantGui.Player.class, Player.class).getLeft();
 
         update();
-        updated = false;
+        update = 0;
 
         Map<Integer, TradeElement> elementMap = new TreeMap<>();
         List<TradeElement> elementList = new ArrayList<>();
@@ -73,11 +69,17 @@ public final class MerchantGuiControllerImpl extends ContainerGuiControllerImpl<
 
     @Override
     public @NotNull MerchantInventory getInventory() {
+        if (inventory == null) {
+            throw new IllegalStateException();
+        }
         return inventory;
     }
 
     @Override
-    public @NotNull TradeElement getElement(final int index) {
+    public @Nullable TradeElement getElement(final int index) {
+        if (index >= elements.size()) {
+            return null;
+        }
         return elements.get(index);
     }
 
@@ -87,7 +89,7 @@ public final class MerchantGuiControllerImpl extends ContainerGuiControllerImpl<
     }
 
     @Override
-    public boolean setElement(int index, @NotNull TradeElement element) {
+    public boolean setElement(final int index, final @NotNull TradeElement element) {
         if (index < 0 || index > elements.size()) {
             return false;
         }
@@ -97,64 +99,76 @@ public final class MerchantGuiControllerImpl extends ContainerGuiControllerImpl<
         } else {
             elements.set(index, element);
         }
+
+        if (element instanceof TradeElementImpl impl) {
+            impl.registerObserver(this);
+        }
+
         update();
         return true;
     }
 
     @Override
-    public void addElement(@NotNull TradeElement element) {
+    public void addElement(final @NotNull TradeElement element) {
         setElement(elements.size(), element);
     }
 
     @Override
-    public void removeElement(int index) {
+    public void removeElement(final int index) {
+        if (getElement(index) instanceof TradeElementImpl impl) {
+            impl.unregisterObserver(this);
+        }
         elements.remove(index);
         update();
     }
 
     @Override
-    public void insertElement(int index, @NotNull TradeElement element) {
+    public void insertElement(final int index, final @NotNull TradeElement element) {
+        if (index > elements.size()) {
+            return;
+        }
+
+        if (element instanceof TradeElementImpl impl) {
+            impl.registerObserver(this);
+        }
+
         elements.add(index, element);
         update();
     }
 
     @Override
-    public void close() {
-        if (updated) {
-            updated = false;
-            return;
-        }
-
-        callEvent(new MerchantGuiCloseEventImpl(gui));
-
-        elements.stream()
-                .filter(element -> element instanceof TradeElementImpl)
-                .forEach(element -> ((TradeElementImpl) element).removeObserver(this));
-        super.close();
-    }
-
-    @Override
-    public boolean select(final int index, final @NotNull TradeElement element) {
+    public boolean select(final int index) {
+        TradeElement element = elements.get(index);
         if (!element.canSelect()) {
             return true;
         }
-
         return callEvent(new MerchantGuiSelectEventImpl(gui, index, element));
     }
 
     @Override
-    public boolean purchase(final int index, final @NotNull TradeElement element) {
+    public boolean purchase(final int index) {
+        TradeElement element = elements.get(index);
         if (!element.canPurchase()) {
             return true;
         }
-
         return callEvent(new MerchantGuiPurchaseEventImpl(gui, index, element));
+    }
+
+    @Override
+    public void close() {
+        if (0 < update) {
+            update--;
+            return;
+        }
+
+        callEvent(new MerchantGuiCloseEventImpl(gui));
+        super.close();
     }
 
     @Override
     public void update() {
         merchant.setRecipes(elements.stream().map(TradeElement::create).toList());
-        updated = true;
+        update++;
         Bukkit.getScheduler().runTask(Visualkit.plugin(), () -> {
             player.openInventory(MenuType.MERCHANT.builder()
                     .title(getDeclarationOrDefault(gui, MerchantGui.Title.class, ComponentLike.class, Component.empty()).getLeft().asComponent())

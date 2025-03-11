@@ -33,10 +33,9 @@ public sealed interface MerchantGuiController extends ContainerGuiController<Mer
 
     void insertElement(final int index, final @NotNull TradeElement element);
 
-    boolean select(final int index, final @NotNull TradeElement element);
+    boolean select(final int index);
 
-    boolean purchase(final int index, final @NotNull TradeElement element);
+    boolean purchase(final int index);
 
-    @ApiStatus.Internal
     void update();
 }

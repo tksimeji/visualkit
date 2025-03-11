@@ -1,15 +1,12 @@
 package com.tksimeji.visualkit.element;
 
+import com.tksimeji.visualkit.event.MerchantGuiEvents;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.MerchantRecipe;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Range;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 
 public interface TradeElement extends Element<MerchantRecipe> {
     @NotNull ItemStack result();
@@ -40,62 +37,54 @@ public interface TradeElement extends Element<MerchantRecipe> {
     @Contract("_ -> this")
     @NotNull TradeElement canPurchase(final boolean canUse);
 
-    @Nullable SelectHandler selectHandler();
+    @Nullable TradeElement.SelectHandler selectHandler();
 
     @Contract("_ -> this")
-    @NotNull TradeElement selectHandler(final @NotNull SelectHandler handler);
-
-    @Nullable PurchaseHandler purchaseHandler();
+    @NotNull TradeElement selectHandler(final @NotNull TradeElement.SelectHandler1 handler);
 
     @Contract("_ -> this")
-    @NotNull TradeElement purchaseHandler(final @NotNull PurchaseHandler handler);
+    @NotNull TradeElement selectHandler(final @NotNull TradeElement.SelectHandler2 handler);
 
-    class Ingredients implements Iterable<ItemStack> {
-        private final @NotNull ItemStack ingredient1;
-        private final @Nullable ItemStack ingredient2;
+    @Nullable TradeElement.PurchaseHandler purchaseHandler();
 
-        public Ingredients(final @NotNull ItemStack ingredient) {
-            this(ingredient, null);
-        }
+    @Contract("_ -> this")
+    @NotNull TradeElement purchaseHandler(final @NotNull TradeElement.PurchaseHandler1 handler);
 
-        public Ingredients(final @NotNull ItemStack ingredient1, final @Nullable ItemStack ingredient2) {
-            this.ingredient1 = ingredient1;
-            this.ingredient2 = ingredient2;
-        }
-
-        public @NotNull ItemStack getIngredient1() {
-            return ingredient1.clone();
-        }
-
-        public @Nullable ItemStack getIngredient2() {
-            return ingredient2 != null ? ingredient2.clone() : null;
-        }
-
-        public boolean hasIngredient2() {
-            return getIngredient2() != null;
-        }
-
-        @Override
-        public @NotNull Iterator<ItemStack> iterator() {
-            List<ItemStack> collection = new ArrayList<>();
-            collection.add(getIngredient1());
-
-            if (hasIngredient2()) {
-                collection.add(getIngredient2());
-            }
-
-            return collection.iterator();
-        }
-    }
+    @Contract("_ -> this")
+    @NotNull TradeElement purchaseHandler(final @NotNull TradeElement.PurchaseHandler2 handler);
 
     @Override
     @NotNull TradeElement createCopy();
 
+    boolean equals(final @Nullable MerchantRecipe object);
+
     interface SelectHandler {
+    }
+
+    interface SelectHandler1 extends SelectHandler {
         void onSelect();
     }
 
+    interface SelectHandler2 extends SelectHandler {
+        void onSelect(@NotNull MerchantGuiEvents.SelectEvent event);
+    }
+
     interface PurchaseHandler {
+    }
+
+    interface PurchaseHandler1 extends PurchaseHandler {
         void onPurchase();
+    }
+
+    interface PurchaseHandler2 extends PurchaseHandler {
+        void onPurchase(@NotNull MerchantGuiEvents.PurchaseEvent event);
+    }
+
+    interface Ingredients extends Iterable<ItemStack> {
+        @NotNull ItemStack getIngredient1();
+
+        @Nullable ItemStack getIngredient2();
+
+        boolean hasIngredient2();
     }
 }

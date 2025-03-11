@@ -10,7 +10,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 
-public interface ItemContainerGuiController<I extends Inventory> extends ContainerGuiController<I>, TickableController {
+public interface ItemContainerGuiController<I extends Inventory> extends ContainerGuiController<I>, TickableGuiController {
     @Nullable ItemElement getElement(final int index);
 
     @NotNull Map<Integer, ItemElement> getElements();

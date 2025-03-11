@@ -20,9 +20,9 @@ public final class MerchantGuiEvents {
         @NotNull TradeElement getElement();
     }
 
-    public interface SelectEvent extends InteractEvent {
+    public interface PurchaseEvent extends InteractEvent {
     }
 
-    public interface PurchaseEvent extends InteractEvent {
+    public interface SelectEvent extends InteractEvent {
     }
 }

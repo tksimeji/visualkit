@@ -1,6 +1,7 @@
 package com.tksimeji.visualkit.element;
 
 import com.google.common.base.Preconditions;
+import com.tksimeji.visualkit.markupextension.MarkupExtensionSupport;
 import com.tksimeji.visualkit.markupextension.context.Context;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
@@ -23,7 +24,11 @@ public interface Element<T> extends IElement<T> {
     }
 
     static @NotNull ComponentElement component(final @NotNull ComponentLike component, final @Nullable Context<?> ctx) {
-        return component(component).context(ctx);
+        ComponentElement element = component(component);
+        if (element instanceof MarkupExtensionSupport markupExtensionSupport) {
+            markupExtensionSupport.setContext(ctx);
+        }
+        return element;
     }
 
     static @NotNull ComponentElement component(final @NotNull ComponentLike component, final @Nullable Object object) {
@@ -65,8 +70,6 @@ public interface Element<T> extends IElement<T> {
     }
 
     static @NotNull TradeElement trade(@NotNull ItemStack result, @NotNull ItemStack ingredient1, @Nullable ItemStack ingredient2) {
-        Preconditions.checkArgument(result != null, "Trade result cannot be null.");
-        Preconditions.checkArgument(ingredient1 != null, "Ingredient-1 cannot be null.");
         return new TradeElementImpl(result, ingredient1, ingredient2);
     }
 }

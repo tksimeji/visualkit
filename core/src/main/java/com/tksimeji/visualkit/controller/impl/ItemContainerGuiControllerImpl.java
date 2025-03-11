@@ -50,14 +50,14 @@ public abstract class ItemContainerGuiControllerImpl<I extends Inventory> extend
             return;
         }
 
-        if (element != null) {
-            element.setContext(markupExtensionContext);
-        } else if (elements.containsKey(index)) {
-            elements.get(index).setContext(null);
+        ItemElement aElement = element != null ? element.createCopy() : null;
+
+        if (aElement instanceof MarkupExtensionSupport markupExtensionSupport) {
+            markupExtensionSupport.setContext(markupExtensionContext);
         }
 
-        elements.put(index, element != null ? element.createCopy() : null);
-        getInventory().setItem(index, element != null ? element.create() : null);
+        elements.put(index, aElement);
+        getInventory().setItem(index, element != null ? aElement.create() : null);
     }
 
     @Override

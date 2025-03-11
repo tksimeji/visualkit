@@ -1,5 +1,6 @@
 package com.tksimeji.visualkit.element;
 
+import com.tksimeji.visualkit.markupextension.MarkupExtensionSupport;
 import com.tksimeji.visualkit.markupextension.context.Context;
 import com.tksimeji.visualkit.util.Components;
 import net.kyori.adventure.text.Component;
@@ -7,7 +8,7 @@ import net.kyori.adventure.text.ComponentLike;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class ComponentElementImpl implements ComponentElement {
+public class ComponentElementImpl implements ComponentElement, MarkupExtensionSupport {
     private @NotNull Component source;
 
     private @Nullable Context<?> markupExtensionContext;
@@ -35,17 +36,6 @@ public class ComponentElementImpl implements ComponentElement {
     @Override
     public @NotNull Component source() {
         return source;
-    }
-
-    @Override
-    public @Nullable Context<?> context() {
-        return getContext();
-    }
-
-    @Override
-    public @NotNull ComponentElement context(final @Nullable Context<?> ctx) {
-        setContext(ctx);
-        return this;
     }
 
     @Override

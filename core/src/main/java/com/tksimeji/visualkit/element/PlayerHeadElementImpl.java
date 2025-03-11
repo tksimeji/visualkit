@@ -18,7 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-class PlayerHeadElementImpl extends ItemElementImpl implements PlayerHeadElement {
+public class PlayerHeadElementImpl extends ItemElementImpl implements PlayerHeadElement {
     private static final Map<String, UUID> UUID_CACHE = new HashMap<>();
 
     private @Nullable URL url;

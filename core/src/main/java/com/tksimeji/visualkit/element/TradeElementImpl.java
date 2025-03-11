@@ -1,17 +1,17 @@
 package com.tksimeji.visualkit.element;
 
 import com.tksimeji.visualkit.controller.MerchantGuiController;
+import com.tksimeji.visualkit.markupextension.MarkupExtensionSupport;
+import com.tksimeji.visualkit.markupextension.context.Context;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.MerchantRecipe;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Range;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
-public class TradeElementImpl implements TradeElement {
+public class TradeElementImpl implements ObservableElement<MerchantRecipe, MerchantGuiController>, TradeElement {
     private @NotNull ItemStack result;
 
     private @NotNull Ingredients ingredients;
@@ -27,24 +27,43 @@ public class TradeElementImpl implements TradeElement {
 
     private final @NotNull Set<MerchantGuiController> observers = new HashSet<>();
 
-    public TradeElementImpl(final @NotNull ItemStack result, final @NotNull ItemStack ingredient) {
-        this(result, ingredient, null);
+    public TradeElementImpl(final @NotNull ItemStack result, final @NotNull ItemStack ingredient1, final @Nullable ItemStack ingredient2) {
+        this.result = result.clone();
+
+        if (this.result instanceof MarkupExtensionSupport markupExtensionSupport) {
+            markupExtensionSupport.setContext(null);
+        }
+
+        ingredients = new IngredientsImpl(ingredient1.clone(), ingredient2 != null ? ingredient2.clone() : null);
     }
 
-    public TradeElementImpl(final @NotNull ItemStack result, final @NotNull ItemStack ingredient1, final @Nullable ItemStack ingredient2) {
-        this.result = result;
-        ingredients = new Ingredients(ingredient1.clone(), ingredient2 != null ? ingredient2.clone() : null);
+    @Override
+    public void registerObserver(final @NotNull MerchantGuiController observer) {
+        observers.add(observer);
+    }
+
+    @Override
+    public void unregisterObserver(final @NotNull MerchantGuiController observer) {
+        observers.remove(observer);
+    }
+
+    private void callObservers() {
+        observers.forEach(MerchantGuiController::update);
     }
 
     @Override
     public @NotNull ItemStack result() {
-        return result;
+        return result.clone();
     }
 
     @Override
     public @NotNull TradeElement result(final @NotNull ItemStack result) {
-        this.result = result;
-        observers.forEach(MerchantGuiController::update);
+        if (result.equals(this.result)) {
+            return this;
+        }
+
+        this.result = result.clone();
+        callObservers();
         return this;
     }
 
@@ -53,17 +72,19 @@ public class TradeElementImpl implements TradeElement {
         return ingredients;
     }
 
-    @NotNull
     @Override
-    public TradeElement ingredient(@NotNull ItemStack ingredient) {
+    public @NotNull TradeElement ingredient(final @NotNull ItemStack ingredient) {
         return ingredients(ingredient, null);
     }
 
-    @NotNull
     @Override
-    public TradeElement ingredients(@NotNull ItemStack ingredient1, @Nullable ItemStack ingredient2) {
-        this.ingredients = new Ingredients(ingredient1, ingredient2);
-        observers.forEach(MerchantGuiController::update);
+    public @NotNull TradeElement ingredients(final @NotNull ItemStack ingredient1, @Nullable ItemStack ingredient2) {
+        if (ingredient1.equals(ingredients.getIngredient1()) && Objects.equals(ingredient2, ingredients.getIngredient2())) {
+            return this;
+        }
+
+        ingredients = new IngredientsImpl(ingredient1, ingredient2);
+        callObservers();
         return this;
     }
 
@@ -74,8 +95,12 @@ public class TradeElementImpl implements TradeElement {
 
     @Override
     public @NotNull TradeElement maxUses(final @Range(from = 0, to = Integer.MAX_VALUE) int maxUses) {
+        if (maxUses == this.maxUses) {
+            return this;
+        }
+
         this.maxUses = maxUses;
-        observers.forEach(MerchantGuiController::update);
+        callObservers();
         return this;
     }
 
@@ -86,7 +111,12 @@ public class TradeElementImpl implements TradeElement {
 
     @Override
     public @NotNull TradeElement canSelect(final boolean canSelect) {
+        if (canSelect == this.canSelect) {
+            return this;
+        }
+
         this.canSelect = canSelect;
+        callObservers();
         return this;
     }
 
@@ -97,7 +127,12 @@ public class TradeElementImpl implements TradeElement {
 
     @Override
     public @NotNull TradeElement canPurchase(final boolean canPurchase) {
+        if (canPurchase == this.canPurchase) {
+            return this;
+        }
+
         this.canPurchase = canPurchase;
+        callObservers();
         return this;
     }
 
@@ -107,7 +142,13 @@ public class TradeElementImpl implements TradeElement {
     }
 
     @Override
-    public @NotNull TradeElement selectHandler(final @NotNull SelectHandler handler) {
+    public @NotNull TradeElement selectHandler(final @NotNull SelectHandler1 handler) {
+        selectHandler = handler;
+        return this;
+    }
+
+    @Override
+    public @NotNull TradeElement selectHandler(final @NotNull SelectHandler2 handler) {
         selectHandler = handler;
         return this;
     }
@@ -118,7 +159,13 @@ public class TradeElementImpl implements TradeElement {
     }
 
     @Override
-    public @NotNull TradeElement purchaseHandler(@NotNull PurchaseHandler handler) {
+    public @NotNull TradeElement purchaseHandler(final @NotNull PurchaseHandler1 handler) {
+        purchaseHandler = handler;
+        return this;
+    }
+
+    @Override
+    public @NotNull TradeElement purchaseHandler(final @NotNull PurchaseHandler2 handler) {
         purchaseHandler = handler;
         return this;
     }
@@ -126,11 +173,9 @@ public class TradeElementImpl implements TradeElement {
     @Override
     public @NotNull MerchantRecipe create() {
         MerchantRecipe merchantRecipe = new MerchantRecipe(result, maxUses);
-
         for (ItemStack ingredient : ingredients) {
             merchantRecipe.addIngredient(ingredient);
         }
-
         return merchantRecipe;
     }
 
@@ -140,25 +185,57 @@ public class TradeElementImpl implements TradeElement {
         copy.maxUses = maxUses;
         copy.selectHandler = selectHandler;
         copy.purchaseHandler = purchaseHandler;
-        copy.observers.addAll(observers);
         return copy;
     }
 
-    @ApiStatus.Internal
-    public void addObserver(final @NotNull MerchantGuiController observer) {
-        observers.add(observer);
-    }
-
-    @ApiStatus.Internal
-    public void removeObserver(final @NotNull MerchantGuiController observer) {
-        observers.remove(observer);
-    }
-
-    public boolean equals(final @Nullable MerchantRecipe obj) {
-        if (obj == null) {
+    @Override
+    public boolean equals(final @Nullable MerchantRecipe object) {
+        if (object == null) {
             return false;
         }
+        return object.getResult().equals(result) && (object.getIngredients().stream().allMatch(ingredient -> ingredient.equals(ingredients.getIngredient1()) || ingredient.equals(ingredients.getIngredient2())));
+    }
 
-        return obj.getResult().equals(result) && ((obj.getIngredients().stream().allMatch(ingredient -> ingredient.equals(ingredients.getIngredient1()) || ingredient.equals(ingredients.getIngredient2()))));
+    private static final class IngredientsImpl implements Ingredients {
+        private final @NotNull ItemStack ingredient1;
+        private final @Nullable ItemStack ingredient2;
+
+        private @Nullable Context<?> markupExtensionContext;
+
+        public IngredientsImpl(final @NotNull ItemStack ingredient) {
+            this(ingredient, null);
+        }
+
+        public IngredientsImpl(final @NotNull ItemStack ingredient1, final @Nullable ItemStack ingredient2) {
+            this.ingredient1 = ingredient1.clone();
+            this.ingredient2 = ingredient2 != null ? ingredient2.clone() : null;
+        }
+
+        @Override
+        public @NotNull ItemStack getIngredient1() {
+            return ingredient1.clone();
+        }
+
+        @Override
+        public @Nullable ItemStack getIngredient2() {
+            return ingredient2 != null ? ingredient2.clone() : null;
+        }
+
+        @Override
+        public boolean hasIngredient2() {
+            return ingredient2 != null;
+        }
+
+        @Override
+        public @NotNull Iterator<ItemStack> iterator() {
+            List<ItemStack> collection = new ArrayList<>();
+            collection.add(ingredient1);
+
+            if (hasIngredient2()) {
+                collection.add(ingredient2);
+            }
+
+            return collection.iterator();
+        }
     }
 }

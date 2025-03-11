@@ -2,6 +2,7 @@ package com.tksimeji.visualkit.element;
 
 import com.google.common.base.Preconditions;
 import com.tksimeji.visualkit.Visualkit;
+import com.tksimeji.visualkit.markupextension.MarkupExtensionSupport;
 import com.tksimeji.visualkit.markupextension.context.Context;
 import com.tksimeji.visualkit.policy.ItemSlotPolicy;
 import com.tksimeji.visualkit.util.Components;
@@ -27,7 +28,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
-class ItemElementImpl implements ItemElement {
+public class ItemElementImpl implements ItemElement, MarkupExtensionSupport {
     private @NotNull ItemStack itemStack;
 
     private @Nullable Component title;
