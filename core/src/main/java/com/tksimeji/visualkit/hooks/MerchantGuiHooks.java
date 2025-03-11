@@ -12,48 +12,48 @@ import java.util.List;
 
 public interface MerchantGuiHooks extends IMerchantGuiHooks {
     @Override
-    default @NotNull Player usePlayer() {
+    default @NotNull Player hookPlayer() {
         return controller().getPlayer();
     }
 
     @Override
-    default @Nullable TradeElement useGetElement(final int index) {
+    default @Nullable TradeElement hookGetElement(final int index) {
         return controller().getElement(index);
     }
 
     @Override
-    default @NotNull List<TradeElement> useGetElements() {
+    default @NotNull List<TradeElement> hookGetElements() {
         return controller().getElements();
     }
 
     @Override
-    default void useSetElement(final int index, final @NotNull TradeElement element) {
+    default void hookSetElement(final int index, final @NotNull TradeElement element) {
         controller().setElement(index, element);
     }
 
     @Override
-    default void useAddElement(final @NotNull TradeElement element) {
+    default void hookAddElement(final @NotNull TradeElement element) {
         controller().addElement(element);
     }
 
     @Override
-    default void useRemoveElement(final int index) {
+    default void hookRemoveElement(final int index) {
         controller().removeElement(index);
     }
 
     @Override
-    default void useInsertElement(final int index, final @NotNull TradeElement element) {
+    default void hookInsertElement(final int index, final @NotNull TradeElement element) {
         controller().insertElement(index, element);
     }
 
     @Override
-    default void useClose() {
+    default void hookClose() {
         controller().close();
     }
 
     @Override
-    default void useState(final @NotNull String key, final @Nullable Object value) {
-        controller().setState(key, value);
+    default void hookState(final @NotNull String name, final @Nullable Object value) {
+        controller().setState(name, value);
     }
 
     private @NotNull MerchantGuiController controller() {

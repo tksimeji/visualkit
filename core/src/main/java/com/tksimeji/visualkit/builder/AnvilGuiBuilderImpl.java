@@ -90,7 +90,7 @@ public final class AnvilGuiBuilderImpl extends ItemContainerGuiBuilderImpl<Anvil
         @Handler
         public void onInit(final @NotNull AnvilGuiEvents.InitEvent event) {
             for (Map.Entry<Integer, ItemSlotPolicy> entry : policies.entrySet()) {
-                useSetPolicy(entry.getKey(), entry.getValue());
+                this.hookSetPolicy(entry.getKey(), entry.getValue());
             }
         }
     }

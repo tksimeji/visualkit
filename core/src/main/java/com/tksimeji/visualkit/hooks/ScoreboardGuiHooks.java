@@ -13,83 +13,83 @@ import java.util.Set;
 
 public interface ScoreboardGuiHooks extends IScoreboardGuiHooks {
     @Override
-    default @NotNull Set<Player> useGetPlayers() {
+    default @NotNull Set<Player> hookGetPlayers() {
         return controller().getPlayers();
     }
 
     @Override
-    default void useAddPlayer(final @NotNull Player player) {
+    default void hookAddPlayer(final @NotNull Player player) {
         controller().addPlayer(player);
     }
 
     @Override
-    default void useRemovePlayer(final @NotNull Player player) {
+    default void hookRemovePlayer(final @NotNull Player player) {
         controller().removePlayer(player);
     }
 
     @Override
-    default boolean useIsPlayer(final @NotNull Player player) {
+    default boolean hookIsPlayer(final @NotNull Player player) {
         return controller().isPlayer(player);
     }
 
     @Override
-    default @NotNull Component useGetTitle() {
+    default @NotNull Component hookGetTitle() {
         return controller().getTitle();
     }
 
     @Override
-    default void useSetTitle(final @NotNull ComponentLike title) {
+    default void hookSetTitle(final @NotNull ComponentLike title) {
         controller().setTitle(title);
     }
 
     @Override
-    default @Nullable Component useGetLine(final int index) {
+    default @Nullable Component hookGetLine(final int index) {
         return controller().getLine(index);
     }
 
     @Override
-    default void useSetLine(final int index, final @NotNull ComponentLike line) {
+    default void hookSetLine(final int index, final @NotNull ComponentLike line) {
         controller().setLine(index, line);
     }
 
     @Override
-    default void useAddLine(final @NotNull ComponentLike line) {
+    default void hookAddLine(final @NotNull ComponentLike line) {
         controller().addLine(line);
     }
 
     @Override
-    default void useRemoveLine(final int index) {
+    default void hookRemoveLine(final int index) {
         controller().removeLine(index);
     }
 
     @Override
-    default void useRemoveLines() {
+    default void hookRemoveLines() {
         controller().removeLines();
     }
 
     @Override
-    default void useInsertLine(final int index, final @NotNull ComponentLike line) {
+    default void hookInsertLine(final int index, final @NotNull ComponentLike line) {
         controller().insertLine(index, line);
     }
 
     @Override
-    default void useClearLine(final int index) {
+    default void hookClearLine(final int index) {
         controller().clearLine(index);
     }
 
     @Override
-    default void useClearLines() {
+    default void hookClearLines() {
         controller().clearLines();
     }
 
     @Override
-    default int useSize() {
+    default int hookSize() {
         return controller().getSize();
     }
 
     @Override
-    default void useState(final @NotNull String key, final @Nullable Object value) {
-        controller().setState(key, value);
+    default void hookState(final @NotNull String name, final @Nullable Object value) {
+        controller().setState(name, value);
     }
 
     private @NotNull ScoreboardGuiController controller() {

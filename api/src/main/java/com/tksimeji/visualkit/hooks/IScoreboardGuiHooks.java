@@ -11,33 +11,33 @@ import java.util.Set;
 
 @ApiStatus.Internal
 interface IScoreboardGuiHooks extends Hooks {
-    @NotNull Set<Player> useGetPlayers();
+    @NotNull Set<Player> hookGetPlayers();
 
-    void useAddPlayer(final @NotNull Player player);
+    void hookAddPlayer(final @NotNull Player player);
 
-    void useRemovePlayer(final @NotNull Player player);
+    void hookRemovePlayer(final @NotNull Player player);
 
-    boolean useIsPlayer(final @NotNull Player player);
+    boolean hookIsPlayer(final @NotNull Player player);
 
-    @NotNull Component useGetTitle();
+    @NotNull Component hookGetTitle();
 
-    void useSetTitle(final @NotNull ComponentLike title);
+    void hookSetTitle(final @NotNull ComponentLike title);
 
-    @Nullable Component useGetLine(final int index);
+    @Nullable Component hookGetLine(final int index);
 
-    void useSetLine(final int index, final @NotNull ComponentLike line);
+    void hookSetLine(final int index, final @NotNull ComponentLike line);
 
-    void useAddLine(final @NotNull ComponentLike line);
+    void hookAddLine(final @NotNull ComponentLike line);
 
-    void useRemoveLine(final int index);
+    void hookRemoveLine(final int index);
 
-    void useRemoveLines();
+    void hookRemoveLines();
 
-    void useInsertLine(final int index, final @NotNull ComponentLike line);
+    void hookInsertLine(final int index, final @NotNull ComponentLike line);
 
-    void useClearLine(final int index);
+    void hookClearLine(final int index);
 
-    void useClearLines();
+    void hookClearLines();
 
-    int useSize();
+    int hookSize();
 }

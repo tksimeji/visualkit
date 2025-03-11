@@ -13,82 +13,82 @@ import java.util.Locale;
 
 public interface AnvilGuiHooks extends IAnvilGuiHooks {
     @Override
-    default @NotNull Player usePlayer() {
+    default @NotNull Player hookPlayer() {
         return controller().getPlayer();
     }
 
-    default @Nullable ItemElement useGetFirstElement() {
+    default @Nullable ItemElement hookGetFirstElement() {
         return controller().getFirstElement();
     }
 
-    default void useSetFirstElement(final @Nullable ItemElement element) {
+    default void hookSetFirstElement(final @Nullable ItemElement element) {
         controller().setFirstElement(element);
     }
 
-    default @Nullable ItemElement useGetSecondElement() {
+    default @Nullable ItemElement hookGetSecondElement() {
         return controller().getSecondElement();
     }
 
-    default void useSetSecondElement(final @Nullable ItemElement element) {
+    default void hookSetSecondElement(final @Nullable ItemElement element) {
         controller().setSecondElement(element);
     }
 
-    default @Nullable ItemElement useGetResultElement() {
+    default @Nullable ItemElement hookGetResultElement() {
         return controller().getResultElement();
     }
 
-    default void useSetResultElement(final @Nullable ItemElement element) {
+    default void hookSetResultElement(final @Nullable ItemElement element) {
         controller().setResultElement(element);
     }
 
     @Override
-    default @NotNull ItemSlotPolicy useGetPolicy(final int index) {
+    default @NotNull ItemSlotPolicy hookGetPolicy(final int index) {
         return controller().getPolicy(index);
     }
 
     @Override
-    default void useSetPolicy(final int index, final @NotNull ItemSlotPolicy policy) {
+    default void hookSetPolicy(final int index, final @NotNull ItemSlotPolicy policy) {
         controller().setPolicy(index, policy);
     }
 
     @Override
-    default @NotNull ItemSlotPolicy useGetDefaultPolicy() {
+    default @NotNull ItemSlotPolicy hookGetDefaultPolicy() {
         return controller().getDefaultPolicy();
     }
 
     @Override
-    default void useSetDefaultPolicy(final @NotNull ItemSlotPolicy defaultPolicy) {
+    default void hookSetDefaultPolicy(final @NotNull ItemSlotPolicy defaultPolicy) {
         controller().setDefaultPolicy(defaultPolicy);
     }
 
     @Override
-    default @NotNull ItemSlotPolicy useGetPlayerDefaultPolicy() {
+    default @NotNull ItemSlotPolicy hookGetPlayerDefaultPolicy() {
         return controller().getPlayerDefaultPolicy();
     }
 
     @Override
-    default void useSetPlayerDefaultPolicy(final @NotNull ItemSlotPolicy playerDefaultPolicy) {
+    default void hookSetPlayerDefaultPolicy(final @NotNull ItemSlotPolicy playerDefaultPolicy) {
         controller().setPlayerDefaultPolicy(playerDefaultPolicy);
     }
 
     @Override
-    default boolean useIsEmpty() {
-        return useGetFirstElement() == null && useGetSecondElement() == null && useGetResultElement() == null;
+    default boolean hookIsEmpty() {
+        return this.hookGetFirstElement() == null && this.hookGetSecondElement() == null && this.hookGetResultElement() == null;
     }
 
     @Override
-    default @NotNull Locale useLocale() {
+    default @NotNull Locale hookLocale() {
         return controller().getLocale();
     }
 
     @Override
-    default void useClose() {
+    default void hookClose() {
         controller().close();
     }
 
     @Override
-    default void useState(final @NotNull String key, final @Nullable Object value) {
-        controller().setState(key, value);
+    default void hookState(final @NotNull String name, final @Nullable Object value) {
+        controller().setState(name, value);
     }
 
     private @NotNull AnvilGuiController controller() {

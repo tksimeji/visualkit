@@ -14,78 +14,78 @@ import java.util.Map;
 
 public interface ChestGuiHooks extends IChestGuiHooks {
     @Override
-    default @NotNull Player usePlayer() {
+    default @NotNull Player hookPlayer() {
         return controller().getPlayer();
     }
 
     @Override
-    default @Nullable ItemElement useGetElement(final int index) {
+    default @Nullable ItemElement hookGetElement(final int index) {
         return controller().getElement(index);
     }
 
     @Override
-    default @NotNull Map<Integer, ItemElement> useGetElements() {
+    default @NotNull Map<Integer, ItemElement> hookGetElements() {
         return controller().getElements();
     }
 
     @Override
-    default void useSetElement(final int index, final @NotNull ItemElement element) {
+    default void hookSetElement(final int index, final @NotNull ItemElement element) {
         controller().setElement(index, element);
     }
 
     @Override
-    default void useClearElement(final int index) {
+    default void hookClearElement(final int index) {
         controller().setElement(index, null);
     }
 
     @Override
-    default @NotNull ItemSlotPolicy useGetPolicy(final int index) {
+    default @NotNull ItemSlotPolicy hookGetPolicy(final int index) {
         return controller().getPolicy(index);
     }
 
     @Override
-    default void useSetPolicy(final int index, final @NotNull ItemSlotPolicy policy) {
+    default void hookSetPolicy(final int index, final @NotNull ItemSlotPolicy policy) {
         controller().setPolicy(index, policy);
     }
 
     @Override
-    default @NotNull ItemSlotPolicy useGetDefaultPolicy() {
+    default @NotNull ItemSlotPolicy hookGetDefaultPolicy() {
         return controller().getDefaultPolicy();
     }
 
     @Override
-    default void useSetDefaultPolicy(final @NotNull ItemSlotPolicy defaultPolicy) {
+    default void hookSetDefaultPolicy(final @NotNull ItemSlotPolicy defaultPolicy) {
         controller().setDefaultPolicy(defaultPolicy);
     }
 
     @Override
-    default @NotNull ItemSlotPolicy useGetPlayerDefaultPolicy() {
+    default @NotNull ItemSlotPolicy hookGetPlayerDefaultPolicy() {
         return controller().getPlayerDefaultPolicy();
     }
 
     @Override
-    default void useSetPlayerDefaultPolicy(final @NotNull ItemSlotPolicy playerDefaultPolicy) {
+    default void hookSetPlayerDefaultPolicy(final @NotNull ItemSlotPolicy playerDefaultPolicy) {
         controller().setPlayerDefaultPolicy(playerDefaultPolicy);
     }
 
     @Override
-    default @NotNull Locale useLocale() {
+    default @NotNull Locale hookLocale() {
         return controller().getLocale();
     }
 
     @Override
-    default boolean useIsEmpty() {
-        return useGetElements().isEmpty();
+    default boolean hookIsEmpty() {
+        return this.hookGetElements().isEmpty();
     }
 
     @Override
-    default void useClose() {
+    default void hookClose() {
         controller().close();
     }
 
     @Override
-    default void useState(final @NotNull String key, final @Nullable Object value) {
-        controller().setState(key, value);
+    default void hookState(final @NotNull String name, final @Nullable Object value) {
+        controller().setState(name, value);
     }
 
     private @NotNull ChestGuiController controller() {

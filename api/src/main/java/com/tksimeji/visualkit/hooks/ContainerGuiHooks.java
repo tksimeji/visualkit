@@ -4,7 +4,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 public interface ContainerGuiHooks extends Hooks {
-    @NotNull Player usePlayer();
+    @NotNull Player hookPlayer();
 
-    void useClose();
+    void hookClose();
 }

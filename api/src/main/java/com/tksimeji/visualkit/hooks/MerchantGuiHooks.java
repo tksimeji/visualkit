@@ -9,32 +9,32 @@ import java.util.List;
 
 public interface MerchantGuiHooks extends IMerchantGuiHooks {
     @Override
-    default @Nullable TradeElement useGetElement(final int index) {
+    default @Nullable TradeElement hookGetElement(final int index) {
         throw new NotImplementedException("The API module cannot be called at runtime.");
     }
 
     @Override
-    default @NotNull List<TradeElement> useGetElements() {
+    default @NotNull List<TradeElement> hookGetElements() {
         throw new NotImplementedException("The API module cannot be called at runtime.");
     }
 
     @Override
-    default void useSetElement(final int index, final @NotNull TradeElement element) {
+    default void hookSetElement(final int index, final @NotNull TradeElement element) {
         throw new NotImplementedException("The API module cannot be called at runtime.");
     }
 
     @Override
-    default void useAddElement(final @NotNull TradeElement element) {
+    default void hookAddElement(final @NotNull TradeElement element) {
         throw new NotImplementedException("The API module cannot be called at runtime.");
     }
 
     @Override
-    default void useRemoveElement(final int index) {
+    default void hookRemoveElement(final int index) {
         throw new NotImplementedException("The API module cannot be called at runtime.");
     }
 
     @Override
-    default void useInsertElement(final int index, final @NotNull TradeElement element) {
+    default void hookInsertElement(final int index, final @NotNull TradeElement element) {
         throw new NotImplementedException("The API module cannot be called at runtime.");
     }
 }

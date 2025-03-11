@@ -10,77 +10,77 @@ import java.util.Set;
 
 public interface ScoreboardGuiHooks extends IScoreboardGuiHooks {
     @Override
-    default @NotNull Set<Player> useGetPlayers() {
+    default @NotNull Set<Player> hookGetPlayers() {
         throw new NotImplementedException("The API module cannot be called at runtime.");
     }
 
     @Override
-    default void useAddPlayer(final @NotNull Player player) {
+    default void hookAddPlayer(final @NotNull Player player) {
         throw new NotImplementedException("The API module cannot be called at runtime.");
     }
 
     @Override
-    default void useRemovePlayer(final @NotNull Player player) {
+    default void hookRemovePlayer(final @NotNull Player player) {
         throw new NotImplementedException("The API module cannot be called at runtime.");
     }
 
     @Override
-    default boolean useIsPlayer(final @NotNull Player player) {
+    default boolean hookIsPlayer(final @NotNull Player player) {
         throw new NotImplementedException("The API module cannot be called at runtime.");
     }
 
     @Override
-    default @NotNull Component useGetTitle() {
+    default @NotNull Component hookGetTitle() {
         throw new NotImplementedException("The API module cannot be called at runtime.");
     }
 
     @Override
-    default void useSetTitle(final @NotNull ComponentLike title) {
+    default void hookSetTitle(final @NotNull ComponentLike title) {
         throw new NotImplementedException("The API module cannot be called at runtime.");
     }
 
     @Override
-    default @NotNull Component useGetLine(final int index) {
+    default @NotNull Component hookGetLine(final int index) {
         throw new NotImplementedException("The API module cannot be called at runtime.");
     }
 
     @Override
-    default void useSetLine(final int index, final @NotNull ComponentLike line) {
+    default void hookSetLine(final int index, final @NotNull ComponentLike line) {
         throw new NotImplementedException("The API module cannot be called at runtime.");
     }
 
     @Override
-    default void useAddLine(final @NotNull ComponentLike line) {
+    default void hookAddLine(final @NotNull ComponentLike line) {
         throw new NotImplementedException("The API module cannot be called at runtime.");
     }
 
     @Override
-    default void useRemoveLine(final int index) {
+    default void hookRemoveLine(final int index) {
         throw new NotImplementedException("The API module cannot be called at runtime.");
     }
 
     @Override
-    default void useRemoveLines() {
+    default void hookRemoveLines() {
         throw new NotImplementedException("The API module cannot be called at runtime.");
     }
 
     @Override
-    default void useInsertLine(final int index, final @NotNull ComponentLike line) {
+    default void hookInsertLine(final int index, final @NotNull ComponentLike line) {
         throw new NotImplementedException("The API module cannot be called at runtime.");
     }
 
     @Override
-    default void useClearLine(final int index) {
+    default void hookClearLine(final int index) {
         throw new NotImplementedException("The API module cannot be called at runtime.");
     }
 
     @Override
-    default void useClearLines() {
+    default void hookClearLines() {
         throw new NotImplementedException("The API module cannot be called at runtime.");
     }
 
     @Override
-    default int useSize() {
+    default int hookSize() {
         throw new NotImplementedException("The API module cannot be called at runtime.");
     }
 }

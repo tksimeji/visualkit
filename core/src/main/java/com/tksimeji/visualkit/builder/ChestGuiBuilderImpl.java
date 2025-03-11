@@ -30,15 +30,15 @@ public final class ChestGuiBuilderImpl extends ItemContainerGuiBuilderImpl<Chest
         Visualkit.create(gui, ChestGui.class);
 
         for (Map.Entry<Integer, ItemElement> entry : elements.entrySet()) {
-            gui.useSetElement(entry.getKey(), entry.getValue());
+            gui.hookSetElement(entry.getKey(), entry.getValue());
         }
 
         for (Map.Entry<Integer, ItemSlotPolicy> entry : policies.entrySet()) {
-            gui.useSetPolicy(entry.getKey(), entry.getValue());
+            gui.hookSetPolicy(entry.getKey(), entry.getValue());
         }
 
-        Optional.ofNullable(defaultPolicy).ifPresent(gui::useSetDefaultPolicy);
-        Optional.ofNullable(playerDefaultPolicy).ifPresent(gui::useSetPlayerDefaultPolicy);
+        Optional.ofNullable(defaultPolicy).ifPresent(gui::hookSetDefaultPolicy);
+        Optional.ofNullable(playerDefaultPolicy).ifPresent(gui::hookSetPlayerDefaultPolicy);
         return gui;
     }
 

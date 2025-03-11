@@ -30,7 +30,7 @@ public final class MerchantGuiBuilderImpl extends ContainerGuiBuilderImpl<Mercha
         Visualkit.create(gui, MerchantGui.class);
 
         for (TradeElement element : elements) {
-            gui.useAddElement(element);
+            gui.hookAddElement(element);
         }
         return gui;
     }

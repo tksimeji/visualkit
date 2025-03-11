@@ -9,11 +9,11 @@ import java.util.Map;
 
 @ApiStatus.Internal
 interface IChestGuiHooks extends ItemContainerGuiHooks {
-    @Nullable ItemElement useGetElement(final int index);
+    @Nullable ItemElement hookGetElement(final int index);
 
-    @NotNull Map<Integer, ItemElement> useGetElements();
+    @NotNull Map<Integer, ItemElement> hookGetElements();
 
-    void useSetElement(final int index, final @NotNull ItemElement element);
+    void hookSetElement(final int index, final @NotNull ItemElement element);
 
-    void useClearElement(final int index);
+    void hookClearElement(final int index);
 }

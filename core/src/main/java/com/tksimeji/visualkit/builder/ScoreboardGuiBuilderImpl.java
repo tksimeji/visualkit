@@ -35,10 +35,10 @@ public class ScoreboardGuiBuilderImpl extends IGuiBuilderImpl<ScoreboardGuiBuild
 
         Visualkit.create(gui, ScoreboardGui.class);
 
-        gui.useSetTitle(title);
+        gui.hookSetTitle(title);
 
         for (Component line : lines) {
-            gui.useAddLine(line);
+            gui.hookAddLine(line);
         }
         return gui;
     }
