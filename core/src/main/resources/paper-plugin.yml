@@ -1,4 +1,4 @@
-name: visualkit
+name: kunectron
 version: '${version}'
-main: com.tksimeji.visualkit.Visualkit
+main: com.tksimeji.kunectron.Kunectron
 api-version: '1.21'

@@ -142,7 +142,7 @@ Also, if a player is passed as an argument, the language setting of that player 
 
 Create a user interface using a chest.
 
-### 1. Create a class that extends `com.tksimeji.visualkit.ChestUI`
+### 1. Create a class that extends `com.tksimeji.kunectron.ChestUI`
 
 You need to implement a title() method that returns `net.kyori.adventure.text.Component`
 and a size() method that defines the size of the chest.
@@ -171,7 +171,7 @@ Let's add elements to the GUI.
 
 The simplest way to declare an element is to define a field in the class.
 
-Add `com.tksimeji.visualkit.api.Element` to a field of type `com.tksimeji.visualkit.element.VisualkitElement`.
+Add `com.tksimeji.kunectron.api.Element` to a field of type `com.tksimeji.kunectron.element.VisualkitElement`.
 
 ```java
 private int count;
@@ -216,7 +216,7 @@ You can also use asm (Advanced Slot Mapping) for more advanced specifications.
 @Element(asm = {@Asm(from = 0, to = 8), @Asm(from = 18, to = 26), @Asm({27, 28})}, value = {29, 30})
 ```
 
-If you want to dynamically add or remove elements, use `com.tksimeji.visualkit.ChestUI#setElement(...)`
+If you want to dynamically add or remove elements, use `com.tksimeji.kunectron.ChestUI#setElement(...)`
 
 ```java
 // You can specify an VisualkitElement
@@ -238,7 +238,7 @@ A policy defines the behavior of a slot.
 
 You can control drops outside the window by specifying -1 in the slot.
 
-#### Defines a filed with a `com.tksimeji.visualkit.api.Policy` annotation:
+#### Defines a filed with a `com.tksimeji.kunectron.api.Policy` annotation:
 
 ```java
 // The method for specifying the scope is the same as for @Element
@@ -269,7 +269,7 @@ void setPolicy(int slot, @NotNull SlotPolicy policy, @NotNull PolicyTarget targe
 
 Define a method to handle clicks on any slot.
 
-Add a method with the annotation `com.tksimeji.visualkit.api.Handler`.
+Add a method with the annotation `com.tksimeji.kunectron.api.Handler`.
 In addition to slots, you can add action and mouse conditions to the Handler annotation.
 
 ```java
@@ -312,8 +312,8 @@ However, these arguments are injected only if the following conditions are met:
 | Type                                |
 |:------------------------------------|
 | `int` / `java.lang.Integer`         |
-| `com.tksimeji.visualkit.api.Action` |
-| `com.tksimeji.visualkit.api.Mouse`  |
+| `com.tksimeji.kunectron.api.Action` |
+| `com.tksimeji.kunectron.api.Mouse`  |
 | `org.bukkit.inventory.ItemStack`    |
 
 This is useful when you specify a broad conditions in the annotation.
@@ -340,7 +340,7 @@ The GUI will be displayed to the player specified as an argument.
 
 This is a GUI that uses an anvil. It is intended to be used as a text input screen.
 
-### 1. Create a class that extends `com.tksimeji.visualkit.AnvilUI`
+### 1. Create a class that extends `com.tksimeji.kunectron.AnvilUI`
 
 ```java
 public class MyAnvilUI extends AnvilUI {
@@ -377,7 +377,7 @@ public void onTyped(@NotNull String string) {
 
 The Merchant GUI uses the GUI used to trade with villagers and wandering traders.
 
-### 1. Create a class that extends `com.tksimeji.visualkit.MerchantUI`
+### 1. Create a class that extends `com.tksimeji.kunectron.MerchantUI`
 
 ```java
 public class MyMerchantUI extends MerchantUI {
@@ -426,7 +426,7 @@ Details can be passed as arguments.
 | type                                          | description |
 |:----------------------------------------------|-------------|
 | `int` / `java.lang.Integer`                   | index       |
-| `com.tksimeji.visualkit.trade.VisualkitTrade` | trade       |
+| `com.tksimeji.kunectron.trade.VisualkitTrade` | trade       |
 
 You can also specify whether to pass the event through by returning a boolean value.
 
@@ -434,7 +434,7 @@ You can also specify whether to pass the event through by returning a boolean va
 
 The Panel GUI is a user interface that utilizes the scoreboard sidebar.
 
-### 1. Create a class that extends `com.tksimeji.visualkit.SharedPanelUI`
+### 1. Create a class that extends `com.tksimeji.kunectron.SharedPanelUI`
 
 ```java
 public class MyPanelUI extends PanelUI {
@@ -479,18 +479,18 @@ public void onTick() {
 
 This time we created a panel for one player,
 but if you want to display the same panel for multiple players,
-try extending `com.tksimeji.visualkit.SharedPanelUI`.
+try extending `com.tksimeji.kunectron.SharedPanelUI`.
 
 ### 3. Display the GUI
 
 ![](./assets/9f1b15f3-90d9-4fba-aace-999084882d52.png)
 
 ```java
-// If you extend com.tksimeji.visualkit.PanelUI
+// If you extend com.tksimeji.kunectron.PanelUI
 
 new MyPanelUI(player);
 
-// If you extend com.tksimeji.visualkit.SharedPanelUI
+// If you extend com.tksimeji.kunectron.SharedPanelUI
 
 new MyPanelUI(player1, player2);
 

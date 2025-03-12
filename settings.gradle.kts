@@ -1,4 +1,4 @@
-rootProject.name = "visualkit"
+rootProject.name = "kunectron"
 include(
     ":api",
     ":core",
