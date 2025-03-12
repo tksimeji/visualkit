@@ -28,17 +28,15 @@ public class PlayerHeadElementImpl extends ItemElementImpl implements PlayerHead
     }
 
     @Override
-    @NotNull
-    public ItemElement type(final @NotNull ItemType type) {
+    public @NotNull ItemElement type(final @NotNull ItemType type) {
         if (type != ItemType.PLAYER_HEAD) {
             return new ItemElementImpl(type);
         }
         return this;
     }
 
-    @NotNull
     @Override
-    public PlayerHeadElement name(final @Nullable String name) {
+    public @NotNull PlayerHeadElement name(final @Nullable String name) {
         if (name == null) {
             return url((URL) null);
         }
@@ -55,9 +53,8 @@ public class PlayerHeadElementImpl extends ItemElementImpl implements PlayerHead
         return this;
     }
 
-    @NotNull
     @Override
-    public PlayerHeadElement uuid(final @Nullable UUID uuid) {
+    public @NotNull PlayerHeadElement uuid(final @Nullable UUID uuid) {
         if (uuid == null) {
             return url((URL) null);
         }
@@ -78,9 +75,8 @@ public class PlayerHeadElementImpl extends ItemElementImpl implements PlayerHead
         return this;
     }
 
-    @NotNull
     @Override
-    public PlayerHeadElement player(final @Nullable OfflinePlayer player) {
+    public @NotNull PlayerHeadElement player(final @Nullable OfflinePlayer player) {
         return uuid(player != null ? player.getUniqueId() : null);
     }
 

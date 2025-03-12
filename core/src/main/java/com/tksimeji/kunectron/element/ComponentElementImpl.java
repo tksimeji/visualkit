@@ -1,5 +1,6 @@
 package com.tksimeji.kunectron.element;
 
+import com.google.common.base.Preconditions;
 import com.tksimeji.kunectron.markupextension.MarkupExtensionSupport;
 import com.tksimeji.kunectron.markupextension.context.Context;
 import com.tksimeji.kunectron.util.Components;
@@ -28,7 +29,8 @@ public class ComponentElementImpl implements ComponentElement, MarkupExtensionSu
     }
 
     @Override
-    public @NotNull ComponentElement source(@NotNull ComponentLike source) {
+    public @NotNull ComponentElement source(final @NotNull ComponentLike source) {
+        Preconditions.checkArgument(source != null, "Source cannot be null.");
         this.source = source.asComponent();
         return this;
     }

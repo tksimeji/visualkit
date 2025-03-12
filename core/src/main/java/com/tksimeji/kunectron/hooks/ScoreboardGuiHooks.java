@@ -1,5 +1,6 @@
 package com.tksimeji.kunectron.hooks;
 
+import com.google.common.base.Preconditions;
 import com.tksimeji.kunectron.Kunectron;
 import com.tksimeji.kunectron.controller.GuiController;
 import com.tksimeji.kunectron.controller.ScoreboardGuiController;
@@ -19,11 +20,13 @@ public interface ScoreboardGuiHooks extends IScoreboardGuiHooks {
 
     @Override
     default void hookAddPlayer(final @NotNull Player player) {
+        Preconditions.checkArgument(player != null, "Player cannot be null.");
         controller().addPlayer(player);
     }
 
     @Override
     default void hookRemovePlayer(final @NotNull Player player) {
+        Preconditions.checkArgument(player != null, "Player cannot be null.");
         controller().removePlayer(player);
     }
 
@@ -39,6 +42,7 @@ public interface ScoreboardGuiHooks extends IScoreboardGuiHooks {
 
     @Override
     default void hookSetTitle(final @NotNull ComponentLike title) {
+        Preconditions.checkArgument(title != null, "Title cannot be null.");
         controller().setTitle(title);
     }
 
@@ -49,11 +53,13 @@ public interface ScoreboardGuiHooks extends IScoreboardGuiHooks {
 
     @Override
     default void hookSetLine(final int index, final @NotNull ComponentLike line) {
+        Preconditions.checkArgument(line != null, "Line cannot be null.");
         controller().setLine(index, line);
     }
 
     @Override
     default void hookAddLine(final @NotNull ComponentLike line) {
+        Preconditions.checkArgument(line != null, "Line cannot be null.");
         controller().addLine(line);
     }
 
@@ -69,6 +75,7 @@ public interface ScoreboardGuiHooks extends IScoreboardGuiHooks {
 
     @Override
     default void hookInsertLine(final int index, final @NotNull ComponentLike line) {
+        Preconditions.checkArgument(line != null, "Line cannot be null.");
         controller().insertLine(index, line);
     }
 
@@ -89,6 +96,7 @@ public interface ScoreboardGuiHooks extends IScoreboardGuiHooks {
 
     @Override
     default void hookState(final @NotNull String key, final @Nullable Object value) {
+        Preconditions.checkArgument(key != null, "Key cannot be null.");
         controller().setState(key, value);
     }
 

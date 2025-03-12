@@ -6,6 +6,7 @@ import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
+import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ItemType;
@@ -23,6 +24,11 @@ public interface ItemElement extends Element<ItemStack> {
 
     @Contract("_ -> this")
     @NotNull ItemElement type(final @NotNull ItemType type);
+
+    @NotNull Material material();
+
+    @Contract("_ -> this")
+    @NotNull ItemElement material(final @NotNull Material material);
 
     @NotNull Component title();
 

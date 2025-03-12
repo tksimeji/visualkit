@@ -1,5 +1,6 @@
 package com.tksimeji.kunectron.builder;
 
+import com.google.common.base.Preconditions;
 import com.tksimeji.kunectron.ScoreboardGui;
 import com.tksimeji.kunectron.Kunectron;
 import com.tksimeji.kunectron.event.Event;
@@ -19,12 +20,14 @@ public class ScoreboardGuiBuilderImpl extends IGuiBuilderImpl<ScoreboardGuiBuild
 
     @Override
     public @NotNull ScoreboardGuiBuilder title(final @NotNull ComponentLike title) {
+        Preconditions.checkArgument(title != null, "Title cannot be null.");
         this.title = title.asComponent();
         return this;
     }
 
     @Override
     public @NotNull ScoreboardGuiBuilder line(final @NotNull ComponentLike line) {
+        Preconditions.checkArgument(line != null, "Line cannot be null.");
         lines.add(line.asComponent());
         return this;
     }

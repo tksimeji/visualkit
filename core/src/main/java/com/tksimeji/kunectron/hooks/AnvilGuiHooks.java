@@ -1,5 +1,6 @@
 package com.tksimeji.kunectron.hooks;
 
+import com.google.common.base.Preconditions;
 import com.tksimeji.kunectron.Kunectron;
 import com.tksimeji.kunectron.controller.AnvilGuiController;
 import com.tksimeji.kunectron.controller.GuiController;
@@ -48,6 +49,7 @@ public interface AnvilGuiHooks extends IAnvilGuiHooks {
 
     @Override
     default void hookSetPolicy(final int index, final @NotNull ItemSlotPolicy policy) {
+        Preconditions.checkArgument(policy != null, "Policy cannot be null.");
         controller().setPolicy(index, policy);
     }
 
@@ -58,6 +60,7 @@ public interface AnvilGuiHooks extends IAnvilGuiHooks {
 
     @Override
     default void hookSetDefaultPolicy(final @NotNull ItemSlotPolicy defaultPolicy) {
+        Preconditions.checkArgument(defaultPolicy != null, "Default policy cannot be null.");
         controller().setDefaultPolicy(defaultPolicy);
     }
 
@@ -68,6 +71,7 @@ public interface AnvilGuiHooks extends IAnvilGuiHooks {
 
     @Override
     default void hookSetPlayerDefaultPolicy(final @NotNull ItemSlotPolicy playerDefaultPolicy) {
+        Preconditions.checkArgument(playerDefaultPolicy != null, "Player default policy cannot be null.");
         controller().setPlayerDefaultPolicy(playerDefaultPolicy);
     }
 
@@ -88,6 +92,7 @@ public interface AnvilGuiHooks extends IAnvilGuiHooks {
 
     @Override
     default void hookState(final @NotNull String key, final @Nullable Object value) {
+        Preconditions.checkArgument(key != null, "Key cannot be null.");
         controller().setState(key, value);
     }
 

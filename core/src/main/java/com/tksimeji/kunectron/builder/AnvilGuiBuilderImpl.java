@@ -1,5 +1,6 @@
 package com.tksimeji.kunectron.builder;
 
+import com.google.common.base.Preconditions;
 import com.tksimeji.kunectron.AnvilGui;
 import com.tksimeji.kunectron.Kunectron;
 import com.tksimeji.kunectron.element.ItemElement;
@@ -19,21 +20,25 @@ import java.util.Map;
 public final class AnvilGuiBuilderImpl extends ItemContainerGuiBuilderImpl<AnvilGuiBuilder, AnvilGuiHooks> implements AnvilGuiBuilder {
     @Override
     public @NotNull AnvilGuiBuilder firstElement(@NotNull ItemElement firstElement) {
+        Preconditions.checkArgument(firstElement != null, "First element cannot be null.");
         return element(0, firstElement);
     }
 
     @Override
     public @NotNull AnvilGuiBuilder secondElement(@NotNull ItemElement secondElement) {
+        Preconditions.checkArgument(secondElement != null, "Second element cannot be null.");
         return element(1, secondElement);
     }
 
     @Override
     public @NotNull AnvilGuiBuilder resultElement(@NotNull ItemElement resultElement) {
+        Preconditions.checkArgument(resultElement != null, "Result element cannot be null.");
         return element(2, resultElement);
     }
 
     @Override
     public @NotNull AnvilGuiHooks build(@NotNull Player player) {
+        Preconditions.checkArgument(player != null, "Player cannot be null.");
         Gui gui = new Gui(player, title, elements.get(0), elements.get(1), elements.get(2), defaultPolicy, playerDefaultPolicy, policies, handlers);
         Kunectron.create(gui, AnvilGui.class);
         return gui;

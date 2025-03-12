@@ -13,6 +13,7 @@ import net.kyori.adventure.text.ComponentLike;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.translation.GlobalTranslator;
+import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Sound;
 import org.bukkit.enchantments.Enchantment;
@@ -52,6 +53,10 @@ public class ItemElementImpl implements ItemElement, MarkupExtensionSupport {
         itemStack.setItemMeta(itemMeta);
     }
 
+    public ItemElementImpl(final @NotNull Material material) {
+        this(material.asItemType());
+    }
+
     public ItemElementImpl(final @NotNull ItemStack itemStack) {
         this(itemStack, true);
     }
@@ -86,6 +91,18 @@ public class ItemElementImpl implements ItemElement, MarkupExtensionSupport {
     public @NotNull ItemElement type(final @NotNull ItemType type) {
         Preconditions.checkArgument(type != null, "Item type cannot be null.");
         itemStack = itemStack.withType(type.createItemStack().getType());
+        return this;
+    }
+
+    @Override
+    public @NotNull Material material() {
+        return itemStack.getType();
+    }
+
+    @Override
+    public @NotNull ItemElement material(final @NotNull Material material) {
+        Preconditions.checkArgument(material != null, "Material cannot be null.");
+        itemStack = itemStack.withType(material);
         return this;
     }
 
@@ -134,6 +151,7 @@ public class ItemElementImpl implements ItemElement, MarkupExtensionSupport {
 
     @Override
     public @NotNull ItemElement lore(final @NotNull Collection<Component> components) {
+        Preconditions.checkArgument(components != null, "Components cannot be null.");
         return lore(components.stream().map(component -> (ComponentLike) component).toList());
     }
 
@@ -159,11 +177,13 @@ public class ItemElementImpl implements ItemElement, MarkupExtensionSupport {
 
     @Override
     public @NotNull ItemElement lore(final @NotNull ComponentLike... components) {
+        Preconditions.checkArgument(components != null, "Components cannot be null.");
         return lore(Arrays.stream(components).toList());
     }
 
     @Override
     public @NotNull ItemElement lore(final @NotNull String... strings) {
+        Preconditions.checkArgument(strings != null, "Strings cannot be null.");
         return lore(Arrays.stream(strings).map(string -> (ComponentLike) Component.text(string)).toList());
     }
 
@@ -174,7 +194,8 @@ public class ItemElementImpl implements ItemElement, MarkupExtensionSupport {
 
     @Override
     public @NotNull ItemElement amount(final @Range(from = 1, to = Integer.MAX_VALUE) int amount) {
-        Preconditions.checkArgument(0 < amount, "Amount cannot be less then or equal to 0.");
+        Preconditions.checkArgument(amount > 0, "Amount cannot be less then or equal to 0.");
+        Preconditions.checkArgument(amount <= itemStack.getMaxStackSize(), "Amount must be less than or equal to the maximum stack size of " + itemStack.getMaxStackSize() + ".");
         itemStack.setAmount(amount);
         return this;
     }

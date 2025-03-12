@@ -1,5 +1,6 @@
 package com.tksimeji.kunectron.hooks;
 
+import com.google.common.base.Preconditions;
 import com.tksimeji.kunectron.Kunectron;
 import com.tksimeji.kunectron.controller.GuiController;
 import com.tksimeji.kunectron.controller.MerchantGuiController;
@@ -28,11 +29,13 @@ public interface MerchantGuiHooks extends IMerchantGuiHooks {
 
     @Override
     default void hookSetElement(final int index, final @NotNull TradeElement element) {
+        Preconditions.checkArgument(element != null, "Element cannot be null.");
         controller().setElement(index, element);
     }
 
     @Override
     default void hookAddElement(final @NotNull TradeElement element) {
+        Preconditions.checkArgument(element != null, "Element cannot be null.");
         controller().addElement(element);
     }
 
@@ -43,6 +46,7 @@ public interface MerchantGuiHooks extends IMerchantGuiHooks {
 
     @Override
     default void hookInsertElement(final int index, final @NotNull TradeElement element) {
+        Preconditions.checkArgument(element != null, "Element cannot be null.");
         controller().insertElement(index, element);
     }
 
@@ -53,6 +57,7 @@ public interface MerchantGuiHooks extends IMerchantGuiHooks {
 
     @Override
     default void hookState(final @NotNull String key, final @Nullable Object value) {
+        Preconditions.checkArgument(key != null, "Key cannot be null.");
         controller().setState(key, value);
     }
 

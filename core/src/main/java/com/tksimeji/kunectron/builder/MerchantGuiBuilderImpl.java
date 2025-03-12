@@ -1,5 +1,6 @@
 package com.tksimeji.kunectron.builder;
 
+import com.google.common.base.Preconditions;
 import com.tksimeji.kunectron.MerchantGui;
 import com.tksimeji.kunectron.Kunectron;
 import com.tksimeji.kunectron.element.TradeElement;
@@ -19,12 +20,15 @@ public final class MerchantGuiBuilderImpl extends ContainerGuiBuilderImpl<Mercha
 
     @Override
     public @NotNull MerchantGuiBuilder element(final @NotNull TradeElement element) {
+        Preconditions.checkArgument(element != null, "Element cannot be null.");
         elements.add(element);
         return this;
     }
 
     @Override
     public @NotNull MerchantGuiHooks build(final @NotNull Player player) {
+        Preconditions.checkArgument(player != null, "Player cannot be null.");
+
         Gui gui = new Gui(player, title, handlers);
 
         Kunectron.create(gui, MerchantGui.class);

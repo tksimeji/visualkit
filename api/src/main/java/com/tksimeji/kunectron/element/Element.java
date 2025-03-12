@@ -3,6 +3,7 @@ package com.tksimeji.kunectron.element;
 import com.tksimeji.kunectron.markupextension.context.Context;
 import net.kyori.adventure.text.ComponentLike;
 import org.apache.commons.lang3.NotImplementedException;
+import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ItemType;
@@ -30,6 +31,10 @@ public interface Element<T> extends IElement<T> {
     }
 
     static @NotNull ItemElement item(final @NotNull ItemType type) {
+        throw new NotImplementedException("The API module cannot be called at runtime.");
+    }
+
+    static @NotNull ItemElement item(final @NotNull Material material) {
         throw new NotImplementedException("The API module cannot be called at runtime.");
     }
 

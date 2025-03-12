@@ -1,5 +1,6 @@
 package com.tksimeji.kunectron.element;
 
+import com.google.common.base.Preconditions;
 import com.tksimeji.kunectron.controller.MerchantGuiController;
 import com.tksimeji.kunectron.markupextension.MarkupExtensionSupport;
 import com.tksimeji.kunectron.markupextension.context.Context;
@@ -39,11 +40,13 @@ public class TradeElementImpl implements ObservableElement<MerchantRecipe, Merch
 
     @Override
     public void registerObserver(final @NotNull MerchantGuiController observer) {
+        Preconditions.checkArgument(observer != null, "Observer cannot be null.");
         observers.add(observer);
     }
 
     @Override
     public void unregisterObserver(final @NotNull MerchantGuiController observer) {
+        Preconditions.checkArgument(observer != null, "Observer cannot be null.");
         observers.remove(observer);
     }
 
@@ -58,6 +61,8 @@ public class TradeElementImpl implements ObservableElement<MerchantRecipe, Merch
 
     @Override
     public @NotNull TradeElement result(final @NotNull ItemStack result) {
+        Preconditions.checkArgument(result != null, "Result cannot be null.");
+
         if (result.equals(this.result)) {
             return this;
         }
@@ -74,11 +79,14 @@ public class TradeElementImpl implements ObservableElement<MerchantRecipe, Merch
 
     @Override
     public @NotNull TradeElement ingredient(final @NotNull ItemStack ingredient) {
+        Preconditions.checkArgument(ingredient != null, "Ingredient cannot be null.");
         return ingredients(ingredient, null);
     }
 
     @Override
     public @NotNull TradeElement ingredients(final @NotNull ItemStack ingredient1, @Nullable ItemStack ingredient2) {
+        Preconditions.checkArgument(ingredient1 != null, "Ingredient1 cannot be null.");
+
         if (ingredient1.equals(ingredients.getIngredient1()) && Objects.equals(ingredient2, ingredients.getIngredient2())) {
             return this;
         }
@@ -95,6 +103,8 @@ public class TradeElementImpl implements ObservableElement<MerchantRecipe, Merch
 
     @Override
     public @NotNull TradeElement maxUses(final @Range(from = 0, to = Integer.MAX_VALUE) int maxUses) {
+        Preconditions.checkArgument(0 < maxUses, "Max uses cannot be less than 0.");
+
         if (maxUses == this.maxUses) {
             return this;
         }

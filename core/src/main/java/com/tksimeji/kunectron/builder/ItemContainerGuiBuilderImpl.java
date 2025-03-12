@@ -1,5 +1,6 @@
 package com.tksimeji.kunectron.builder;
 
+import com.google.common.base.Preconditions;
 import com.tksimeji.kunectron.IndexGroup;
 import com.tksimeji.kunectron.controller.impl.GuiControllerImpl;
 import com.tksimeji.kunectron.element.ItemElement;
@@ -24,6 +25,7 @@ public abstract class ItemContainerGuiBuilderImpl<B extends ItemContainerGuiBuil
 
     @Override
     public @NotNull B element(final int index, final @NotNull ItemElement element) {
+        Preconditions.checkArgument(element != null, "Element cannot be null.");
         elements.put(index, element);
         return (B) this;
     }
@@ -39,6 +41,7 @@ public abstract class ItemContainerGuiBuilderImpl<B extends ItemContainerGuiBuil
     @NotNull
     @Override
     public B policy(final int index, final @NotNull ItemSlotPolicy policy) {
+        Preconditions.checkArgument(policy != null, "Policy cannot be null.");
         policies.put(index, policy);
         return (B) this;
     }
@@ -55,6 +58,7 @@ public abstract class ItemContainerGuiBuilderImpl<B extends ItemContainerGuiBuil
     @NotNull
     @Override
     public B defaultPolicy(@NotNull ItemSlotPolicy defaultPolicy) {
+        Preconditions.checkArgument(defaultPolicy != null, "Default policy cannot be null.");
         this.defaultPolicy = defaultPolicy;
         return (B) this;
     }
@@ -62,6 +66,7 @@ public abstract class ItemContainerGuiBuilderImpl<B extends ItemContainerGuiBuil
     @NotNull
     @Override
     public B playerDefaultPolicy(@NotNull ItemSlotPolicy playerDefaultPolicy) {
+        Preconditions.checkArgument(playerDefaultPolicy != null, "Player default policy cannot be null.");
         this.playerDefaultPolicy = playerDefaultPolicy;
         return (B) this;
     }

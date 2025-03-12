@@ -1,5 +1,6 @@
 package com.tksimeji.kunectron.builder;
 
+import com.google.common.base.Preconditions;
 import com.tksimeji.kunectron.ChestGui;
 import com.tksimeji.kunectron.Kunectron;
 import com.tksimeji.kunectron.element.ItemElement;
@@ -19,12 +20,14 @@ public final class ChestGuiBuilderImpl extends ItemContainerGuiBuilderImpl<Chest
 
     @Override
     public @NotNull ChestGuiBuilder size(final @NotNull ChestGui.ChestSize size) {
+        Preconditions.checkArgument(size != null, "Size cannot be null.");
         this.size = size;
         return this;
     }
 
     @Override
     public @NotNull ChestGuiHooks build(final @NotNull Player player) {
+        Preconditions.checkArgument(player != null, "Player cannot be null.");
         Gui gui = new Gui(player, title, size, handlers);
 
         Kunectron.create(gui, ChestGui.class);
