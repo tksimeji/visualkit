@@ -1,7 +1,7 @@
 rootProject.name = "kunectron"
 include(
-    ":api",
-    ":core",
-    ":v1_21_1",
-    ":v1_21_3"
+    ":modules:api",
+    ":modules:core",
+    ":modules:v1_21_1",
+    ":modules:v1_21_3"
 )

@@ -1,7 +1,7 @@
 dependencies {
-    implementation(project(":api"))
-    implementation(project(":v1_21_1"))
-    implementation(project(":v1_21_3"))
+    implementation(project(":modules:api"))
+    implementation(project(":modules:v1_21_1"))
+    implementation(project(":modules:v1_21_3"))
     compileOnly("io.papermc.paper:paper-api:1.21.4-R0.1-SNAPSHOT")
     implementation("com.tksimeji:mojango:0.0.2")
 }

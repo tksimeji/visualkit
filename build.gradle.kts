@@ -60,8 +60,8 @@ subprojects {
 }
 
 dependencies {
-    implementation(project(":api"))
-    implementation(project(":core"))
+    implementation(project(":modules:api"))
+    implementation(project(":modules:core"))
 }
 
 publishing {
@@ -94,7 +94,7 @@ publishing {
 }
 
 tasks.named<Jar>("jar") {
-    from(project(":api").sourceSets.main.get().output)
+    from(project(":modules:api").sourceSets.main.get().output)
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 
