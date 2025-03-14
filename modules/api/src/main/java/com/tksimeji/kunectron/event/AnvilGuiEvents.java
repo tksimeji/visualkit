@@ -15,14 +15,14 @@ public final class AnvilGuiEvents {
         boolean isResultSlot();
     }
 
-    public interface CloseEvent extends Event {
+    public interface CloseEvent extends GuiEvent {
         @NotNull String getText();
     }
 
-    public interface InitEvent extends Event {
+    public interface InitEvent extends GuiEvent {
     }
 
-    public interface TextChangeEvent extends Event {
+    public interface TextChangeEvent extends GuiEvent {
         @NotNull String getText();
     }
 }

@@ -2,7 +2,7 @@ package com.tksimeji.kunectron.event;
 
 import org.jetbrains.annotations.NotNull;
 
-public class CancellableEventImpl extends EventImpl implements CancellableEvent  {
+public class CancellableEventImpl extends GuiEventImpl implements CancellableEvent  {
     private boolean cancelled;
 
     public CancellableEventImpl(final @NotNull Object gui) {

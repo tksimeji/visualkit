@@ -4,7 +4,6 @@ import com.google.common.base.Preconditions;
 import com.tksimeji.kunectron.ChestGui;
 import com.tksimeji.kunectron.Kunectron;
 import com.tksimeji.kunectron.element.ItemElement;
-import com.tksimeji.kunectron.event.Event;
 import com.tksimeji.kunectron.hooks.ChestGuiHooks;
 import com.tksimeji.kunectron.policy.ItemSlotPolicy;
 import net.kyori.adventure.text.Component;
@@ -12,6 +11,7 @@ import net.kyori.adventure.text.ComponentLike;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -46,7 +46,7 @@ public final class ChestGuiBuilderImpl extends ItemContainerGuiBuilderImpl<Chest
     }
 
     @ChestGui
-    private static final class Gui extends AbstractGui implements ChestGuiHooks {
+    private static final class Gui extends AbstractGui<ChestGuiHooks> implements ChestGuiHooks {
         @ChestGui.Player
         private final @NotNull Player player;
 
@@ -56,9 +56,9 @@ public final class ChestGuiBuilderImpl extends ItemContainerGuiBuilderImpl<Chest
         @ChestGui.Size
         private final @NotNull ChestGui.ChestSize size;
 
-        public Gui(final @NotNull Player player, final @NotNull ComponentLike title, final @NotNull ChestGui.ChestSize size, final @NotNull Map<Class<? extends Event>, HandlerFunction<?>> handlers) {
+        public Gui(final @NotNull Player player, final @NotNull ComponentLike title, final @NotNull ChestGui.ChestSize size, final @NotNull List<HandlerInfo> handlers) {
             super(handlers);
-            
+
             this.player = player;
             this.title = title.asComponent();
             this.size = size;

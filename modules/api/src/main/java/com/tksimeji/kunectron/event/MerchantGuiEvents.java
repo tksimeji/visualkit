@@ -8,10 +8,10 @@ public final class MerchantGuiEvents {
         throw new UnsupportedOperationException();
     }
 
-    public interface CloseEvent extends Event {
+    public interface CloseEvent extends GuiEvent {
     }
 
-    public interface InitEvent extends Event {
+    public interface InitEvent extends GuiEvent {
     }
 
     public interface InteractEvent extends CancellableEvent {

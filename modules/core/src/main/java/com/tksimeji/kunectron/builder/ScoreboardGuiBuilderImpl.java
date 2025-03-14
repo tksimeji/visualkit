@@ -3,7 +3,6 @@ package com.tksimeji.kunectron.builder;
 import com.google.common.base.Preconditions;
 import com.tksimeji.kunectron.ScoreboardGui;
 import com.tksimeji.kunectron.Kunectron;
-import com.tksimeji.kunectron.event.Event;
 import com.tksimeji.kunectron.hooks.ScoreboardGuiHooks;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
@@ -11,7 +10,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class ScoreboardGuiBuilderImpl extends IGuiBuilderImpl<ScoreboardGuiBuilder, ScoreboardGuiHooks> implements ScoreboardGuiBuilder {
     private @NotNull Component title = Component.empty();
@@ -47,8 +45,8 @@ public class ScoreboardGuiBuilderImpl extends IGuiBuilderImpl<ScoreboardGuiBuild
     }
 
     @ScoreboardGui
-    private static final class Gui extends AbstractGui implements ScoreboardGuiHooks {
-        public Gui(final @NotNull Map<Class<? extends Event>, HandlerFunction<?>> handlers) {
+    private static final class Gui extends AbstractGui<ScoreboardGuiHooks> implements ScoreboardGuiHooks {
+        public Gui(final @NotNull List<HandlerInfo> handlers) {
             super(handlers);
         }
     }

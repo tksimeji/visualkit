@@ -7,7 +7,7 @@ import com.tksimeji.kunectron.Kunectron;
 import com.tksimeji.kunectron.controller.impl.ItemContainerGuiControllerImpl;
 import com.tksimeji.kunectron.element.ItemElement;
 import com.tksimeji.kunectron.event.AnvilGuiEvents;
-import com.tksimeji.kunectron.event.Event;
+import com.tksimeji.kunectron.event.GuiEvent;
 import com.tksimeji.kunectron.event.anvil.AnvilGuiClickEventImpl;
 import com.tksimeji.kunectron.event.anvil.AnvilGuiCloseEventImpl;
 import com.tksimeji.kunectron.event.anvil.AnvilGuiInitEventImpl;
@@ -149,7 +149,7 @@ public final class AnvilGuiControllerImpl extends ItemContainerGuiControllerImpl
     }
 
     @Override
-    public boolean callEvent(@NotNull Event event) {
+    public boolean callEvent(@NotNull GuiEvent event) {
         if (event instanceof AnvilGuiEvents.TextChangeEvent textChangeEvent) {
             text = textChangeEvent.getText();
         }

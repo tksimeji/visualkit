@@ -1,10 +1,10 @@
 package com.tksimeji.kunectron.event.scoreboard;
 
-import com.tksimeji.kunectron.event.EventImpl;
+import com.tksimeji.kunectron.event.GuiEventImpl;
 import com.tksimeji.kunectron.event.ScoreboardGuiEvents;
 import org.jetbrains.annotations.NotNull;
 
-public final class ScoreboardGuiTickEventImpl extends EventImpl implements ScoreboardGuiEvents.TickEvent {
+public final class ScoreboardGuiTickEventImpl extends GuiEventImpl implements ScoreboardGuiEvents.TickEvent {
     public ScoreboardGuiTickEventImpl(final @NotNull Object gui) {
         super(gui);
     }

@@ -6,13 +6,13 @@ import org.jetbrains.annotations.NotNull;
 public final class KunectronEvent extends org.bukkit.event.Event {
     private static final HandlerList HANDLER_LIST = new HandlerList();
 
-    private final @NotNull Event event;
+    private final @NotNull GuiEvent event;
 
-    public KunectronEvent(final @NotNull Event event) {
+    public KunectronEvent(final @NotNull GuiEvent event) {
         this.event = event;
     }
 
-    public @NotNull Event getEvent() {
+    public @NotNull GuiEvent getEvent() {
         return event;
     }
 

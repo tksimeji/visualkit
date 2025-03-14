@@ -6,7 +6,7 @@ import com.tksimeji.kunectron.element.ItemElement;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public abstract class ItemContainerClickEventImpl extends EventImpl implements ItemContainerClickEvent {
+public abstract class ItemContainerClickEventImpl extends GuiEventImpl implements ItemContainerClickEvent {
     protected final @Nullable ItemElement element;
 
     protected final int index;

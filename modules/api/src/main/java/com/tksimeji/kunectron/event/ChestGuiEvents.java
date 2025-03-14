@@ -8,9 +8,9 @@ public final class ChestGuiEvents {
     public interface ClickEvent extends ItemContainerClickEvent {
     }
 
-    public interface CloseEvent extends Event {
+    public interface CloseEvent extends GuiEvent {
     }
 
-    public interface InitEvent extends Event {
+    public interface InitEvent extends GuiEvent {
     }
 }

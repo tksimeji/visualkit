@@ -4,7 +4,7 @@ import com.google.common.base.Preconditions;
 import com.tksimeji.kunectron.MerchantGui;
 import com.tksimeji.kunectron.Kunectron;
 import com.tksimeji.kunectron.element.TradeElement;
-import com.tksimeji.kunectron.event.Event;
+import com.tksimeji.kunectron.hooks.AnvilGuiHooks;
 import com.tksimeji.kunectron.hooks.MerchantGuiHooks;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
@@ -13,7 +13,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public final class MerchantGuiBuilderImpl extends ContainerGuiBuilderImpl<MerchantGuiBuilder, MerchantGuiHooks> implements MerchantGuiBuilder {
     private final @NotNull List<TradeElement> elements = new ArrayList<>();
@@ -40,14 +39,14 @@ public final class MerchantGuiBuilderImpl extends ContainerGuiBuilderImpl<Mercha
     }
 
     @MerchantGui
-    private static final class Gui extends AbstractGui implements MerchantGuiHooks {
+    private static final class Gui extends AbstractGui<AnvilGuiHooks> implements MerchantGuiHooks {
         @MerchantGui.Player
         private final @NotNull Player player;
 
         @MerchantGui.Title
         private final @NotNull Component title;
 
-        public Gui(final @NotNull Player player, final @NotNull ComponentLike title, final @NotNull Map<Class<? extends Event>, HandlerFunction<?>> handlers) {
+        public Gui(final @NotNull Player player, final @NotNull ComponentLike title, final @NotNull List<HandlerInfo> handlers) {
             super(handlers);
 
             this.player = player;

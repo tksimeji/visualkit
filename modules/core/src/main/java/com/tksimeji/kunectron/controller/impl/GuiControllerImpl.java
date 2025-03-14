@@ -1,14 +1,16 @@
 package com.tksimeji.kunectron.controller.impl;
 
 import com.tksimeji.kunectron.IndexGroup;
+import com.tksimeji.kunectron.Kunectron;
 import com.tksimeji.kunectron.controller.GuiController;
-import com.tksimeji.kunectron.event.Handler;
-import com.tksimeji.kunectron.event.Event;
+import com.tksimeji.kunectron.event.GuiEvent;
+import com.tksimeji.kunectron.event.GuiHandler;
 import com.tksimeji.kunectron.event.KunectronEvent;
 import com.tksimeji.kunectron.markupextension.context.Context;
 import com.tksimeji.kunectron.markupextension.context.MutableContext;
 import com.tksimeji.kunectron.util.Classes;
 import org.apache.commons.lang3.tuple.Pair;
+import org.bukkit.Bukkit;
 import org.bukkit.event.Cancellable;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -57,10 +59,10 @@ public abstract class GuiControllerImpl implements GuiController {
         markupExtensionContext = Context.mutable(gui);
 
         Classes.getMethods(gui.getClass()).stream()
-                .filter(method -> method.isAnnotationPresent(Handler.class) &&
+                .filter(method -> method.isAnnotationPresent(GuiHandler.class) &&
                         method.getParameters().length == 1 &&
-                        Event.class.isAssignableFrom(method.getParameterTypes()[0]))
-                .sorted(Comparator.comparingInt(method -> method.getAnnotation(Handler.class).priority()))
+                        GuiEvent.class.isAssignableFrom(method.getParameterTypes()[0]))
+                .sorted(Comparator.comparingInt(method -> method.getAnnotation(GuiHandler.class).priority()))
                 .forEach(handlers::add);
     }
 
@@ -75,20 +77,30 @@ public abstract class GuiControllerImpl implements GuiController {
     }
 
     @Override
-    public boolean callEvent(final @NotNull Event event) {
+    public boolean callEvent(final @NotNull GuiEvent event) {
         List<Method> handlers = this.handlers.stream().filter(handler -> handler.getParameterTypes()[0].isAssignableFrom(event.getClass())).toList();
 
         for (Method handler : handlers) {
-            if (event instanceof Cancellable && ((Cancellable) event).isCancelled() && handler.getAnnotation(Handler.class).ignoreCancelled()) {
+            GuiHandler annotation = handler.getAnnotation(GuiHandler.class);
+
+            if (event instanceof Cancellable && ((Cancellable) event).isCancelled() && annotation.ignoreCancelled()) {
                 continue;
             }
 
             handler.setAccessible(true);
 
-            try {
-                handler.invoke(gui, event);
-            } catch (IllegalAccessException | InvocationTargetException e) {
-                throw new RuntimeException(e);
+            Runnable runnable = () -> {
+                try {
+                    handler.invoke(gui, event);
+                } catch (IllegalAccessException | InvocationTargetException e) {
+                    throw new RuntimeException(e);
+                }
+            };
+
+            if (annotation.async()) {
+                Bukkit.getScheduler().runTaskAsynchronously(Kunectron.plugin(), runnable);
+            } else {
+                Bukkit.getScheduler().runTask(Kunectron.plugin(), runnable);
             }
         }
 

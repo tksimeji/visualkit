@@ -24,7 +24,7 @@ public abstract class ItemContainerGuiControllerImpl<I extends Inventory> extend
     private @NotNull ItemSlotPolicy playerDefaultPolicy;
 
     public ItemContainerGuiControllerImpl(final @NotNull Object gui) {
-        this(gui, Policy.itemSlot(), Policy.itemSlot());
+        this(gui, Policy.itemSlot(false), Policy.itemSlot(false));
     }
 
     public ItemContainerGuiControllerImpl(final @NotNull Object gui, final @NotNull ItemSlotPolicy defaultPolicy, final @NotNull ItemSlotPolicy playerDefaultPolicy) {

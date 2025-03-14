@@ -37,10 +37,9 @@ public final class ItemContainerGuiListener implements Listener {
         event.setCancelled(true);
 
         int index = event.getRawSlot();
-        ItemElement element = controller.getElement(index);
         ItemSlotPolicy policy = index >= 0 ? controller.getPolicy(index) : Policy.itemSlot(true);
 
-        if (element != null) {
+        if (controller.isValidIndex(index)) {
             Action action = event.getClick() == ClickType.DOUBLE_CLICK ? Action.DOUBLE_CLICK : event.isShiftClick() ? Action.SHIFT_CLICK : Action.SINGLE_CLICK;
             Mouse mouse = event.getClick().isLeftClick() ? Mouse.LEFT : Mouse.RIGHT;
             controller.click(index, action, mouse);

@@ -5,8 +5,8 @@ import com.tksimeji.kunectron.AnvilGui;
 import com.tksimeji.kunectron.Kunectron;
 import com.tksimeji.kunectron.element.ItemElement;
 import com.tksimeji.kunectron.event.AnvilGuiEvents;
-import com.tksimeji.kunectron.event.Event;
-import com.tksimeji.kunectron.event.Handler;
+import com.tksimeji.kunectron.event.GuiEvent;
+import com.tksimeji.kunectron.event.GuiHandler;
 import com.tksimeji.kunectron.hooks.AnvilGuiHooks;
 import com.tksimeji.kunectron.policy.ItemSlotPolicy;
 import net.kyori.adventure.text.Component;
@@ -15,6 +15,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.Map;
 
 public final class AnvilGuiBuilderImpl extends ItemContainerGuiBuilderImpl<AnvilGuiBuilder, AnvilGuiHooks> implements AnvilGuiBuilder {
@@ -45,7 +46,7 @@ public final class AnvilGuiBuilderImpl extends ItemContainerGuiBuilderImpl<Anvil
     }
 
     @AnvilGui
-    private static final class Gui extends AbstractGui implements AnvilGuiHooks {
+    private static final class Gui extends AbstractGui<AnvilGuiHooks> implements AnvilGuiHooks {
         @AnvilGui.Player
         private final @NotNull Player player;
 
@@ -78,7 +79,7 @@ public final class AnvilGuiBuilderImpl extends ItemContainerGuiBuilderImpl<Anvil
                 final @Nullable ItemSlotPolicy defaultPolicy,
                 final @Nullable ItemSlotPolicy playerDefaultPolicy,
                 final @NotNull Map<Integer, ItemSlotPolicy> policies,
-                final @NotNull Map<Class<? extends Event>, HandlerFunction<?>> handlers
+                final @NotNull List<HandlerInfo> handlers
         ) {
             super(handlers);
 
@@ -92,7 +93,7 @@ public final class AnvilGuiBuilderImpl extends ItemContainerGuiBuilderImpl<Anvil
             this.policies = policies;
         }
 
-        @Handler
+        @GuiHandler
         public void onInit(final @NotNull AnvilGuiEvents.InitEvent event) {
             for (Map.Entry<Integer, ItemSlotPolicy> entry : policies.entrySet()) {
                 this.hookSetPolicy(entry.getKey(), entry.getValue());
