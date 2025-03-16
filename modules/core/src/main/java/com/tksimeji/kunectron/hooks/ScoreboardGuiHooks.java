@@ -10,92 +10,103 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.Set;
 
 public interface ScoreboardGuiHooks extends IScoreboardGuiHooks {
     @Override
-    default @NotNull Set<Player> hookGetPlayers() {
+    default @NotNull Set<Player> usePlayers() {
         return controller().getPlayers();
     }
 
     @Override
-    default void hookAddPlayer(final @NotNull Player player) {
+    default void useAddPlayer(final @NotNull Player player) {
         Preconditions.checkArgument(player != null, "Player cannot be null.");
         controller().addPlayer(player);
     }
 
     @Override
-    default void hookRemovePlayer(final @NotNull Player player) {
+    default void useRemovePlayer(final @NotNull Player player) {
         Preconditions.checkArgument(player != null, "Player cannot be null.");
         controller().removePlayer(player);
     }
 
     @Override
-    default boolean hookIsPlayer(final @NotNull Player player) {
+    default boolean useIsPlayer(final @NotNull Player player) {
         return controller().isPlayer(player);
     }
 
     @Override
-    default @NotNull Component hookGetTitle() {
+    default @NotNull Component useTitle() {
         return controller().getTitle();
     }
 
     @Override
-    default void hookSetTitle(final @NotNull ComponentLike title) {
+    default void useTitle(final @NotNull ComponentLike title) {
         Preconditions.checkArgument(title != null, "Title cannot be null.");
         controller().setTitle(title);
     }
 
     @Override
-    default @Nullable Component hookGetLine(final int index) {
+    default @Nullable Component useLine(final int index) {
         return controller().getLine(index);
     }
 
     @Override
-    default void hookSetLine(final int index, final @NotNull ComponentLike line) {
+    default void useLine(final int index, final @NotNull ComponentLike line) {
         Preconditions.checkArgument(line != null, "Line cannot be null.");
         controller().setLine(index, line);
     }
 
     @Override
-    default void hookAddLine(final @NotNull ComponentLike line) {
+    default void useAddLine(final @NotNull ComponentLike line) {
         Preconditions.checkArgument(line != null, "Line cannot be null.");
         controller().addLine(line);
     }
 
     @Override
-    default void hookRemoveLine(final int index) {
+    default void useRemoveLine(final int index) {
         controller().removeLine(index);
     }
 
     @Override
-    default void hookRemoveLines() {
+    default void useRemoveLines() {
         controller().removeLines();
     }
 
     @Override
-    default void hookInsertLine(final int index, final @NotNull ComponentLike line) {
+    default void useInsertLine(final int index, final @NotNull ComponentLike line) {
         Preconditions.checkArgument(line != null, "Line cannot be null.");
         controller().insertLine(index, line);
     }
 
     @Override
-    default void hookClearLine(final int index) {
+    default void useClearLine(final int index) {
         controller().clearLine(index);
     }
 
     @Override
-    default void hookClearLines() {
+    default void useClearLines() {
         controller().clearLines();
     }
 
     @Override
-    default int hookSize() {
+    default @NotNull List<Component> useLines() {
+        return controller().getLines();
+    }
+
+    @Override
+    default int useSize() {
         return controller().getSize();
     }
 
     @Override
-    default void hookState(final @NotNull String key, final @Nullable Object value) {
+    default void useClose() {
+        controller().close();
+    }
+
+    @Override
+    default void useState(final @NotNull String key, final @Nullable Object value) {
         Preconditions.checkArgument(key != null, "Key cannot be null.");
         controller().setState(key, value);
     }

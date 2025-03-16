@@ -5,7 +5,6 @@ import com.tksimeji.kunectron.AnvilGui;
 import com.tksimeji.kunectron.Kunectron;
 import com.tksimeji.kunectron.element.ItemElement;
 import com.tksimeji.kunectron.event.AnvilGuiEvents;
-import com.tksimeji.kunectron.event.GuiEvent;
 import com.tksimeji.kunectron.event.GuiHandler;
 import com.tksimeji.kunectron.hooks.AnvilGuiHooks;
 import com.tksimeji.kunectron.policy.ItemSlotPolicy;
@@ -96,7 +95,7 @@ public final class AnvilGuiBuilderImpl extends ItemContainerGuiBuilderImpl<Anvil
         @GuiHandler
         public void onInit(final @NotNull AnvilGuiEvents.InitEvent event) {
             for (Map.Entry<Integer, ItemSlotPolicy> entry : policies.entrySet()) {
-                this.hookSetPolicy(entry.getKey(), entry.getValue());
+                this.usePolicy(entry.getKey(), entry.getValue());
             }
         }
     }

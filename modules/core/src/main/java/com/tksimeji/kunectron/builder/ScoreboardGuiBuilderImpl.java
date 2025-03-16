@@ -36,10 +36,10 @@ public class ScoreboardGuiBuilderImpl extends IGuiBuilderImpl<ScoreboardGuiBuild
 
         Kunectron.create(gui, ScoreboardGui.class);
 
-        gui.hookSetTitle(title);
+        gui.useTitle(title);
 
         for (Component line : lines) {
-            gui.hookAddLine(line);
+            gui.useAddLine(line);
         }
         return gui;
     }

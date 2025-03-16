@@ -1,5 +1,6 @@
 package com.tksimeji.kunectron.controller;
 
+import com.tksimeji.kunectron.Kunectron;
 import com.tksimeji.kunectron.ScoreboardGui;
 import com.tksimeji.kunectron.controller.impl.GuiControllerImpl;
 import com.tksimeji.kunectron.element.ComponentElement;
@@ -121,6 +122,11 @@ public final class ScoreboardGuiControllerImpl extends GuiControllerImpl impleme
     }
 
     @Override
+    public @NotNull List<Component> getLines() {
+        return scoreboardLines.stream().map(line -> line.getElement().create()).toList();
+    }
+
+    @Override
     public void setLine(final int index, final @NotNull ComponentLike line) {
         ComponentElement element = Element.component(line.asComponent(), markupExtensionContext);
 
@@ -185,6 +191,15 @@ public final class ScoreboardGuiControllerImpl extends GuiControllerImpl impleme
     @Override
     public int getSize() {
         return scoreboardLines.size();
+    }
+
+    @Override
+    public void close() {
+        Kunectron.removeGuiController(this);
+        objective.unregister();
+        for (Player player : getPlayers()) {
+            removePlayer(player);
+        }
     }
 
     @Override

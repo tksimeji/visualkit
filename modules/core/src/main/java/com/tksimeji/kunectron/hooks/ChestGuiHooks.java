@@ -15,80 +15,90 @@ import java.util.Map;
 
 public interface ChestGuiHooks extends IChestGuiHooks {
     @Override
-    default @NotNull Player hookPlayer() {
+    default @NotNull Player usePlayer() {
         return controller().getPlayer();
     }
 
     @Override
-    default @Nullable ItemElement hookGetElement(final int index) {
+    default @Nullable ItemElement useElement(final int index) {
         return controller().getElement(index);
     }
 
     @Override
-    default @NotNull Map<Integer, ItemElement> hookGetElements() {
-        return controller().getElements();
-    }
-
-    @Override
-    default void hookSetElement(final int index, final @NotNull ItemElement element) {
+    default void useElement(final int index, final @NotNull ItemElement element) {
         controller().setElement(index, element);
     }
 
     @Override
-    default void hookClearElement(final int index) {
+    default void useClearElement(final int index) {
         controller().setElement(index, null);
     }
 
     @Override
-    default @NotNull ItemSlotPolicy hookGetPolicy(final int index) {
-        return controller().getPolicy(index);
+    default @NotNull Map<Integer, ItemElement> useElements() {
+        return controller().getElements();
     }
 
     @Override
-    default void hookSetPolicy(final int index, final @NotNull ItemSlotPolicy policy) {
+    default @NotNull ItemSlotPolicy usePolicy(final int index) {
+        return usePolicy(index, false);
+    }
+
+    @Override
+    default @NotNull ItemSlotPolicy usePolicy(final int index, final boolean player) {
+        return controller().getPolicy(player ? controller().getSize() + index : index);
+    }
+
+    @Override
+    default void usePolicy(final int index, final @NotNull ItemSlotPolicy policy) {
+        usePolicy(index, policy);
+    }
+
+    @Override
+    default void usePolicy(final int index, final @NotNull ItemSlotPolicy policy, final boolean player) {
         Preconditions.checkArgument(policy != null, "Policy cannot be null.");
-        controller().setPolicy(index, policy);
+        controller().setPolicy(player ? index + controller().getSize() : index, policy);
     }
 
     @Override
-    default @NotNull ItemSlotPolicy hookGetDefaultPolicy() {
+    default @NotNull ItemSlotPolicy useDefaultPolicy() {
         return controller().getDefaultPolicy();
     }
 
     @Override
-    default void hookSetDefaultPolicy(final @NotNull ItemSlotPolicy defaultPolicy) {
+    default void useDefaultPolicy(final @NotNull ItemSlotPolicy defaultPolicy) {
         Preconditions.checkArgument(defaultPolicy != null, "Default policy cannot be null.");
         controller().setDefaultPolicy(defaultPolicy);
     }
 
     @Override
-    default @NotNull ItemSlotPolicy hookGetPlayerDefaultPolicy() {
+    default @NotNull ItemSlotPolicy usePlayerDefaultPolicy() {
         return controller().getPlayerDefaultPolicy();
     }
 
     @Override
-    default void hookSetPlayerDefaultPolicy(final @NotNull ItemSlotPolicy playerDefaultPolicy) {
+    default void usePlayerDefaultPolicy(final @NotNull ItemSlotPolicy playerDefaultPolicy) {
         Preconditions.checkArgument(playerDefaultPolicy != null, "Player default policy cannot be null.");
         controller().setPlayerDefaultPolicy(playerDefaultPolicy);
     }
 
     @Override
-    default @NotNull Locale hookLocale() {
+    default @NotNull Locale useLocale() {
         return controller().getLocale();
     }
 
     @Override
-    default boolean hookIsEmpty() {
-        return this.hookGetElements().isEmpty();
+    default boolean useIsEmpty() {
+        return this.useElements().isEmpty();
     }
 
     @Override
-    default void hookClose() {
+    default void useClose() {
         controller().close();
     }
 
     @Override
-    default void hookState(final @NotNull String key, final @Nullable Object value) {
+    default void useState(final @NotNull String key, final @Nullable Object value) {
         Preconditions.checkArgument(key != null, "Key cannot be null.");
         controller().setState(key, value);
     }

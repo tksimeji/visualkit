@@ -9,67 +9,67 @@ import org.jetbrains.annotations.Nullable;
 
 public interface AnvilGuiHooks extends IAnvilGuiHooks {
     @Override
-    default @NotNull Player hookPlayer() {
+    default @NotNull Player usePlayer() {
         throw new NotImplementedException("The API module cannot be called at runtime.");
     }
 
     @Override
-    default @Nullable ItemElement hookGetFirstElement() {
+    default @Nullable ItemElement useFirstElement() {
         throw new NotImplementedException("The API module cannot be called at runtime.");
     }
 
     @Override
-    default void hookSetFirstElement(@Nullable ItemElement element) {
+    default void useFirstElement(@Nullable ItemElement element) {
         throw new NotImplementedException("The API module cannot be called at runtime.");
     }
 
     @Override
-    default @Nullable ItemElement hookGetSecondElement() {
+    default @Nullable ItemElement useSecondElement() {
         throw new NotImplementedException("The API module cannot be called at runtime.");
     }
 
     @Override
-    default void hookSetSecondElement(@Nullable ItemElement element) {
+    default void useSecondElement(@Nullable ItemElement element) {
         throw new NotImplementedException("The API module cannot be called at runtime.");
     }
 
     @Override
-    default @Nullable ItemElement hookGetResultElement() {
+    default @Nullable ItemElement useResultElement() {
         throw new NotImplementedException("The API module cannot be called at runtime.");
     }
 
     @Override
-    default void hookSetResultElement(@Nullable ItemElement element) {
+    default void useResultElement(@Nullable ItemElement element) {
         throw new NotImplementedException("The API module cannot be called at runtime.");
     }
 
     @Override
-    default @NotNull ItemSlotPolicy hookGetPolicy(final int index) {
+    default @NotNull ItemSlotPolicy usePolicy(final int index) {
         throw new NotImplementedException("The API module cannot be called at runtime.");
     }
 
     @Override
-    default @NotNull ItemSlotPolicy hookGetDefaultPolicy() {
+    default void usePolicy(final int index, final @NotNull ItemSlotPolicy policy) {
         throw new NotImplementedException("The API module cannot be called at runtime.");
     }
 
     @Override
-    default void hookSetDefaultPolicy(final @NotNull ItemSlotPolicy defaultPolicy) {
+    default @NotNull ItemSlotPolicy useDefaultPolicy() {
         throw new NotImplementedException("The API module cannot be called at runtime.");
     }
 
     @Override
-    default @NotNull ItemSlotPolicy hookGetPlayerDefaultPolicy() {
+    default void useDefaultPolicy(final @NotNull ItemSlotPolicy defaultPolicy) {
         throw new NotImplementedException("The API module cannot be called at runtime.");
     }
 
     @Override
-    default void hookSetPlayerDefaultPolicy(final @NotNull ItemSlotPolicy playerDefaultPolicy) {
+    default @NotNull ItemSlotPolicy usePlayerDefaultPolicy() {
         throw new NotImplementedException("The API module cannot be called at runtime.");
     }
 
     @Override
-    default void hookSetPolicy(final int index, final @NotNull ItemSlotPolicy policy) {
+    default void usePlayerDefaultPolicy(final @NotNull ItemSlotPolicy playerDefaultPolicy) {
         throw new NotImplementedException("The API module cannot be called at runtime.");
     }
 }

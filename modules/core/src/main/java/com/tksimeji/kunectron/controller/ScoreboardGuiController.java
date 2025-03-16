@@ -9,6 +9,7 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.Set;
 
 public sealed interface ScoreboardGuiController extends GuiController, TickableGuiController permits ScoreboardGuiControllerImpl {
@@ -34,6 +35,8 @@ public sealed interface ScoreboardGuiController extends GuiController, TickableG
 
     @Nullable Component getLine(final int index);
 
+    @NotNull List<Component> getLines();
+
     void setLine(final int index, final @NotNull ComponentLike line);
 
     void addLine(final @NotNull ComponentLike line);
@@ -49,4 +52,6 @@ public sealed interface ScoreboardGuiController extends GuiController, TickableG
     void clearLines();
 
     int getSize();
+
+    void close();
 }

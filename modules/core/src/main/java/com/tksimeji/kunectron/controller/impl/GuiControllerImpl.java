@@ -99,8 +99,10 @@ public abstract class GuiControllerImpl implements GuiController {
 
             if (annotation.async()) {
                 Bukkit.getScheduler().runTaskAsynchronously(Kunectron.plugin(), runnable);
-            } else {
+            } else if (!Bukkit.isPrimaryThread()) {
                 Bukkit.getScheduler().runTask(Kunectron.plugin(), runnable);
+            } else {
+                runnable.run();
             }
         }
 

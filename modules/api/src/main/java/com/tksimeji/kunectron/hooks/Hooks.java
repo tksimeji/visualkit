@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public interface Hooks {
-    default void hookState(final @NotNull String name, final @Nullable Object value) {
+    default void useState(final @NotNull String name, final @Nullable Object value) {
         throw new NotImplementedException("The API module cannot be called at runtime.");
     }
 }

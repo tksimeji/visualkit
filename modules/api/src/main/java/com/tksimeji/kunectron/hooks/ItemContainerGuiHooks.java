@@ -6,19 +6,23 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Locale;
 
 public interface ItemContainerGuiHooks extends ContainerGuiHooks {
-    @NotNull ItemSlotPolicy hookGetPolicy(final int index);
+    @NotNull ItemSlotPolicy usePolicy(final int index);
 
-    void hookSetPolicy(final int index, final @NotNull ItemSlotPolicy policy);
+    @NotNull ItemSlotPolicy usePolicy(final int index, final boolean player);
 
-    @NotNull ItemSlotPolicy hookGetDefaultPolicy();
+    void usePolicy(final int index, final @NotNull ItemSlotPolicy policy);
 
-    void hookSetDefaultPolicy(final @NotNull ItemSlotPolicy defaultPolicy);
+    void usePolicy(final int index, final @NotNull ItemSlotPolicy policy, final boolean player);
 
-    @NotNull ItemSlotPolicy hookGetPlayerDefaultPolicy();
+    @NotNull ItemSlotPolicy useDefaultPolicy();
 
-    void hookSetPlayerDefaultPolicy(final @NotNull ItemSlotPolicy playerDefaultPolicy);
+    void useDefaultPolicy(final @NotNull ItemSlotPolicy defaultPolicy);
 
-    @NotNull Locale hookLocale();
+    @NotNull ItemSlotPolicy usePlayerDefaultPolicy();
 
-    boolean hookIsEmpty();
+    void usePlayerDefaultPolicy(final @NotNull ItemSlotPolicy playerDefaultPolicy);
+
+    @NotNull Locale useLocale();
+
+    boolean useIsEmpty();
 }

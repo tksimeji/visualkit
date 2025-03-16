@@ -14,84 +14,94 @@ import java.util.Locale;
 
 public interface AnvilGuiHooks extends IAnvilGuiHooks {
     @Override
-    default @NotNull Player hookPlayer() {
+    default @NotNull Player usePlayer() {
         return controller().getPlayer();
     }
 
-    default @Nullable ItemElement hookGetFirstElement() {
+    default @Nullable ItemElement useFirstElement() {
         return controller().getFirstElement();
     }
 
-    default void hookSetFirstElement(final @Nullable ItemElement element) {
+    default void useFirstElement(final @Nullable ItemElement element) {
         controller().setFirstElement(element);
     }
 
-    default @Nullable ItemElement hookGetSecondElement() {
+    default @Nullable ItemElement useSecondElement() {
         return controller().getSecondElement();
     }
 
-    default void hookSetSecondElement(final @Nullable ItemElement element) {
+    default void useSecondElement(final @Nullable ItemElement element) {
         controller().setSecondElement(element);
     }
 
-    default @Nullable ItemElement hookGetResultElement() {
+    default @Nullable ItemElement useResultElement() {
         return controller().getResultElement();
     }
 
-    default void hookSetResultElement(final @Nullable ItemElement element) {
+    default void useResultElement(final @Nullable ItemElement element) {
         controller().setResultElement(element);
     }
 
     @Override
-    default @NotNull ItemSlotPolicy hookGetPolicy(final int index) {
-        return controller().getPolicy(index);
+    default @NotNull ItemSlotPolicy usePolicy(final int index) {
+        return usePolicy(index, false);
     }
 
     @Override
-    default void hookSetPolicy(final int index, final @NotNull ItemSlotPolicy policy) {
+    default @NotNull ItemSlotPolicy usePolicy(final int index, final boolean player) {
+        return controller().getPolicy(player ? index + controller().getSize() : index);
+    }
+
+    @Override
+    default void usePolicy(final int index, final @NotNull ItemSlotPolicy policy) {
+        usePolicy(index, policy, false);
+    }
+
+    @Override
+    default void usePolicy(final int index, final @NotNull ItemSlotPolicy policy, final boolean player) {
         Preconditions.checkArgument(policy != null, "Policy cannot be null.");
-        controller().setPolicy(index, policy);
+        controller().setPolicy(player ? controller().getSize() + index : index, policy);
     }
 
     @Override
-    default @NotNull ItemSlotPolicy hookGetDefaultPolicy() {
+    default @NotNull ItemSlotPolicy useDefaultPolicy() {
         return controller().getDefaultPolicy();
     }
 
     @Override
-    default void hookSetDefaultPolicy(final @NotNull ItemSlotPolicy defaultPolicy) {
+    default void useDefaultPolicy(final @NotNull ItemSlotPolicy defaultPolicy) {
         Preconditions.checkArgument(defaultPolicy != null, "Default policy cannot be null.");
         controller().setDefaultPolicy(defaultPolicy);
     }
 
     @Override
-    default @NotNull ItemSlotPolicy hookGetPlayerDefaultPolicy() {
+    default @NotNull ItemSlotPolicy usePlayerDefaultPolicy() {
         return controller().getPlayerDefaultPolicy();
     }
 
     @Override
-    default void hookSetPlayerDefaultPolicy(final @NotNull ItemSlotPolicy playerDefaultPolicy) {
+    default void usePlayerDefaultPolicy(final @NotNull ItemSlotPolicy playerDefaultPolicy) {
         Preconditions.checkArgument(playerDefaultPolicy != null, "Player default policy cannot be null.");
         controller().setPlayerDefaultPolicy(playerDefaultPolicy);
     }
 
     @Override
-    default boolean hookIsEmpty() {
-        return this.hookGetFirstElement() == null && this.hookGetSecondElement() == null && this.hookGetResultElement() == null;
+    default boolean useIsEmpty() {
+        return this.useFirstElement() == null && this.useSecondElement() == null && this.useResultElement() == null;
     }
 
     @Override
-    default @NotNull Locale hookLocale() {
+    default @NotNull Locale useLocale() {
         return controller().getLocale();
     }
 
     @Override
-    default void hookClose() {
+    default void useClose() {
         controller().close();
     }
 
     @Override
-    default void hookState(final @NotNull String key, final @Nullable Object value) {
+    default void useState(final @NotNull String key, final @Nullable Object value) {
         Preconditions.checkArgument(key != null, "Key cannot be null.");
         controller().setState(key, value);
     }

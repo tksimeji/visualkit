@@ -6,15 +6,15 @@ import org.jetbrains.annotations.Nullable;
 
 @ApiStatus.Internal
 interface IAnvilGuiHooks extends ItemContainerGuiHooks {
-    @Nullable ItemElement hookGetFirstElement();
+    @Nullable ItemElement useFirstElement();
 
-    void hookSetFirstElement(final @Nullable ItemElement element);
+    void useFirstElement(final @Nullable ItemElement element);
 
-    @Nullable ItemElement hookGetSecondElement();
+    @Nullable ItemElement useSecondElement();
 
-    void hookSetSecondElement(final @Nullable ItemElement element);
+    void useSecondElement(final @Nullable ItemElement element);
 
-    @Nullable ItemElement hookGetResultElement();
+    @Nullable ItemElement useResultElement();
 
-    void hookSetResultElement(final @Nullable ItemElement element);
+    void useResultElement(final @Nullable ItemElement element);
 }

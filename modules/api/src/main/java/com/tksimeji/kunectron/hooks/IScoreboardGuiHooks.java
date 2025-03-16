@@ -7,37 +7,42 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.Set;
 
 @ApiStatus.Internal
 interface IScoreboardGuiHooks extends Hooks {
-    @NotNull Set<Player> hookGetPlayers();
+    @NotNull Set<Player> usePlayers();
 
-    void hookAddPlayer(final @NotNull Player player);
+    void useAddPlayer(final @NotNull Player player);
 
-    void hookRemovePlayer(final @NotNull Player player);
+    void useRemovePlayer(final @NotNull Player player);
 
-    boolean hookIsPlayer(final @NotNull Player player);
+    boolean useIsPlayer(final @NotNull Player player);
 
-    @NotNull Component hookGetTitle();
+    @NotNull Component useTitle();
 
-    void hookSetTitle(final @NotNull ComponentLike title);
+    void useTitle(final @NotNull ComponentLike title);
 
-    @Nullable Component hookGetLine(final int index);
+    @Nullable Component useLine(final int index);
 
-    void hookSetLine(final int index, final @NotNull ComponentLike line);
+    void useLine(final int index, final @NotNull ComponentLike line);
 
-    void hookAddLine(final @NotNull ComponentLike line);
+    void useAddLine(final @NotNull ComponentLike line);
 
-    void hookRemoveLine(final int index);
+    void useRemoveLine(final int index);
 
-    void hookRemoveLines();
+    void useRemoveLines();
 
-    void hookInsertLine(final int index, final @NotNull ComponentLike line);
+    void useInsertLine(final int index, final @NotNull ComponentLike line);
 
-    void hookClearLine(final int index);
+    void useClearLine(final int index);
 
-    void hookClearLines();
+    void useClearLines();
 
-    int hookSize();
+    @NotNull List<Component> useLines();
+
+    int useSize();
+
+    void useClose();
 }

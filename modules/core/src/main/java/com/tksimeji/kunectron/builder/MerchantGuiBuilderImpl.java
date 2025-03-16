@@ -33,7 +33,7 @@ public final class MerchantGuiBuilderImpl extends ContainerGuiBuilderImpl<Mercha
         Kunectron.create(gui, MerchantGui.class);
 
         for (TradeElement element : elements) {
-            gui.hookAddElement(element);
+            gui.useAddElement(element);
         }
         return gui;
     }

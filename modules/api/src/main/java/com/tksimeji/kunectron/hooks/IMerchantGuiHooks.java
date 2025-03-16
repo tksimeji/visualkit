@@ -9,15 +9,15 @@ import java.util.List;
 
 @ApiStatus.Internal
 interface IMerchantGuiHooks extends ContainerGuiHooks {
-    @Nullable TradeElement hookGetElement(final int index);
+    @Nullable TradeElement useElement(final int index);
 
-    @NotNull List<TradeElement> hookGetElements();
+    void useElement(final int index, final @NotNull TradeElement element);
 
-    void hookSetElement(final int index, final @NotNull TradeElement element);
+    void useAddElement(final @NotNull TradeElement element);
 
-    void hookAddElement(final @NotNull TradeElement element);
+    void useRemoveElement(final int index);
 
-    void hookRemoveElement(final int index);
+    void useInsertElement(final int index, final @NotNull TradeElement element);
 
-    void hookInsertElement(final int index, final @NotNull TradeElement element);
+    @NotNull List<TradeElement> useElements();
 }

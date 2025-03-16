@@ -33,15 +33,15 @@ public final class ChestGuiBuilderImpl extends ItemContainerGuiBuilderImpl<Chest
         Kunectron.create(gui, ChestGui.class);
 
         for (Map.Entry<Integer, ItemElement> entry : elements.entrySet()) {
-            gui.hookSetElement(entry.getKey(), entry.getValue());
+            gui.useElement(entry.getKey(), entry.getValue());
         }
 
         for (Map.Entry<Integer, ItemSlotPolicy> entry : policies.entrySet()) {
-            gui.hookSetPolicy(entry.getKey(), entry.getValue());
+            gui.usePolicy(entry.getKey(), entry.getValue());
         }
 
-        Optional.ofNullable(defaultPolicy).ifPresent(gui::hookSetDefaultPolicy);
-        Optional.ofNullable(playerDefaultPolicy).ifPresent(gui::hookSetPlayerDefaultPolicy);
+        Optional.ofNullable(defaultPolicy).ifPresent(gui::useDefaultPolicy);
+        Optional.ofNullable(playerDefaultPolicy).ifPresent(gui::usePlayerDefaultPolicy);
         return gui;
     }
 

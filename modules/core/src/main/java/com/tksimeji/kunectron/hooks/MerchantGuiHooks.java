@@ -13,50 +13,50 @@ import java.util.List;
 
 public interface MerchantGuiHooks extends IMerchantGuiHooks {
     @Override
-    default @NotNull Player hookPlayer() {
+    default @NotNull Player usePlayer() {
         return controller().getPlayer();
     }
 
     @Override
-    default @Nullable TradeElement hookGetElement(final int index) {
+    default @Nullable TradeElement useElement(final int index) {
         return controller().getElement(index);
     }
 
     @Override
-    default @NotNull List<TradeElement> hookGetElements() {
-        return controller().getElements();
-    }
-
-    @Override
-    default void hookSetElement(final int index, final @NotNull TradeElement element) {
+    default void useElement(final int index, final @NotNull TradeElement element) {
         Preconditions.checkArgument(element != null, "Element cannot be null.");
         controller().setElement(index, element);
     }
 
     @Override
-    default void hookAddElement(final @NotNull TradeElement element) {
+    default void useAddElement(final @NotNull TradeElement element) {
         Preconditions.checkArgument(element != null, "Element cannot be null.");
         controller().addElement(element);
     }
 
     @Override
-    default void hookRemoveElement(final int index) {
+    default void useRemoveElement(final int index) {
         controller().removeElement(index);
     }
 
     @Override
-    default void hookInsertElement(final int index, final @NotNull TradeElement element) {
+    default void useInsertElement(final int index, final @NotNull TradeElement element) {
         Preconditions.checkArgument(element != null, "Element cannot be null.");
         controller().insertElement(index, element);
     }
 
     @Override
-    default void hookClose() {
+    default @NotNull List<TradeElement> useElements() {
+        return controller().getElements();
+    }
+
+    @Override
+    default void useClose() {
         controller().close();
     }
 
     @Override
-    default void hookState(final @NotNull String key, final @Nullable Object value) {
+    default void useState(final @NotNull String key, final @Nullable Object value) {
         Preconditions.checkArgument(key != null, "Key cannot be null.");
         controller().setState(key, value);
     }
