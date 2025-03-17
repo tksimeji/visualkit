@@ -9,7 +9,7 @@ plugins {
 }
 
 group = "com.tksimeji"
-version = "1.0.0-beta.2"
+version = "1.0.0-beta.1"
 
 allprojects {
     apply {
@@ -70,11 +70,11 @@ publishing {
             pom {
                 name.set("tksimeji")
                 description.set("The Minecraft GUI framework")
-                url.set("https://github.com/tksimeji/visualkit")
+                url.set("https://github.com/tksimeji/kunectron")
                 licenses {
                     license {
                         name.set("MIT License")
-                        url.set("https://github.com/tksimeji/visualkit/blob/master/LICENSE")
+                        url.set("https://github.com/tksimeji/kunectron/blob/master/LICENSE")
                         distribution.set("repo")
                     }
                 }
@@ -86,7 +86,7 @@ publishing {
                     }
                 }
                 scm {
-                    url.set("https://github.com/tksimeji/visualkit")
+                    url.set("https://github.com/tksimeji/kunectron")
                 }
             }
         }
